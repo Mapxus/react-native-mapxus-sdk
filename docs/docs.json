@@ -1,0 +1,960 @@
+{
+  "MapxusMap": {
+    "description": "MapxusMap provides control and listening to indoor maps.",
+    "displayName": "MapxusMap",
+    "methods": [
+      {
+        "name": "setMapxusStyle",
+        "docblock": "Setting the general map appearance.\n@param {MapxusMapStyle} style style enum value.",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "style",
+            "description": "style enum value.",
+            "type": {
+              "name": "MapxusMapStyle"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Setting the general map appearance.",
+        "examples": []
+      },
+      {
+        "name": "setMapxusStyleWithString",
+        "docblock": "Set up custom map appearance, you can contact us for map appearance customization.\n@param {String} name the style name we provide.",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "name",
+            "description": "the style name we provide.",
+            "type": {
+              "name": "String"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Set up custom map appearance, you can contact us for map appearance customization.",
+        "examples": []
+      },
+      {
+        "name": "setMapLanguage",
+        "docblock": "Setting the map language.\n@param {String} name map language with options for en, zh-Hant, zh-Hans, ja, ko, default.",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "name",
+            "description": "map language with options for en, zh-Hant, zh-Hans, ja, ko, default.",
+            "type": {
+              "name": "String"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Setting the map language.",
+        "examples": []
+      },
+      {
+        "name": "selectIndoorScene",
+        "docblock": "Select the building and the floor of that building by code.\n@param {MapxusZoomMode} zoomMode Zoom method\n@param {Insets} insets zoom to fit the margins, if zoomMode is MXMZoomDisable, the value passed in is invalid\n@param {String} buildingId id of the building to be selected\n@param {String} floor name of the floor to be selected",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "zoomMode",
+            "description": "Zoom method",
+            "type": {
+              "name": "MapxusZoomMode"
+            },
+            "optional": false
+          },
+          {
+            "name": "insets",
+            "description": "zoom to fit the margins, if zoomMode is MXMZoomDisable, the value passed in is invalid",
+            "type": {
+              "name": "Insets"
+            },
+            "optional": false
+          },
+          {
+            "name": "buildingId",
+            "description": "id of the building to be selected",
+            "type": {
+              "name": "String"
+            },
+            "optional": false
+          },
+          {
+            "name": "floor",
+            "description": "name of the floor to be selected",
+            "type": {
+              "name": "String"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Select the building and the floor of that building by code.",
+        "examples": []
+      }
+    ],
+    "props": [
+      {
+        "name": "mapOption",
+        "required": false,
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "outdoorHidden",
+              "required": false,
+              "type": "bool",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            },
+            {
+              "name": "defaultStyle",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            },
+            {
+              "name": "defaultStyleName",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            },
+            {
+              "name": "buildingId",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            },
+            {
+              "name": "floor",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            },
+            {
+              "name": "zoomInsets",
+              "required": false,
+              "type": {
+                "name": "shape",
+                "value": [
+                  {
+                    "name": "top",
+                    "required": false,
+                    "type": "number",
+                    "default": "none",
+                    "description": "FIX ME NO DESCRIPTION"
+                  },
+                  {
+                    "name": "left",
+                    "required": false,
+                    "type": "number",
+                    "default": "none",
+                    "description": "FIX ME NO DESCRIPTION"
+                  },
+                  {
+                    "name": "bottom",
+                    "required": false,
+                    "type": "number",
+                    "default": "none",
+                    "description": "FIX ME NO DESCRIPTION"
+                  },
+                  {
+                    "name": "right",
+                    "required": false,
+                    "type": "number",
+                    "default": "none",
+                    "description": "FIX ME NO DESCRIPTION"
+                  }
+                ]
+              },
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            },
+            {
+              "name": "poiId",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            },
+            {
+              "name": "zoomLevel",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            },
+            {
+              "name": "language",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            }
+          ]
+        },
+        "default": "none",
+        "description": "Initialization parameters, setting them before rendering the map."
+      },
+      {
+        "name": "selectFontColor",
+        "required": false,
+        "type": "union",
+        "default": "none",
+        "description": "Colour of selected font for floor selector bar."
+      },
+      {
+        "name": "selectBoxColor",
+        "required": false,
+        "type": "union",
+        "default": "none",
+        "description": "Colour of selected box for floor selector bar."
+      },
+      {
+        "name": "fontColor",
+        "required": false,
+        "type": "union",
+        "default": "none",
+        "description": "Colour of unselected font for floor selector bar."
+      },
+      {
+        "name": "indoorControllerAlwaysHidden",
+        "required": false,
+        "type": "bool",
+        "default": "none",
+        "description": "Set floor selector bar always hidden."
+      },
+      {
+        "name": "selectorPosition",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Set the position of the indoor map control, it is a enum MapxusSelectorPosition, the default is CENTER_LEFT."
+      },
+      {
+        "name": "selectorPositionCustom",
+        "required": false,
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "x",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            },
+            {
+              "name": "y",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            }
+          ]
+        },
+        "default": "none",
+        "description": "Control the margin between the floor selector bar and the mapview, which is related to the setting of `selectorPosition`,\nsuch as selectorPosition is CENTER_LEFT, x represents the distance of left, y represents the distance of top."
+      },
+      {
+        "name": "logoBottomMargin",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Set the margin of the 'Mapxus logo' from the bottom of the mapView, you can only pass 0 or a positive number, passing \na negative number will reset it to 0"
+      },
+      {
+        "name": "openStreetSourceBottomMargin",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Set the margin of the 'Open Street Source' from the bottom of the mapView, you can only pass in 0 or a positive number, \npassing in a negative number will reset it to 0."
+      },
+      {
+        "name": "outdoorHidden",
+        "required": false,
+        "type": "bool",
+        "default": "none",
+        "description": "Set whether to display outdoor map."
+      },
+      {
+        "name": "gestureSwitchingBuilding",
+        "required": false,
+        "type": "bool",
+        "default": "none",
+        "description": "Click on the map to switch the building, the default status is YES."
+      },
+      {
+        "name": "autoChangeBuilding",
+        "required": false,
+        "type": "bool",
+        "default": "none",
+        "description": "The default state is YES. when auto switch mode is on and the building is moved to the centre of the view,\nthe building could be automatically selected to show its internal structure."
+      },
+      {
+        "name": "onTappedOnPoi",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This event is triggered when poi is clicked."
+      },
+      {
+        "name": "onTappedOnBlank",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This event is triggered when blank of the map is clicked."
+      },
+      {
+        "name": "onLongPressed",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "Map long press listener, gets called when a user long presses the map."
+      },
+      {
+        "name": "onIndoorSceneChange",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This event is triggered when indoor scene is change."
+      },
+      {
+        "name": "onIndoorStatusChange",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This event is triggered when indoor status is change."
+      }
+    ],
+    "composes": [
+      "../../utils"
+    ],
+    "name": "MapxusMap"
+  },
+  "MapxusMapLocation.android": {
+    "description": "MapxusMapLocation backed by Mapxus Map SDK",
+    "displayName": "MapxusMapLocation",
+    "methods": [],
+    "props": [
+      {
+        "name": "onLocationStarted",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This event is triggered when location started."
+      },
+      {
+        "name": "onLocationStopped",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This event is triggered when location Stopped."
+      },
+      {
+        "name": "onLocationError",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This event is triggered when location Error."
+      },
+      {
+        "name": "onLocationChange",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This event is triggered when location change."
+      },
+      {
+        "name": "onCompassChange",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This event is triggered when compass change."
+      },
+      {
+        "name": "followUserMode",
+        "required": false,
+        "type": "enum",
+        "default": "none",
+        "description": "The mode used to track the user location on the map. One of; \"None\", \"Follow\", \"FollowWithHeading\". Or just pass a number , \"None\" to 0,\"Follow\" to 1,\"FollowWithHeading\" to 3"
+      }
+    ],
+    "composes": [
+      "../../utils"
+    ],
+    "name": "MapxusMapLocation.android"
+  },
+  "MapxusPointAnnotationView": {
+    "description": "PointAnnotation represents a one-dimensional shape located at a single geographical coordinate.\n\nConsider using ShapeSource and SymbolLayer instead, if you have many points and you have static images,\nthey'll offer much better performance\n\n.\nIf you need interctive views please use MarkerView,\nas with PointAnnotation on Android child views are rendered onto a bitmap for better performance.",
+    "displayName": "MapxusPointAnnotationView",
+    "methods": [
+      {
+        "name": "refresh",
+        "docblock": "On android point annotation is rendered offscreen with a canvas into an image.\nTo rerender the image from the current state of the view call refresh.\nCall this for example from Image#onLoad.",
+        "modifiers": [],
+        "params": [],
+        "returns": null,
+        "description": "On android point annotation is rendered offscreen with a canvas into an image.\nTo rerender the image from the current state of the view call refresh.\nCall this for example from Image#onLoad.",
+        "examples": []
+      }
+    ],
+    "props": [
+      {
+        "name": "buildingId",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Mark annotaion which building it is located."
+      },
+      {
+        "name": "floor",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Mark annotaion which floor it is located."
+      },
+      {
+        "name": "id",
+        "required": true,
+        "type": "string",
+        "default": "none",
+        "description": "A string that uniquely identifies the annotation"
+      },
+      {
+        "name": "title",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "The string containing the annotation’s title. Note this is required to be set if you want to see a callout appear on iOS."
+      },
+      {
+        "name": "snippet",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "The string containing the annotation’s snippet(subtitle). Not displayed in the default callout."
+      },
+      {
+        "name": "selected",
+        "required": false,
+        "type": "bool",
+        "default": "none",
+        "description": "Manually selects/deselects annotation\n@type {[type]}"
+      },
+      {
+        "name": "draggable",
+        "required": false,
+        "type": "bool",
+        "default": "false",
+        "description": "Enable or disable dragging. Defaults to false."
+      },
+      {
+        "name": "coordinate",
+        "required": true,
+        "type": {
+          "name": "array",
+          "value": {
+            "type": "number"
+          }
+        },
+        "default": "none",
+        "description": "The center point (specified as a map coordinate) of the annotation."
+      },
+      {
+        "name": "anchor",
+        "required": false,
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "x",
+              "required": true,
+              "type": "number",
+              "default": "none",
+              "description": "See anchor"
+            },
+            {
+              "name": "y",
+              "required": true,
+              "type": "number",
+              "default": "none",
+              "description": "See anchor"
+            }
+          ]
+        },
+        "default": "{x: 0.5, y: 0.5}",
+        "description": "Specifies the anchor being set on a particular point of the annotation.\nThe anchor point is specified in the continuous space [0.0, 1.0] x [0.0, 1.0],\nwhere (0, 0) is the top-left corner of the image, and (1, 1) is the bottom-right corner.\nNote this is only for custom annotations not the default pin view.\nDefaults to the center of the view."
+      },
+      {
+        "name": "onSelected",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This callback is fired once this annotation is selected. Returns a Feature as the first param."
+      },
+      {
+        "name": "onDeselected",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This callback is fired once this annotation is deselected."
+      },
+      {
+        "name": "onDragStart",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This callback is fired once this annotation has started being dragged."
+      },
+      {
+        "name": "onDragEnd",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This callback is fired once this annotation has stopped being dragged."
+      },
+      {
+        "name": "onDrag",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This callback is fired while this annotation is being dragged."
+      }
+    ],
+    "composes": [
+      "../../utils"
+    ],
+    "name": "MapxusPointAnnotationView"
+  },
+  "NavigationView": {
+    "description": "This component makes it easy to draw and control routes.",
+    "displayName": "NavigationView",
+    "methods": [
+      {
+        "name": "getPainterPathDto",
+        "docblock": "Get the data generated before drawing the route, such as 'keys' represent the identification value of the route section.\n@returns {Promise}",
+        "modifiers": [
+          "async"
+        ],
+        "params": [],
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "Promise"
+          }
+        },
+        "description": "Get the data generated before drawing the route, such as 'keys' represent the identification value of the route section.",
+        "examples": []
+      },
+      {
+        "name": "paintRouteUsingPath",
+        "docblock": "Draw the route with the route search result\n@param {Path} path the route which you want to display.\n@param {Array<IndoorPoint>} points the waypoint list.",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "path",
+            "description": "the route which you want to display.",
+            "type": {
+              "name": "Path"
+            },
+            "optional": false
+          },
+          {
+            "name": "points",
+            "description": "the waypoint list.",
+            "type": {
+              "name": "Array",
+              "elements": [
+                {
+                  "name": "IndoorPoint"
+                }
+              ]
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Draw the route with the route search result",
+        "examples": []
+      },
+      {
+        "name": "cleanRoute",
+        "docblock": "Clear the route that has been drawn on the map.",
+        "modifiers": [],
+        "params": [],
+        "returns": null,
+        "description": "Clear the route that has been drawn on the map.",
+        "examples": []
+      },
+      {
+        "name": "changeOn",
+        "docblock": "Show the route of the specified scene, usually called when `MapxusMap.onIndoorSceneChange` is triggered.\n@param {String} buildingId id of the building to be selected\n@param {String} floor name of the floor to be selected",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "buildingId",
+            "description": "id of the building to be selected",
+            "type": {
+              "name": "String"
+            },
+            "optional": false
+          },
+          {
+            "name": "floor",
+            "description": "name of the floor to be selected",
+            "type": {
+              "name": "String"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Show the route of the specified scene, usually called when `MapxusMap.onIndoorSceneChange` is triggered.",
+        "examples": []
+      },
+      {
+        "name": "focusOn",
+        "docblock": "Let the map zoom to the appropriate level to show the specified route section.\n@param {Array<String>} keys The route sections you want to show in full.\n@param {Insets} insets The margins when displayed.",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "keys",
+            "description": "The route sections you want to show in full.",
+            "type": {
+              "name": "Array",
+              "elements": [
+                {
+                  "name": "String"
+                }
+              ]
+            },
+            "optional": false
+          },
+          {
+            "name": "insets",
+            "description": "The margins when displayed.",
+            "type": {
+              "name": "Insets"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Let the map zoom to the appropriate level to show the specified route section.",
+        "examples": []
+      }
+    ],
+    "props": [
+      {
+        "name": "selected",
+        "required": false,
+        "type": "bool",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      }
+    ],
+    "composes": [
+      "../../utils"
+    ],
+    "name": "NavigationView"
+  },
+  "buildingSearchManager": {
+    "name": "buildingSearchManager",
+    "description": "Use buildingSearchManager to search the indoor buildings we offer and get the building details.",
+    "props": [],
+    "styles": [],
+    "methods": [
+      {
+        "name": "buildingSearchGlobal",
+        "description": "Search for buildings worldwide.",
+        "params": [
+          {
+            "name": "params",
+            "description": "parameters of the global search: keywords (optional), offset, page.",
+            "type": {
+              "name": ""
+            },
+            "optional": false
+          }
+        ],
+        "examples": [],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "Promise"
+          }
+        }
+      },
+      {
+        "name": "buildingSearchOnBbox",
+        "description": "Search within a rectangular area.",
+        "params": [
+          {
+            "name": "params",
+            "description": "parameters for searching within a rectangular area: keywords (optional), bbox, offset, page.",
+            "type": {
+              "name": ""
+            },
+            "optional": false
+          }
+        ],
+        "examples": [],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "Promise"
+          }
+        }
+      },
+      {
+        "name": "buildingSearchNearbyCenter",
+        "description": "Search within a circular area.",
+        "params": [
+          {
+            "name": "params",
+            "description": "parameters for searching within a circular area: keywords (optional), center, distance, offset, page.",
+            "type": {
+              "name": ""
+            },
+            "optional": false
+          }
+        ],
+        "examples": [],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "Promise"
+          }
+        }
+      },
+      {
+        "name": "buildingSearchByIds",
+        "description": "Search building by buildingId.",
+        "params": [
+          {
+            "name": "params",
+            "description": "parameters for searching with buildingId: buildingIds.",
+            "type": {
+              "name": ""
+            },
+            "optional": false
+          }
+        ],
+        "examples": [],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "Promise"
+          }
+        }
+      }
+    ]
+  },
+  "geocodeSearchManager": {
+    "name": "geocodeSearchManager",
+    "description": "Reverse geocoding (coordinate to address)",
+    "props": [],
+    "styles": [],
+    "methods": [
+      {
+        "name": "reverseGeoCode",
+        "description": "Convert the positioning coordinates to the specific building and floor, providing users with more \ndetailed and more user-friendly positioning information.",
+        "params": [
+          {
+            "name": "params",
+            "description": "parameters of reverse geocode: location, ordinalFloor.",
+            "type": {
+              "name": ""
+            },
+            "optional": false
+          }
+        ],
+        "examples": [],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "Promise"
+          }
+        }
+      }
+    ]
+  },
+  "poiCategorySearchManager": {
+    "name": "poiCategorySearchManager",
+    "description": "POI category search",
+    "props": [],
+    "styles": [],
+    "methods": [
+      {
+        "name": "poiCategorySearch",
+        "description": "POI category search, which allows you to know what type of POI is in a building floor.",
+        "params": [
+          {
+            "name": "params",
+            "description": "The POI category search request parameters is as follows: buildingId, floor.",
+            "type": {
+              "name": ""
+            },
+            "optional": false
+          }
+        ],
+        "examples": [],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "Promise"
+          }
+        }
+      }
+    ]
+  },
+  "poiSearchManager": {
+    "name": "poiSearchManager",
+    "description": "Use poiSearchManager to search the indoor POI we offer and get the POI details.",
+    "props": [],
+    "styles": [],
+    "methods": [
+      {
+        "name": "poiSearchInIndoorScene",
+        "description": "Search by Building Information",
+        "params": [
+          {
+            "name": "params",
+            "description": "parameters for POIs searching in the specified building: keywords (optional), \nbuildingId, floor (optional), offset, page, category(optional).",
+            "type": {
+              "name": ""
+            },
+            "optional": false
+          }
+        ],
+        "examples": [],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "Promise"
+          }
+        }
+      },
+      {
+        "name": "poiSearchOnBbox",
+        "description": "Search within a rectangular area.",
+        "params": [
+          {
+            "name": "params",
+            "description": "parameters for searching within a rectangular area: keywords (optional), bbox, \noffset, page, category(optional).",
+            "type": {
+              "name": ""
+            },
+            "optional": false
+          }
+        ],
+        "examples": [],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "Promise"
+          }
+        }
+      },
+      {
+        "name": "poiSearchNearbyCenter",
+        "description": "Search within a circular area.",
+        "params": [
+          {
+            "name": "params",
+            "description": "parameters for searching within a circular area: keywords (optional), center, \nmeterDistance, offset, page, category (optional).",
+            "type": {
+              "name": ""
+            },
+            "optional": false
+          }
+        ],
+        "examples": [],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "Promise"
+          }
+        }
+      },
+      {
+        "name": "poiSearchByIds",
+        "description": "Search POI by POIId.",
+        "params": [
+          {
+            "name": "params",
+            "description": "parameters for searching with POIId: POIIds.",
+            "type": {
+              "name": ""
+            },
+            "optional": false
+          }
+        ],
+        "examples": [],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "Promise"
+          }
+        }
+      },
+      {
+        "name": "orientationPoiSearch",
+        "description": "Query the angle of the nearby POI relative to the center point. Through this function, you can \nview the nearby POI in relative orientation and provide the user with a positioning reference.",
+        "params": [
+          {
+            "name": "params",
+            "description": "parameters for searching: angle, distanceSearchType, buildingId, floor, center, distance.",
+            "type": {
+              "name": ""
+            },
+            "optional": false
+          }
+        ],
+        "examples": [],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "Promise"
+          }
+        }
+      }
+    ]
+  },
+  "routeSearchManager": {
+    "name": "routeSearchManager",
+    "description": "Use RouteSearchManager to planning the route.",
+    "props": [],
+    "styles": [],
+    "methods": [
+      {
+        "name": "routeSearch",
+        "description": "Searh for the route planning",
+        "params": [
+          {
+            "name": "params",
+            "description": "parameters for route planning: fromBuilding (optional), fromFloor (optional), fromLon, \nfromLat, toBuilding (optional), toFloor (optional), toLon, toLat, vehicle (optional), locale, toDoor (optional).",
+            "type": {
+              "name": ""
+            },
+            "optional": false
+          }
+        ],
+        "examples": [],
+        "returns": null
+      }
+    ]
+  }
+}

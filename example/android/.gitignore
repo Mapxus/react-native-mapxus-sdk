@@ -1,0 +1,6 @@
+gradle.properties
+.classpath
+.project
+./.settings
+keystore.properties
+maphive.jks
