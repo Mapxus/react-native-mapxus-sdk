@@ -91,4 +91,4 @@ import MapxusSdk from '@mapxus/react-native-mapxus-sdk';
 MapxusSdk;
 ```
 
-For more usage, please click [this link](!https://map-service.mapxus.com/dpw/digitalMapRN).
+For more usage, please click [this link](https://map-service.mapxus.com/dpw/digitalMapRN).
