@@ -14,9 +14,6 @@
     "@mapbox/geo-viewport": ">= 0.4.0",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-community/segmented-control": "^2.2.2",
-    "@react-native-community/cameraroll": "^4.0.4",
-    "@react-native-community/slider": "^3.0.3",
-    "@react-native-picker/picker": "^1.16.1",
     "@turf/along": ">= 4.0.0 <7.0.0",
     "@turf/bbox": "^6.3.0",
     "@turf/bbox-polygon": "^6.3.0",
@@ -32,8 +29,7 @@
     "react-native": "0.64.2",
     "react-native-pager-view": "^5.1.7",
     "react-native-safe-area-context": "^3.2.0",
-    "react-native-gesture-handler":"^1.10.3",
-    "@babel/preset-env":"7.14.7"
+    "react-native-gesture-handler":"^1.10.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
