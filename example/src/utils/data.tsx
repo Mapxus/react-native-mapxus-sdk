@@ -289,7 +289,7 @@ const samples: any = {
 			subTitle: 'Search POIs near the specified center by building or ordinal.',
 			component: <SearchPOINearby/>
 		},
-/*		{
+		{
 			id: 'search_POI_by_ID',
 			category: 'map_search',
 			menuImg: <Image
@@ -297,10 +297,10 @@ const samples: any = {
 				style={{height: '100%', width: '100%'}}
 			/>,
 			header: 'Search POI by ID',
-			title: '指定POI ID搜索',
-			subTitle: '按ID搜索POI。',
+			title: 'Search POIs by IDs',
+			subTitle: 'Accurately search for specific POIs by IDs.',
 			component: <SearchPOIByID/>
-		},*/
+		},
 	],
 	map_cases: [
 		{
