@@ -91,7 +91,7 @@ const samples: any = {
 			subTitle: 'Set the map style, language and whether to display the outdoor map.',
 			component: <MapAppearance/>
 		},
-/*		{
+		{
 			id: 'switching_building_gestures',
 			category: 'map_interaction',
 			menuImg: <Image
@@ -99,10 +99,10 @@ const samples: any = {
 				style={{height: '100%', width: '100%'}}
 			/>,
 			header: 'Switching building gestures',
-			title: '切换建筑的手势交互',
-			subTitle: '设置切换建筑手势。',
+			title: 'The interaction of gestures for switching buildings',
+			subTitle: 'Set the gestures for switching buildings.',
 			component: <SwitchingBuildingGestures/>
-		},*/
+		},
 		{
 			id: 'focus_on_indoor_scene',
 			category: 'map_interaction',
