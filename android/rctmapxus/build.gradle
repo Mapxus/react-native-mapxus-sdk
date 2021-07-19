@@ -36,10 +36,10 @@ dependencies {
     // React Native
     implementation "com.facebook.react:react-native:+"
     //kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.10"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     //mapxus
-    implementation("com.mapxus.map:mapxusmap:4.2.3")
+    implementation("com.mapxus.map:mapxusmap:4.2.4")
     implementation ("com.mapxus.positioning:positioning:2.0.9")
 
     // Mapbox SDK
