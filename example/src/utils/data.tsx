@@ -265,18 +265,18 @@ const samples: any = {
 			subTitle: 'Search POIs from the specified floor of a building。',
 			component: <SearchPOIInScene/>
 		},
-/*		{
+		{
 			id: 'search_POI_in_bound',
 			category: 'map_search',
 			menuImg: <Image
 				source={require('../assets/SearchPOIInBound.png')}
 				style={{height: '100%', width: '100%'}}
 			/>,
-			header: 'Search POI in bound',
-			title: '指定矩形区域内POI搜索',
-			subTitle: '在指定的矩形区域内搜索POI。',
+			header: 'Search POIs in bound',
+			title: 'Search POIs in a bbox',
+			subTitle: 'Search POIs from the specified rectangular area.',
 			component: <SearchPOIInBound/>
-		},*/
+		},
 		{
 			id: 'search_POI_nearby',
 			category: 'map_search',
