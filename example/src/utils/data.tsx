@@ -229,7 +229,7 @@ const samples: any = {
 			subTitle: 'Search buildings from the specified square of a point.',
 			component: <SearchBuildingNearby/>
 		},
-/*		{
+		{
 			id: 'search_building_by_ID',
 			category: 'map_search',
 			menuImg: <Image
@@ -237,10 +237,10 @@ const samples: any = {
 				style={{height: '100%', width: '100%'}}
 			/>,
 			header: 'Search building by ID',
-			title: '指定建筑ID搜索建筑',
-			subTitle: '按ID搜索建筑。',
+			title: 'Search buildings by IDs',
+			subTitle: 'Accurately search for specific buildings by IDs.',
 			component: <SearchBuildingByID/>
-		},*/
+		},
 		{
 			id: 'category_included_in_scene',
 			category: 'map_search',
