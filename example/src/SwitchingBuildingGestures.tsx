@@ -48,12 +48,5 @@ const styles = StyleSheet.create({
 	fontStyle: {
 		marginLeft: 5,
 		fontSize: 17
-	},
-	button: {
-		backgroundColor: '#74aded',
-		borderWidth: 0,
-		height: 'auto',
-		paddingVertical: 8,
-		paddingHorizontal: 10
 	}
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, Text} from 'react-native';
+import {Image} from 'react-native';
 import CreateMapByCoordinate from '../CreateMapByCoordinate';
 import CreateMapByBuilding from '../CreateMapByBuilding';
 import CreateMapByPOI from '../CreateMapByPOI';
@@ -338,7 +338,7 @@ const samples: any = {
 			title: 'Visual map',
 			subTitle: '介绍Visual的集成。',
 			component: <VisualMap/>
-		},
+		},*/
 		{
 			id: 'search_integrate',
 			category: 'map_cases',
@@ -347,10 +347,10 @@ const samples: any = {
 				style={{height: '100%', width: '100%'}}
 			/>,
 			header: 'Search integrate',
-			title: 'Explore 搜索',
-			subTitle: '介绍建筑内POI常见搜索的集成。',
+			title: 'Explore indoor',
+			subTitle: 'The integration of POIs search indoor.',
 			component: <SearchIntegrate/>
-		},*/
+		},
 	]
 };
 
