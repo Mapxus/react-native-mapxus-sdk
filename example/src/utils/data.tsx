@@ -91,7 +91,7 @@ const samples: any = {
 			subTitle: 'Set the map style, language and whether to display the outdoor map.',
 			component: <MapAppearance/>
 		},
-/*		{
+		{
 			id: 'switching_building_gestures',
 			category: 'map_interaction',
 			menuImg: <Image
@@ -99,10 +99,10 @@ const samples: any = {
 				style={{height: '100%', width: '100%'}}
 			/>,
 			header: 'Switching building gestures',
-			title: '切换建筑的手势交互',
-			subTitle: '设置切换建筑手势。',
+			title: 'The interaction of gestures for switching buildings',
+			subTitle: 'Set the gestures for switching buildings.',
 			component: <SwitchingBuildingGestures/>
-		},*/
+		},
 		{
 			id: 'focus_on_indoor_scene',
 			category: 'map_interaction',
@@ -229,7 +229,7 @@ const samples: any = {
 			subTitle: 'Search buildings from the specified square of a point.',
 			component: <SearchBuildingNearby/>
 		},
-/*		{
+		{
 			id: 'search_building_by_ID',
 			category: 'map_search',
 			menuImg: <Image
@@ -237,10 +237,10 @@ const samples: any = {
 				style={{height: '100%', width: '100%'}}
 			/>,
 			header: 'Search building by ID',
-			title: '指定建筑ID搜索建筑',
-			subTitle: '按ID搜索建筑。',
+			title: 'Search buildings by IDs',
+			subTitle: 'Accurately search for specific buildings by IDs.',
 			component: <SearchBuildingByID/>
-		},*/
+		},
 		{
 			id: 'category_included_in_scene',
 			category: 'map_search',
@@ -265,18 +265,18 @@ const samples: any = {
 			subTitle: 'Search POIs from the specified floor of a building。',
 			component: <SearchPOIInScene/>
 		},
-/*		{
+		{
 			id: 'search_POI_in_bound',
 			category: 'map_search',
 			menuImg: <Image
 				source={require('../assets/SearchPOIInBound.png')}
 				style={{height: '100%', width: '100%'}}
 			/>,
-			header: 'Search POI in bound',
-			title: '指定矩形区域内POI搜索',
-			subTitle: '在指定的矩形区域内搜索POI。',
+			header: 'Search POIs in bound',
+			title: 'Search POIs in a bbox',
+			subTitle: 'Search POIs from the specified rectangular area.',
 			component: <SearchPOIInBound/>
-		},*/
+		},
 		{
 			id: 'search_POI_nearby',
 			category: 'map_search',
@@ -289,7 +289,7 @@ const samples: any = {
 			subTitle: 'Search POIs near the specified center by building or ordinal.',
 			component: <SearchPOINearby/>
 		},
-/*		{
+		{
 			id: 'search_POI_by_ID',
 			category: 'map_search',
 			menuImg: <Image
@@ -297,10 +297,10 @@ const samples: any = {
 				style={{height: '100%', width: '100%'}}
 			/>,
 			header: 'Search POI by ID',
-			title: '指定POI ID搜索',
-			subTitle: '按ID搜索POI。',
+			title: 'Search POIs by IDs',
+			subTitle: 'Accurately search for specific POIs by IDs.',
 			component: <SearchPOIByID/>
-		},*/
+		},
 	],
 	map_cases: [
 		{
