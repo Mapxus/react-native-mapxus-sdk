@@ -41,6 +41,7 @@ dependencies {
     //mapxus
     implementation("com.mapxus.map:mapxusmap:4.2.4")
     implementation ("com.mapxus.positioning:positioning:2.0.9")
+    implementation ("com.mapxus.visual:mapxusvisual:0.2.5")
 
     // Mapbox SDK
     if (rootProject.ext.has('rnmbglMapboxLibs')) {
