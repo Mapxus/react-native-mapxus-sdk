@@ -49,11 +49,9 @@ Then run `pod install` and rebuild your project.
 ## Android Installation
 
 ### React-Native > `0.60.0` 
-If you are using autolinking feature introduced in React-Native `0.60.0` you do not need any additional steps.
+If you are using autolinking feature introduced in React-Native 0.60.0 you do not need any additional steps.
 
-Add Kotlin support under dependencies
-
-Add the following to your  `android/build.gradle`:
+Add Kotlin support under dependencies in your  `android/build.gradle`
 
 ```groovy
 ...
@@ -70,9 +68,7 @@ dependencies {
 ...
 ```
 
-Add project under dependencies
-
-Add the following to your  `android/app/build.gradle`:
+Add project under dependencies in your  `android/app/build.gradle`
 
 ```groovy
 ...
@@ -86,7 +82,7 @@ dependencies {
 
 Include project, so gradle knows where to find the project
 
-Add the following to your  `android/settings.gradle`:
+Add the following to your `android/settings.gradle`
 
 ```groovy
 ...
@@ -95,7 +91,7 @@ project(':mapxus_react-native-mapxus-sdk').projectDir = new File(rootProject.pro
 ...
 ```
 
-Also you can overwrite Mapxus dependencies within your `android/app/build.gradle`:
+Also you can overwrite Mapxus dependencies within your `android/app/build.gradle`
 
 ```groovy
 dependencies {
@@ -106,7 +102,7 @@ dependencies {
     }
 ```
 
-Don't forget add mavenCentral repo to your  `android/build.gradle`:
+Don't forget add mavenCentral repo to your `android/build.gradle`
 
 ```groovy
 ...
