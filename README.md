@@ -51,13 +51,62 @@ Then run `pod install` and rebuild your project.
 ### React-Native > `0.60.0` 
 If you are using autolinking feature introduced in React-Native `0.60.0` you do not need any additional steps.
 
-### Mapxus Maps SDK
-
-It is possible to set a custom version of the Mapxus SDK
+Add Kotlin support under dependencies
 
 Add the following to your  `android/build.gradle`:
 
-under section `allprojects/repositories`
+```groovy
+...
+buildscript {
+//...
+dependencies {
+    // ... 
+    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.32")
+    classpath("com.android.tools.build:gradle:4.1.3")
+    // ...
+				}
+//...
+} 
+...
+```
+
+Add project under dependencies
+
+Add the following to your  `android/app/build.gradle`:
+
+```groovy
+...
+dependencies {
+    // ... 
+    implementation project(':mapxus_react-native-mapxus-sdk')
+    // ...
+} 
+...
+```
+
+Include project, so gradle knows where to find the project
+
+Add the following to your  `android/settings.gradle`:
+
+```groovy
+...
+include ':mapxus_react-native-mapxus-sdk'
+project(':mapxus_react-native-mapxus-sdk').projectDir = new File(rootProject.projectDir, '../node_modules/@mapxus/react-native-mapxus-sdk/android/rctmapxus')
+...
+```
+
+Also you can overwrite Mapxus dependencies within your `android/app/build.gradle`:
+
+```groovy
+dependencies {
+    // ... 
+    implementation("com.mapxus.map:mapxusmap:4.2.3")
+    implementation ("com.mapxus.positioning:positioning:2.0.9")    
+    // ...
+    }
+```
+
+Don't forget add mavenCentral repo to your  `android/build.gradle`:
 
 ```groovy
 ...
@@ -69,16 +118,6 @@ allprojects {
     				}
        	 }
 ...
-```
-
-Overwrite Mapxus dependencies within your `android/app/build.gradle`:
-
-```groovy
-dependencies {
-    // ... 
-    implementation("com.mapxus.map:mapxusmap:4.2.3")
-    implementation ("com.mapxus.positioning:positioning:2.0.9")    
-    // ...
 ```
 
 Check the current version of the SDK [here](https://map-service.mapxus.com/dpw/digitalMapAndroid).
