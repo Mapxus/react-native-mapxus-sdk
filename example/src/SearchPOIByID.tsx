@@ -57,7 +57,7 @@ export default function SearchPOIByID() {
 				</MapxusSdk.MapxusMap>
 			</View>
 			<ParamsScrollView>
-				<List>
+				<List style={{marginTop: 10}}>
 					<InputItem
 						labelNumber={5}
 						style={styles.input}

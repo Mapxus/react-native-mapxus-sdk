@@ -228,7 +228,8 @@ const styles = StyleSheet.create({
 	},
 	controller: {
 		backgroundColor: '#fff',
-		paddingHorizontal: 60
+		paddingHorizontal: 60,
+		marginTop: 15
 	},
 	inner: {
 		flexDirection: 'row',

@@ -77,7 +77,7 @@ export default function SearchPOIInScene() {
 				</MapxusSdk.MapxusMap>
 			</View>
 			<ParamsScrollView>
-				<List>
+				<List style={{marginTop: 10}}>
 					<InputItem
 						labelNumber={5}
 						style={styles.input}
@@ -161,6 +161,7 @@ const styles = StyleSheet.create({
 	button: {
 		height: 'auto',
 		marginTop: 15,
+		marginBottom: 10,
 		marginHorizontal: 15,
 		paddingVertical: 8
 	},

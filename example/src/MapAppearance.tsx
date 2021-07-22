@@ -153,7 +153,7 @@ export default function MapAppearance() {
 	return (
 		<Provider>
 			<View style={{flex: 1}}>
-				<View style={{flex: 6}}>
+				<View style={{flex: 5}}>
 					<MapxusSdk.MapxusMap
 						ref={mapRef}
 						outdoorHidden={outdoorHidden}
@@ -207,7 +207,8 @@ export default function MapAppearance() {
 const styles = StyleSheet.create({
 	controller: {
 		backgroundColor: '#fff',
-		paddingHorizontal: 20
+		paddingHorizontal: 20,
+		marginTop: 15
 	},
 	inner: {
 		flexDirection: 'row',

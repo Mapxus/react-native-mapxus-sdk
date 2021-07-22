@@ -53,7 +53,8 @@ const styles = StyleSheet.create({
 		backgroundColor: '#fff',
 		flexDirection: 'row',
 		alignItems: 'center',
-		justifyContent: 'space-around'
+		justifyContent: 'space-around',
+		marginTop: 15
 	},
 	inner: {
 		flexDirection: 'row',

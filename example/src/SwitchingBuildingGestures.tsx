@@ -10,7 +10,7 @@ export default function SwitchingBuildingGestures() {
 
 	return (
 		<View style={{flex: 1}}>
-			<View style={{flex: 6}}>
+			<View style={{flex: 7}}>
 				<MapxusSdk.MapxusMap
 					autoChangeBuilding={isAutoSwitch}
 					gestureSwitchingBuilding={isGesturesSwitch}
@@ -39,7 +39,8 @@ const styles = StyleSheet.create({
 		backgroundColor: '#fff',
 		flexDirection: 'row',
 		alignItems: 'center',
-		justifyContent: 'space-around'
+		justifyContent: 'space-around',
+		marginTop: 15
 	},
 	inner: {
 		flexDirection: 'row',

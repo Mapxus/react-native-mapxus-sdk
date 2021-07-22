@@ -18,7 +18,7 @@ export default function ParamsScrollView({children}: any) {
 
 	return (
 		<SafeAreaView style={{flex: 1, paddingBottom: statusBarHeight}}>
-			<ScrollView style={{marginVertical: 10}}>
+			<ScrollView>
 				{children}
 			</ScrollView>
 		</SafeAreaView>
