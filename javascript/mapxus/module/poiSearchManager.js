@@ -14,8 +14,13 @@ class PoiSearchManager {
      * @returns {Promise}
      */
     async poiSearchInIndoorScene(params) {
-        const result = await module.poiSearchInIndoorScene(params);
-        return result;
+        try {
+            const result = await module.poiSearchInIndoorScene(params);
+            return result;
+        } catch (err) {
+            console.log(err);
+            return {};
+        }
     }
 
     /**
@@ -25,8 +30,14 @@ class PoiSearchManager {
      * @returns {Promise}
      */
     async poiSearchOnBbox(params) {
-        const result = await module.poiSearchOnBbox(params);
-        return result;
+        try {
+            const result = await module.poiSearchOnBbox(params);
+            return result;
+        } catch (err) {
+            console.log(err);
+            return {};
+        }
+
     }
 
     /**
@@ -36,8 +47,14 @@ class PoiSearchManager {
      * @returns {Promise}
      */
     async poiSearchNearbyCenter(params) {
-        const result = await module.poiSearchNearbyCenter(params);
-        return result;
+        try {
+            const result = await module.poiSearchNearbyCenter(params);
+            return result;
+        } catch (err) {
+            console.log(err);
+            return {};
+        }
+
     }
 
     /**
@@ -46,8 +63,14 @@ class PoiSearchManager {
      * @returns {Promise}
      */
     async poiSearchByIds(params) {
-        const result = await module.poiSearchByIds(params);
-        return result;
+        try {
+            const result = await module.poiSearchByIds(params);
+            return result;
+        } catch (err) {
+            console.log(err);
+            return {};
+        }
+
     }
 
     /**
@@ -57,8 +80,14 @@ class PoiSearchManager {
      * @returns {Promise}
      */
     async orientationPoiSearch(params) {
-        const result = await module.orientationPoiSearch(params);
-        return result;
+        try {
+            const result = await module.orientationPoiSearch(params);
+            return result;
+        } catch (err) {
+            console.log(err);
+            return {};
+        }
+
     }
 }
 

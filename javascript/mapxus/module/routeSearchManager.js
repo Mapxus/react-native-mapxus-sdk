@@ -14,8 +14,14 @@ class RouteSearchManager {
      * @returns 
      */
     async routeSearch(params) {
-        const result = module.routeSearch(params);
-        return result;
+        try {
+            const result = module.routeSearch(params);
+            return result;
+
+        } catch (err) {
+            console.log(err);
+            return {};
+        }
     }
 }
 

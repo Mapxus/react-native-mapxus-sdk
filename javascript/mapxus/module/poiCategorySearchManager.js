@@ -13,8 +13,14 @@ class PoiCategorySearchManager {
    * @returns {Promise}
    */
   async poiCategorySearch(params) {
-    const result = await module.poiCategorySearch(params);
-    return result;
+    try {
+      const result = await module.poiCategorySearch(params);
+      return result;
+    } catch (err) {
+      console.log(err);
+      return {};
+    }
+
   }
 }
 

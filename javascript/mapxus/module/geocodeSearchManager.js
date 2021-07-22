@@ -15,8 +15,13 @@ class GeocodeSearchManager {
    * @returns {Promise}
    */
   async reverseGeoCode(params) {
-    const result = await module.reverseGeoCode(params);
-    return result;
+    try {
+      const result = await module.reverseGeoCode(params);
+      return result;
+    } catch (err) {
+      console.log(err);
+      return {};
+    }
   }
 }
 

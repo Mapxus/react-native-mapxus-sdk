@@ -6,6 +6,8 @@ buildscript {
         minSdkVersion = 23
         compileSdkVersion = 30
         targetSdkVersion = 30
+        kotlin_version = '1.5.21'
+        FLIPPER_VERSION = '0.75.1'
     }
     repositories {
         google()
@@ -13,8 +15,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10'
-        classpath('com.android.tools.build:gradle:4.2.1')
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath('com.android.tools.build:gradle:4.2.2')
     // NOTE: Do not place your application dependencies here; they belong
     // in the individual module build.gradle files
     }

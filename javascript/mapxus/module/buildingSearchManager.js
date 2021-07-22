@@ -13,8 +13,13 @@ class BuildingSearchManager {
      * @returns {Promise}
      */
     async buildingSearchGlobal(params = {}) {
-        const result = await module.buildingSearchGlobal(params);
-        return result;
+        try {
+            const result = await module.buildingSearchGlobal(params);
+            return result;
+        } catch (err) {
+            console.log(err);
+            return {};
+        }
     }
 
     /**
@@ -23,8 +28,13 @@ class BuildingSearchManager {
      * @returns {Promise}
      */
     async buildingSearchOnBbox(params = {}) {
-        const result = await module.buildingSearchOnBbox(params);
-        return result;
+        try {
+            const result = await module.buildingSearchOnBbox(params);
+            return result;
+        } catch (err) {
+            console.log(err);
+            return {};
+        }
     }
 
     /**
@@ -33,8 +43,13 @@ class BuildingSearchManager {
      * @returns {Promise}
      */
     async buildingSearchNearbyCenter(params) {
-        const result = await module.buildingSearchNearbyCenter(params);
-        return result;
+        try {
+            const result = await module.buildingSearchNearbyCenter(params);
+            return result;
+        } catch (err) {
+            console.log(err);
+            return {};
+        }
     }
 
     /**
@@ -43,8 +58,13 @@ class BuildingSearchManager {
      * @returns {Promise}
      */
     async buildingSearchByIds(params) {
-        const result = await module.buildingSearchByIds(params);
-        return result;
+        try {
+            const result = await module.buildingSearchByIds(params);
+            return result;
+        } catch (err) {
+            console.log(err);
+            return {};
+        }
     }
 }
 
