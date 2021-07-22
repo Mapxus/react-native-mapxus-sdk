@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text} from 'react-native';
-import MapxusSdk, {LongPressedObject, TappedOnPoiObject} from '@mapxus/react-native-mapxus-sdk';
+import MapxusSdk, {LongPressedObject, TappedOnBlankObject, TappedOnPoiObject} from '@mapxus/react-native-mapxus-sdk';
 import {Provider, Modal} from '@ant-design/react-native';
 import ParamsScrollView from './ParamsScrollView';
 
@@ -23,6 +23,16 @@ export default function ClickEventListening() {
 			feature?.floor,
 			feature?.building?.name
 		)
+	}
+
+	function handleClickBlank(feature: TappedOnBlankObject) {
+		showModal(
+			'building',
+			'You have tapped on',
+			`[${feature?.coordinates?.latitude}, ${feature?.coordinates?.longitude}]`,
+			feature?.floor,
+			feature?.building?.name
+		);
 	}
 
 	function showModal(object: string, title: string, coordinateOrPOIName: string, floor: string, buildingName: string) {
@@ -48,6 +58,7 @@ export default function ClickEventListening() {
 						}}
 						onLongPressed={handlePress}
 						onTappedOnPoi={handleClick}
+						onTappedOnBlank={handleClickBlank}
 					>
 						<MapxusSdk.MapView style={{flex: 1}}/>
 					</MapxusSdk.MapxusMap>
