@@ -351,6 +351,7 @@ class RCTMapxusPointAnnotation(
         val map = (if (mMapxus != null) mMapxus else mapView) ?: return
         if (marker != null) {
             map.symbolManager?.delete(marker)
+            marker = null
         }
         if (mChildView != null) {
             map.offscreenAnnotationViewContainer()?.removeView(mChildView)
