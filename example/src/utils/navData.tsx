@@ -327,7 +327,7 @@ const samples: any = {
 			subTitle: 'Search for routes between the two places by different modes of transportation.',
 			component: <Route/>
 		},
-/*		{
+		{
 			id: 'visual_map',
 			category: 'map_cases',
 			menuImg: <Image
@@ -338,7 +338,7 @@ const samples: any = {
 			title: 'Visual map',
 			subTitle: '介绍Visual的集成。',
 			component: <VisualMap/>
-		},*/
+		},
 		{
 			id: 'search_integrate',
 			category: 'map_cases',
