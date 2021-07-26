@@ -336,7 +336,7 @@ const samples: any = {
 			/>,
 			header: 'Visual map',
 			title: 'Visual map',
-			subTitle: '介绍Visual的集成。',
+			subTitle: 'The integration of Visual map.',
 			component: <VisualMap/>
 		},
 		{
