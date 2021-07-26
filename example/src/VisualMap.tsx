@@ -7,10 +7,7 @@ export default function VisualMap() {
 
 	return (
 		<View style={{flex: 1}}>
-			<MapxusSdk.MapxusMap mapOption={{
-				buildingId: 'tsuenwanplaza_hk_369d01',
-				zoomInsets: {left: -100, right: -100}
-			}}>
+			<MapxusSdk.MapxusMap mapOption={{buildingId: 'tsuenwanplaza_hk_369d01'}}>
 				<MapxusSdk.MapView style={{flex: 1}}/>
 			</MapxusSdk.MapxusMap>
 			<TouchableOpacity
@@ -38,7 +35,7 @@ const styles = StyleSheet.create({
 	iconArea: {
 		position: 'absolute',
 		left: 10,
-		top: 50,
+		top: 60,
 		width: 40,
 		height: 40
 	}
