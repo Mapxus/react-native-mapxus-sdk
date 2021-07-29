@@ -8,6 +8,7 @@ buildscript {
         kotlin_version = '1.5.21'
     }
     repositories {
+        maven { url 'https://www.jitpack.io' }
         google()
         jcenter()
         mavenCentral()
@@ -37,6 +38,11 @@ android {
         targetSdkVersion safeExtGet('targetSdkVersion', 30)
         versionCode 1
         versionName "1.0"
+        javaCompileOptions{
+            annotationProcessorOptions {
+                includeCompileClasspath true
+            }
+        }
     }
 
     compileOptions {
@@ -53,6 +59,7 @@ android {
 }
 
 repositories {
+    maven { url 'https://www.jitpack.io' }
     maven {
         // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
         url("$rootDir/../node_modules/react-native/android")
@@ -64,7 +71,6 @@ repositories {
     mavenCentral()
     google()
     jcenter()
-    maven { url 'https://www.jitpack.io' }
 }
 
 dependencies {
