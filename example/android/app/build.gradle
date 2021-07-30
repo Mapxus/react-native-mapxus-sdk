@@ -186,7 +186,7 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation 'com.facebook.react:react-native:+'  // From node_modules
 
-    implementation project(':rctmapxus')
+    implementation project(':react-native-mapxus-sdk')
 
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 

@@ -55,8 +55,8 @@ class RCTMapxusNavigationView(
                     routedata?.getMap("points")?.getArray("coordinates")?.let {
                         val resultArr = Array(it.size()) { DoubleArray(2) }
                         for (i in 0 until it.size()) {
-                            resultArr[i][0] = it.getMap(i).getDouble("longitude")
-                            resultArr[i][1] = it.getMap(i).getDouble("latitude")
+                            resultArr[i][0] = it.getMap(i)!!.getDouble("longitude")
+                            resultArr[i][1] = it.getMap(i)!!.getDouble("latitude")
                         }
                         coordinates = resultArr
                     }
