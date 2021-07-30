@@ -27,6 +27,8 @@ export default function SurroundingIdentification() {
 	const [location, setLocation] = useState<PageLocation | null>(null);
 	const [isIndoor, setIsIndoor] = useState(false);
 	const [androidAngle, setAndroidAngle] = useState(0.0);
+	const [ordinal, setOrdinal] = useState('0');
+	const [coordinate, setCoordinate] = useState('114.111375, 22.370787');
 
 	const refSortButton = useRef(null);
 
@@ -45,6 +47,8 @@ export default function SurroundingIdentification() {
 	}
 
 	async function handleSearch() {
+		console.log(ordinal, coordinate);
+
 		if (isIndoor && location) {
 			if (Platform.OS == 'ios') {
 				const scenes: GeocodeSearchResult = await getReverseGeoCode({
@@ -130,7 +134,7 @@ export default function SurroundingIdentification() {
 
 	return (
 		<View style={{flex: 1}}>
-			<View style={{flex: 3}}>
+			<View style={{flex: 2}}>
 				<MapxusSdk.MapxusMap onIndoorStatusChange={object => setIsIndoor(object.flag)}>
 					<MapxusSdk.MapView style={{flex: 1}}>
 						{
@@ -187,6 +191,23 @@ export default function SurroundingIdentification() {
 			</View>
 			<ParamsScrollView>
 				<List style={{marginTop: 10}}>
+					<InputItem
+						labelNumber={5}
+						style={styles.input}
+						value={ordinal}
+						onChange={setOrdinal}
+					>
+						ordinal:
+					</InputItem>
+					<InputItem
+						labelNumber={5}
+						style={styles.input}
+						placeholder={'lon, lat'}
+						value={coordinate}
+						onChange={setCoordinate}
+					>
+						coordinate:
+					</InputItem>
 					<InputItem
 						labelNumber={5}
 						style={styles.input}
