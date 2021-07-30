@@ -198,12 +198,22 @@ declare namespace MapxusSdk {
 
   class MapxusMapLocation extends Component<MapxusMapLocationProps> { }
 
-  class NavigationView extends Component<NavigationViewProps> {
+  class RouteView extends Component<RouteViewProps> {
     getPainterPathDto(): Promise<PainterPathDtoProps>;
     paintRouteUsingPath(path: Path, points: IndoorPoint[]): void;
     cleanRoute(): void;
     changeOn(buildingId: string, floor: string): void;
     focusOn(keys: string[], insets: Insets): void;
+  }
+
+  class NavigationView extends Component<NavigationViewProps> {
+    updatePath(path: Path, points: IndoorPoint[]): void;
+    start(): void;
+    stop(): void;
+  }
+
+  class SimulateLocationManager extends Component<SimulateLocationManagerProps> {
+    setSimulateLocation(location: any): void;
   }
 
   class MapView extends Component<MapViewProps> {
@@ -560,8 +570,25 @@ export interface AndroidCompass {
   sensorAccuracy: number;
 }
 
-export interface NavigationViewProps extends ViewProps {
+export interface RouteViewProps extends ViewProps {
+  routeAppearance?: object;
+}
 
+export interface NavigationViewProps extends ViewProps {
+  adsorbable?: boolean,
+  shortenable?: boolean,
+  numberOfAllowedDrifts?: number,
+  maximumDrift?: number,
+  distanceToDestination?: number,
+  onArrivalAtDestination?: () => void,
+  onExcessiveDrift?: () => void,
+  onRefreshTheAdsorptionLocation?: (feature: object) => void,
+  onGetNewPath?: (feature: object) => void,
+}
+
+export interface SimulateLocationManagerProps extends ViewProps {
+  showsUserHeadingIndicator?: boolean;
+  onUpdate?: (feature: object) => void;
 }
 
 export interface MapViewProps extends ViewProps {

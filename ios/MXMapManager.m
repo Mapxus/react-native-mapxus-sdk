@@ -6,7 +6,6 @@
 //
 
 #import <React/RCTUIManager.h>
-
 #import "MXMapManager.h"
 #import "MXMap.h"
 #import "RCTConvert+Mapxus.h"

@@ -6,24 +6,29 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@import Mapbox;
-@import MapxusMapSDK;
-@import MapxusComponentKit;
+#import <MapxusMapSDK/MapxusMapSDK.h>
+#import <MapxusComponentKit/MapxusComponentKit.h>
+#import "RCTMGLMapView.h"
+#import "RCTMXUserLocationProtocol.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MXNavigationView : UIView
+@interface MXNavigationView : UIView <RCTMXUserLocationProtocol>
 
-@property (nonatomic, weak) MGLMapView *mapRenderer;
+@property (nonatomic, assign) BOOL reactAdsorbable;
+@property (nonatomic, assign) BOOL reactShortenable;
+@property (nonatomic, assign) NSUInteger reactNumberOfAllowedDrifts;
+@property (nonatomic, assign) float reactMaximumDrift;
+@property (nonatomic, assign) float reactDistanceToDestination;
+@property (nonatomic, copy) RCTBubblingEventBlock onArrivalAtDestination;
+@property (nonatomic, copy) RCTBubblingEventBlock onExcessiveDrift;
+@property (nonatomic, copy) RCTBubblingEventBlock onRefreshTheAdsorptionLocation;
+@property (nonatomic, copy) RCTBubblingEventBlock onGetNewPath;
 
-@property (nonatomic, readonly) NSDictionary *reactPainterPathDto;
-
-- (void)reactPaintRouteUsingPath:(MXMPath *)path wayPoints:(NSArray<MXMIndoorPoint *> *)list;
-- (void)reactCleanRoute;
-- (void)reactChangeOnBuilding:(nullable NSString *)buildingId floor:(nullable NSString *)floor;
-- (void)reactFocusOnKeys:(NSArray<NSString*> *)keys edgePadding:(UIEdgeInsets)insets;
+- (void)updatePath:(MXMPath *)path wayPoints:(NSArray<MXMIndoorPoint *> *)wayPoints;
+- (void)start;
+- (void)stop;
 
 @end
 
