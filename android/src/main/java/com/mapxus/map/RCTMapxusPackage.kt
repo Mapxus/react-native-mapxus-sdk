@@ -53,6 +53,7 @@ class RCTMapxusPackage : ReactPackage {
             RCTMapxusNavigationViewManager(reactApplicationContext),
             RCTMapxusPointAnnotationManager(reactApplicationContext),
             RCTMapxusSimulateLocationManager(reactApplicationContext),
+            RCTMapxusRouteViewManager(reactApplicationContext),
             // components
             RCTMGLCameraManager(reactApplicationContext),
             RCTMGLMapViewManager(reactApplicationContext),

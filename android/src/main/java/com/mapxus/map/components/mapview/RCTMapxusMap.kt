@@ -22,6 +22,7 @@ import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapxus.map.components.MapxusMapFeature
 import com.mapxus.map.components.annotation.RCTMapxusNavigationView
 import com.mapxus.map.components.annotation.RCTMapxusPointAnnotation
+import com.mapxus.map.components.annotation.RCTMapxusRouteView
 import com.mapxus.map.components.location.RCTMapxusLocation
 import com.mapxus.map.components.location.RCTMapxusSimulateLocation
 import com.mapxus.map.components.mapview.helpers.RCTMapxusMapHelper
@@ -66,6 +67,7 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
     private var mLocation: RCTMapxusLocation? = null
     private var mFakeLocation: RCTMapxusSimulateLocation? = null
     private var mNavigationView: RCTMapxusNavigationView? = null
+    private var mRouteView: RCTMapxusRouteView? = null
     private var mPointAnnotation: RCTMapxusPointAnnotation? = null
 
     //settings
@@ -139,6 +141,10 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
             }
             is RCTMapxusNavigationView -> {
                 mNavigationView = childView
+                feature = childView
+            }
+            is RCTMapxusRouteView -> {
+                mRouteView = childView
                 feature = childView
             }
             is RCTMapxusPointAnnotation -> {
