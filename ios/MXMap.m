@@ -11,6 +11,7 @@
 #import <YYModel/YYModel.h>
 #import "MXPointAnnotationView.h"
 #import "MXNavigationView.h"
+#import "MXVisualNodeView.h"
 
 
 @interface MXMap () <MapxusMapDelegate>
@@ -63,6 +64,9 @@
         MXPointAnnotationView *pointAnnotation = (MXPointAnnotationView *)subview;
         pointAnnotation.map = self.mapView;
         pointAnnotation.mapxusMap = self;
+    } else if ([subview isKindOfClass:[MXVisualNodeView class]]) {
+        MXVisualNodeView *nodeView = (MXVisualNodeView *)subview;
+        nodeView.mapRendererView = self.mapView;
     } else if ([subview isKindOfClass:[MXNavigationView class]]) {
         MXNavigationView *navigationView = (MXNavigationView *)subview;
         navigationView.mapRenderer = self.mapView;
@@ -83,6 +87,9 @@
         MXPointAnnotationView *pointAnnotation = (MXPointAnnotationView *)subview;
         pointAnnotation.map = nil;
         pointAnnotation.mapxusMap = nil;
+    } else if ([subview isKindOfClass:[MXVisualNodeView class]]) {
+        MXVisualNodeView *nodeView = (MXVisualNodeView *)subview;
+        nodeView.mapRendererView = nil;
     } else if ([subview isKindOfClass:[MXNavigationView class]]) {
         MXNavigationView *navigationView = (MXNavigationView *)subview;
         navigationView.mapRenderer = nil;

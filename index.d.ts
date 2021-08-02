@@ -118,7 +118,7 @@ declare namespace MapxusSdk {
   const poiCategorySearchManager: PoiCategorySearchManager;
   const poiSearchManager: PoiSearchManager;
   const routeSearchManager: RouteSearchManager;
-
+  const visualSearchManager: VisualSearchManager;
 
   /**
    * GeoUtils
@@ -186,6 +186,10 @@ declare namespace MapxusSdk {
     routeSearch(params: RouteSearchProps): Promise<RouteSearchResult>;
   }
 
+  class VisualSearchManager {
+    searchVisualDataInBuilding(params: VisualSearchProps): Promise<object>;
+  }
+
   /**
    * Components
    */
@@ -197,6 +201,28 @@ declare namespace MapxusSdk {
   }
 
   class MapxusMapLocation extends Component<MapxusMapLocationProps> { }
+
+  class VisualNodeView extends Component<VisualNodeViewProps> {
+    renderFlagUsingNodes(nodes: object): void;
+    cleanLayer(): void;
+    changeOn(buildingId: string, floor: string): void;
+  }
+
+  class VisualView extends Component<VisualViewProps> {
+    loadVisualViewWithFristImg(imageId: string): void;
+    unloadVisualView(): void;
+    moveToKey(key: string): void;
+    moveCloseTo(buildingId: string, floor: string): void;
+    resize(): void;
+    getBearing(): Promise<number>;
+    setBearing(bearing: number): void;
+    getVisualCenter(): Promise<object>;
+    setVisualCenter(center: object): void;
+    getZoom(): Promise<number>;
+    setZoom(zoom: number): void;
+    activateBearing(): void;
+    deactivateBearing(): void;
+  }
 
   class NavigationView extends Component<NavigationViewProps> {
     getPainterPathDto(): Promise<PainterPathDtoProps>;
@@ -539,6 +565,18 @@ export interface MapxusMapLocationProps extends ViewProps {
   onLocationError?: (feature: AndroidLocationErronInfo) => void;
   onLocationChange?: (feature: AndroidLocation) => void;
   onCompassChange?: (feature: AndroidCompass) => void;
+}
+
+export interface VisualNodeViewProps extends ViewProps {
+  onTappedFlag?: (feature: object) => void;
+}
+
+export interface VisualViewProps extends ViewProps {
+  onLoadFail?: () => void;
+  onRenderComplete?: () => void;
+  onLoadingChanged?: (feature: object) => void;
+  onBearingChanged?: (feature: object) => void;
+  onNodeChanged?: (feature: object) => void;
 }
 
 export interface AndroidLocationErronInfo {
@@ -1655,6 +1693,11 @@ export interface RouteSearchProps {
   vehicle?: string;
   locale: string;
   toDoor?: boolean;
+}
+
+export interface VisualSearchProps {
+  buildingId: string;
+  scope: number;
 }
 
 export interface PainterPathDtoProps {
