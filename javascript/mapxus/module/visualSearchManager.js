@@ -13,7 +13,7 @@ class VisualSearchManager {
       return result;
     } catch (err) {
       console.log(err);
-      return {};
+      return [];
     }
   }
 }

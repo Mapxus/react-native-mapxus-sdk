@@ -155,3 +155,26 @@
              };
 }
 @end
+
+@implementation MXMNode (json)
++ (NSDictionary *)modelCustomPropertyMapper {
+    return @{
+             @"buildingId" : @[@"buildingId", @"building.id"],
+             @"floor" : @"floor.code",
+             @"latitude" : @[@"latitude", @"l.lat"],
+             @"longitude" : @[@"longitude", @"l.lon"],
+             @"bearing" : @[@"bearing", @"ca"],
+             };
+}
+
+@end
+
+@implementation MXMNodeGroup (json)
++ (NSDictionary *)modelCustomPropertyMapper {
+    return @{
+             @"floor" : @"floor.code",
+             @"nodes" : @[@"nodes", @"images"],
+             };
+}
+
+@end

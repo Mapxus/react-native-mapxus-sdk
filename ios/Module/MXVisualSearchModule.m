@@ -40,7 +40,7 @@ RCT_EXPORT_METHOD(searchVisualDataInBuilding:(nonnull NSDictionary *)params
     if (error) {
         _rejectBlock([NSString stringWithFormat:@"%d", error.code], error.localizedDescription, error);
     } else {
-        _resolveBlock([NSArray yy_modelArrayWithClass:[MXMNodeGroup class] json:list]);
+        _resolveBlock([list yy_modelToJSONObject]);
     }
 }
 

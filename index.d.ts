@@ -187,7 +187,7 @@ declare namespace MapxusSdk {
   }
 
   class VisualSearchManager {
-    searchVisualDataInBuilding(params: VisualSearchProps): Promise<object>;
+    searchVisualDataInBuilding(params: VisualSearchProps): Promise<object[]>;
   }
 
   /**

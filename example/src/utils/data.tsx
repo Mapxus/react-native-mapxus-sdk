@@ -327,7 +327,7 @@ const samples: any = {
 			subTitle: 'Search for routes between the two places by different modes of transportation.',
 			component: <Route/>
 		},
-/*		{
+		{
 			id: 'visual_map',
 			category: 'map_cases',
 			menuImg: <Image
@@ -350,7 +350,7 @@ const samples: any = {
 			title: 'Explore 搜索',
 			subTitle: '介绍建筑内POI常见搜索的集成。',
 			component: <SearchIntegrate/>
-		},*/
+		},
 	]
 };
 
