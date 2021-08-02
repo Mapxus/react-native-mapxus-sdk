@@ -10,6 +10,7 @@ import com.mapxus.map.components.camera.RCTMGLCameraManager
 import com.mapxus.map.components.images.RCTMGLImagesManager
 import com.mapxus.map.components.location.RCTMGLNativeUserLocationManager
 import com.mapxus.map.components.location.RCTMapxusLocationManager
+import com.mapxus.map.components.location.RCTMapxusSimulateLocationManager
 import com.mapxus.map.components.mapview.RCTMGLAndroidTextureMapViewManager
 import com.mapxus.map.components.mapview.RCTMGLMapViewManager
 import com.mapxus.map.components.mapview.RCTMapxusMapManager
@@ -51,6 +52,7 @@ class RCTMapxusPackage : ReactPackage {
             RCTMapxusLocationManager(reactApplicationContext),
             RCTMapxusNavigationViewManager(reactApplicationContext),
             RCTMapxusPointAnnotationManager(reactApplicationContext),
+            RCTMapxusSimulateLocationManager(reactApplicationContext),
             // components
             RCTMGLCameraManager(reactApplicationContext),
             RCTMGLMapViewManager(reactApplicationContext),
