@@ -20,12 +20,25 @@
     _mapRendererView = mapRendererView;
     if (mapRendererView) {
         self.painter = [[MXMVisualFlagPainter alloc] initWithMapView:mapRendererView];
+        
+        __weak typeof(self) weakSelf = self;
         self.painter.circleOnClickBlock = ^(NodeDictionary * _Nonnull node) {
-            if (self.onTappedFlag) {
-                self.onTappedFlag(node);
+            if (weakSelf.onTappedFlag) {
+                weakSelf.onTappedFlag(node);
             }
         };
     }
+}
+
+- (void)setOnTappedFlag:(RCTBubblingEventBlock)onTappedFlag {
+    _onTappedFlag = [onTappedFlag copy];
+    
+    __weak typeof(self) weakSelf = self;
+    self.painter.circleOnClickBlock = ^(NodeDictionary * _Nonnull node) {
+        if (weakSelf.onTappedFlag) {
+            weakSelf.onTappedFlag(node);
+        }
+    };
 }
 
 - (void)reactRenderFlagsUsingNodes:(NSArray<NSDictionary *> *)nodes {
