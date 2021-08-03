@@ -118,7 +118,7 @@ declare namespace MapxusSdk {
   const poiCategorySearchManager: PoiCategorySearchManager;
   const poiSearchManager: PoiSearchManager;
   const routeSearchManager: RouteSearchManager;
-
+  const visualSearchManager: VisualSearchManager;
 
   /**
    * GeoUtils
@@ -186,6 +186,10 @@ declare namespace MapxusSdk {
     routeSearch(params: RouteSearchProps): Promise<RouteSearchResult>;
   }
 
+  class VisualSearchManager {
+    searchVisualDataInBuilding(params: VisualSearchProps): Promise<object[]>;
+  }
+
   /**
    * Components
    */
@@ -197,6 +201,28 @@ declare namespace MapxusSdk {
   }
 
   class MapxusMapLocation extends Component<MapxusMapLocationProps> { }
+
+  class VisualNodeView extends Component<VisualNodeViewProps> {
+    renderFlagUsingNodes(nodes: object): void;
+    cleanLayer(): void;
+    changeOn(buildingId: string, floor: string): void;
+  }
+
+  class VisualView extends Component<VisualViewProps> {
+    loadVisualViewWithFristImg(imageId: string): void;
+    unloadVisualView(): void;
+    moveToKey(key: string): void;
+    moveCloseTo(buildingId: string, floor: string): void;
+    resize(): void;
+    getBearing(): Promise<number>;
+    setBearing(bearing: number): void;
+    getVisualCenter(): Promise<object>;
+    setVisualCenter(center: object): void;
+    getZoom(): Promise<number>;
+    setZoom(zoom: number): void;
+    activateBearing(): void;
+    deactivateBearing(): void;
+  }
 
   class RouteView extends Component<RouteViewProps> {
     getPainterPathDto(): Promise<PainterPathDtoProps>;
@@ -549,6 +575,18 @@ export interface MapxusMapLocationProps extends ViewProps {
   onLocationError?: (feature: AndroidLocationErronInfo) => void;
   onLocationChange?: (feature: AndroidLocation) => void;
   onCompassChange?: (feature: AndroidCompass) => void;
+}
+
+export interface VisualNodeViewProps extends ViewProps {
+  onTappedFlag?: (feature: object) => void;
+}
+
+export interface VisualViewProps extends ViewProps {
+  onLoadFail?: () => void;
+  onRenderComplete?: () => void;
+  onLoadingChanged?: (feature: object) => void;
+  onBearingChanged?: (feature: object) => void;
+  onNodeChanged?: (feature: object) => void;
 }
 
 export interface AndroidLocationErronInfo {
@@ -1064,7 +1102,7 @@ export interface Building {
    */
   address_default?: Address;
 
-  /** 
+  /**
    * Adress in English
    */
   address_en?: Address;
@@ -1429,7 +1467,7 @@ export interface Instruction {
   time: number;
 
   /**
-   * Connection type, only returned if sign is `MXMDownstairs` and `MXMUpstairs`, possible values are elevator_customer, 
+   * Connection type, only returned if sign is `MXMDownstairs` and `MXMUpstairs`, possible values are elevator_customer,
    * elevator_good, escalator, ramp, stairs
    */
   type?: string;
@@ -1684,6 +1722,11 @@ export interface RouteSearchProps {
   toDoor?: boolean;
 }
 
+export interface VisualSearchProps {
+  buildingId: string;
+  scope: number;
+}
+
 export interface PainterPathDtoProps {
   /**
    * Starting point
@@ -1696,7 +1739,7 @@ export interface PainterPathDtoProps {
   endPoint: IndoorPoint;
 
   /**
-   * Key in planning order, where outdoor passages are separated by indoor passages by outdoor 1, outdoor 2 
+   * Key in planning order, where outdoor passages are separated by indoor passages by outdoor 1, outdoor 2
    * or buildingId-floor 1... to distinguish them.The indoor sections are grouped together by buildingId-floor.
    */
   keys: string[];
@@ -1709,7 +1752,7 @@ export interface PainterPathDtoProps {
 
 export interface Paragraph {
   /**
-   * Key in planning order, where outdoor passages are separated by indoor passages by outdoor 1, outdoor 2 
+   * Key in planning order, where outdoor passages are separated by indoor passages by outdoor 1, outdoor 2
    * or buildingId-floor 1... to distinguish them.The indoor sections are grouped together by buildingId-floor.
    */
   key: string;

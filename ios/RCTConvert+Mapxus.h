@@ -6,8 +6,8 @@
 //
 
 #import <React/RCTConvert.h>
-
-@import MapxusMapSDK;
+#import <MapxusMapSDK/MapxusMapSDK.h>
+#import <MapxusVisualSDK/MapxusVisualSDK.h>
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -31,6 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (MXMOrientationPOISearchRequest *)MXMOrientationPOISearchRequest:(id)json;
 
 + (MXMRouteSearchRequest *)MXMRouteSearchRequest:(id)json;
+
++ (MXMVisualBuildingSearchOption *)MXMVisualBuildingSearchOption:(id)json;
 
 @end
 

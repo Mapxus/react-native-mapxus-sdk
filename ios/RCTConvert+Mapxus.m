@@ -127,4 +127,12 @@
     return req;
 }
 
++ (MXMVisualBuildingSearchOption *)MXMVisualBuildingSearchOption:(id)json {
+    json = [self NSDictionary:json];
+    MXMVisualBuildingSearchOption *req = [[MXMVisualBuildingSearchOption alloc] init];
+    req.buildingId = json[@"buildingId"];
+    req.scope = [json[@"scope"] unsignedIntegerValue];
+    return req;
+}
+
 @end
