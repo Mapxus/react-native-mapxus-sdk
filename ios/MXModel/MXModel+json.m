@@ -41,7 +41,7 @@
              @"name_ko" : @[@"name_ko", @"name:ko"],
              @"identifier" : @[@"identifier", @"id"],
              @"venueId" : @[@"venueId", @"ref:venue"],
-             };
+    };
 }
 @end
 
@@ -50,8 +50,8 @@
 @implementation MXMPOICategorySearchResponse (json)
 + (NSDictionary *)modelCustomPropertyMapper {
     return @{
-             @"category" : @[@"category", @"result"],
-             };
+        @"category" : @[@"category", @"result"],
+    };
 }
 @end
 
@@ -60,8 +60,8 @@
 @implementation MXMOrientationPOISearchResponse (json)
 + (NSDictionary *)modelCustomPropertyMapper {
     return @{
-             @"pois" : @[@"pois", @"result"],
-             };
+        @"pois" : @[@"pois", @"result"],
+    };
 }
 @end
 
@@ -80,7 +80,7 @@
 + (NSDictionary *)modelCustomPropertyMapper {
     return @{@"latitude" : @[@"latitude", @"lat"],
              @"longitude" : @[@"longitude", @"lon"],
-             };
+    };
 }
 @end
 
@@ -90,7 +90,7 @@
              @"min_longitude" : @[@"min_longitude", @"minLon"],
              @"max_latitude" : @[@"max_latitude", @"maxLat"],
              @"max_longitude" : @[@"max_longitude", @"maxLon"],
-             };
+    };
 }
 @end
 
@@ -98,7 +98,7 @@
 + (NSDictionary *)modelCustomPropertyMapper {
     return @{@"floorId" : @[@"floorId", @"id"],
              @"hasVisualMap" : @[@"hasVisualMap", @"visualMap"]
-             };
+    };
 }
 @end
 
@@ -124,7 +124,7 @@
              @"address_ko" : @[@"address_ko", @"address.ko"],
              @"buildingId" : @[@"buildingId", @"id"],
              @"hasVisualMap" : @[@"hasVisualMap", @"visualMap"]
-             };
+    };
 }
 @end
 
@@ -143,38 +143,34 @@
              @"accessibilityDetail_ja" : @[@"accessibilityDetail_ja", @"accessibilityDetail.ja"],
              @"accessibilityDetail_ko" : @[@"accessibilityDetail_ko", @"accessibilityDetail.ko"],
              @"introduction" : @[@"introduction", @"description"],
-             };
+    };
 }
 @end
+
 
 @implementation MXMInstruction (json)
 + (NSDictionary *)modelCustomPropertyMapper {
     return @{
-             @"buildingId" : @[@"buildingId", @"building_id"],
-             @"streetName" : @[@"streetName", @"street_name"],
-             };
+        @"buildingId" : @[@"buildingId", @"building_id"],
+        @"streetName" : @[@"streetName", @"street_name"],
+    };
 }
 @end
 
-@implementation MXMNode (json)
-+ (NSDictionary *)modelCustomPropertyMapper {
-    return @{
-             @"buildingId" : @[@"buildingId", @"building.id"],
-             @"floor" : @"floor.code",
-             @"latitude" : @[@"latitude", @"l.lat"],
-             @"longitude" : @[@"longitude", @"l.lon"],
-             @"bearing" : @[@"bearing", @"ca"],
-             };
-}
-
-@end
 
 @implementation MXMNodeGroup (json)
-+ (NSDictionary *)modelCustomPropertyMapper {
-    return @{
-             @"floor" : @"floor.code",
-             @"nodes" : @[@"nodes", @"images"],
-             };
+- (NSDictionary<NSString*, id> *)toJson {
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    dic[@"floor"] = self.floor;
+    
+    NSMutableArray *arr = [NSMutableArray array];
+    for (MXMNode *n in self.nodes) {
+        NSDictionary *nd = [n toJson];
+        [arr addObject:nd];
+    }
+    dic[@"nodes"] = [arr copy];
+    
+    return [dic copy];
 }
 
 @end
