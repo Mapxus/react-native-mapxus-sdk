@@ -43,10 +43,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MXMInstruction (json)
 @end
 
-@interface MXMNode (json)
-@end
-
 @interface MXMNodeGroup (json)
+- (NSDictionary<NSString*, id> *)toJson;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -9,6 +9,7 @@
 #import <YYModel/YYModel.h>
 #import "MXVisualSearchModule.h"
 #import "RCTConvert+Mapxus.h"
+#import "MXModel+json.h"
 
 @interface MXVisualSearchModule () <MXMVisualSearchDelegate>
 
@@ -40,7 +41,12 @@ RCT_EXPORT_METHOD(searchVisualDataInBuilding:(nonnull NSDictionary *)params
     if (error) {
         _rejectBlock([NSString stringWithFormat:@"%d", error.code], error.localizedDescription, error);
     } else {
-        _resolveBlock([list yy_modelToJSONObject]);
+        NSMutableArray *arr = [NSMutableArray array];
+        for (MXMNodeGroup *g in list) {
+            NSDictionary *gd = [g toJson];
+            [arr addObject:gd];
+        }
+        _resolveBlock(arr);
     }
 }
 
