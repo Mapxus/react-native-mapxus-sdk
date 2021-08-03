@@ -203,7 +203,7 @@ declare namespace MapxusSdk {
   class MapxusMapLocation extends Component<MapxusMapLocationProps> { }
 
   class VisualNodeView extends Component<VisualNodeViewProps> {
-    renderFlagUsingNodes(nodes: object): void;
+    renderFlagUsingNodes(nodes: any[]): void;
     cleanLayer(): void;
     changeOn(buildingId: string, floor: string): void;
   }
