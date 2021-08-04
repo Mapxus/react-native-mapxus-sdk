@@ -587,11 +587,11 @@ export interface VisualNodeViewProps extends ViewProps {
 }
 
 export interface VisualViewProps extends ViewProps {
-  onLoadFail?: () => void;
+  onLoadFail?: (error: VisualViewError) => void;
   onRenderComplete?: () => void;
-  onLoadingChanged?: (feature: object) => void;
-  onBearingChanged?: (feature: any) => void;
-  onNodeChanged?: (feature: object) => void;
+  onLoadingChanged?: (feature: VisualViewLoadingChangeObject) => void;
+  onBearingChanged?: (feature: BearingChangeObject) => void;
+  onNodeChanged?: (feature: NodeChangeObject) => void;
 }
 
 export interface AndroidLocationErronInfo {
@@ -961,6 +961,23 @@ export interface LightProps extends Omit<ViewProps, 'style'> {
 export interface VisualCoordinate2D {
   x: number;
   y: number;
+}
+
+export interface VisualViewError {
+  code: number;
+  message: string;
+}
+
+export interface VisualViewLoadingChangeObject {
+  isLoading: boolean;
+}
+
+export interface BearingChangeObject {
+  bearing: number;
+}
+
+export interface NodeChangeObject {
+  node: VisualNode;
 }
 
 export interface TappedOnPoiObject {
@@ -1639,7 +1656,7 @@ export interface ImageSourceProps extends ViewProps {
     GeoJSON.Position,
     GeoJSON.Position,
     GeoJSON.Position,
-    GeoJSON.Position,
+    GeoJSON.Position
   ];
 }
 
