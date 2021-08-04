@@ -1,10 +1,15 @@
 import React, {useRef, useState, useEffect} from 'react';
 import {View, TouchableOpacity, Image, StyleSheet} from 'react-native';
-import MapxusSdk, {IndoorSceneChangeObject, VisualNode, VisualSearchProps} from '@mapxus/react-native-mapxus-sdk';
+import MapxusSdk, {
+	BearingChangeObject,
+	IndoorSceneChangeObject,
+	VisualNode, VisualNodeGroup,
+	VisualSearchProps
+} from '@mapxus/react-native-mapxus-sdk';
 import {assign as _assign} from 'lodash';
 
 async function getVisualNodes(params: VisualSearchProps) {
-	const data: Array<any> = await MapxusSdk.visualSearchManager.searchVisualDataInBuilding(params);
+	const data: Array<VisualNodeGroup> = await MapxusSdk.visualSearchManager.searchVisualDataInBuilding(params);
 	return data;
 }
 
@@ -53,8 +58,11 @@ export default function VisualMap() {
 	}, [buildingId]);
 
 	async function initVisualData(params: VisualSearchProps) {
-		const data: Array<any> = await getVisualNodes(params);
-		const _nodes = data.length ? data.reduce((pre, cur) => pre.concat(cur.nodes), []) : [];
+		const data: Array<VisualNodeGroup> = await getVisualNodes(params);
+		const _nodes = data.length
+			? data.reduce((pre: Array<VisualNodeGroup | any>, cur) => pre.concat(cur.nodes), [])
+			: [];
+
 		setNodes(_nodes);
 	}
 
@@ -71,7 +79,7 @@ export default function VisualMap() {
 		setFloor(feature?.floor || '');
 	}
 
-	function clickNode(feature: any) {
+	function clickNode(feature: VisualNode) {
 		setLightMarker(feature);
 
 		const imgId: string = feature?.key;
@@ -85,7 +93,7 @@ export default function VisualMap() {
 		visualViewRef.current?.loadVisualViewWithFirstImg(imageId);
 	}
 
-	function bearingChange(feature: any) {
+	function bearingChange(feature: BearingChangeObject) {
 		setLightMarker(
 			_assign({}, lightMarker, {bearing: feature.bearing})
 		);
