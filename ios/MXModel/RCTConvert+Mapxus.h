@@ -32,6 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (MXMRouteSearchRequest *)MXMRouteSearchRequest:(id)json;
 
++ (CLLocation *)CLLocation:(id)json;
+
 @end
 
 NS_ASSUME_NONNULL_END

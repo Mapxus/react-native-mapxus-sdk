@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MXSimulateLocation : UIView <RCTMXUserLocationProtocol>
 
-- (void)setSimulateLocation:(CLLocation *)location;
+- (void)reactSetSimulateLocation:(CLLocation *)location;
 
 @end
 

@@ -10,50 +10,41 @@
 
 @interface MXSimulateLocation () <CLLocationManagerDelegate>
 
-@property (nonatomic) CLLocationManager *locationManager;
+@property (nonatomic, strong) CLLocationManager *innerLocationManager;
 @property (nonatomic, strong) CLHeading *lastHeading;
 
 @end
 
 @implementation MXSimulateLocation
 
-@synthesize delegate;
+@synthesize delegate = _delegate;
 @synthesize mapRendererView = _mapRendererView;
-@synthesize onUpdate;
 @synthesize reactShowsUserHeadingIndicator = _reactShowsUserHeadingIndicator;
+@synthesize onUpdate;
 
-- (instancetype)init
-{
-    if (self = [super init]) {
-        _locationManager = [[CLLocationManager alloc] init];
-        _locationManager.delegate = self;
-    }
-    return self;
-}
 
 - (void)dealloc
 {
-    [self.locationManager stopUpdatingLocation];
-    [self.locationManager stopUpdatingHeading];
-    self.delegate = nil;
+    [self stopUpdatingLocation];
+    [self stopUpdatingHeading];
 }
 
 - (void)setMapRendererView:(RCTMGLMapView *)mapRendererView {
     _mapRendererView = mapRendererView;
-    if (mapRendererView) {
-        mapRendererView.useNativeUserLocationAnnotationView = YES;
-        mapRendererView.locationManager = self;
-        mapRendererView.showsUserLocation = YES;
-        mapRendererView.showsUserHeadingIndicator = self.reactShowsUserHeadingIndicator;
+    if (_mapRendererView) {
+        _mapRendererView.useNativeUserLocationAnnotationView = YES;
+        _mapRendererView.locationManager = self;
+        _mapRendererView.showsUserLocation = YES;
+        _mapRendererView.showsUserHeadingIndicator = self.reactShowsUserHeadingIndicator;
     } else {
-        mapRendererView.useNativeUserLocationAnnotationView = NO;
-        mapRendererView.locationManager = nil;
-        mapRendererView.showsUserLocation = NO;
-        mapRendererView.showsUserHeadingIndicator = NO;
+        _mapRendererView.useNativeUserLocationAnnotationView = NO;
+        _mapRendererView.locationManager = nil;
+        _mapRendererView.showsUserLocation = NO;
+        _mapRendererView.showsUserHeadingIndicator = NO;
     }
 }
 
-- (void)setSimulateLocation:(CLLocation *)location {
+- (void)reactSetSimulateLocation:(CLLocation *)location {
     if ([self.delegate respondsToSelector:@selector(locationManager:didUpdateLocations:)]) {
         [self.delegate locationManager:self didUpdateLocations:@[location]];
     }
@@ -79,20 +70,20 @@
 #pragma mark - MGLLocationManager
 - (void)setHeadingOrientation:(CLDeviceOrientation)headingOrientation
 {
-    self.locationManager.headingOrientation = headingOrientation;
+    self.innerLocationManager.headingOrientation = headingOrientation;
 }
 
 - (CLDeviceOrientation)headingOrientation
 {
-    return self.locationManager.headingOrientation;
+    return self.innerLocationManager.headingOrientation;
 }
 
 - (void)setDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy {
-    self.locationManager.desiredAccuracy = desiredAccuracy;
+    self.innerLocationManager.desiredAccuracy = desiredAccuracy;
 }
 
 - (CLLocationAccuracy)desiredAccuracy {
-    return self.locationManager.desiredAccuracy;
+    return self.innerLocationManager.desiredAccuracy;
 }
 
 - (CLAuthorizationStatus)authorizationStatus
@@ -101,46 +92,46 @@
 }
 
 - (void)setActivityType:(CLActivityType)activityType {
-    self.locationManager.activityType = activityType;
+    self.innerLocationManager.activityType = activityType;
 }
 
 - (CLActivityType)activityType {
-    return self.locationManager.activityType;
+    return self.innerLocationManager.activityType;
 }
 
 - (void)requestAlwaysAuthorization
 {
-    [self.locationManager requestAlwaysAuthorization];
+    [self.innerLocationManager requestAlwaysAuthorization];
 }
 
 - (void)requestWhenInUseAuthorization
 {
-    [self.locationManager requestWhenInUseAuthorization];
+    [self.innerLocationManager requestWhenInUseAuthorization];
 }
 
 - (void)startUpdatingHeading
 {
-    [self.locationManager startUpdatingHeading];
+    [self.innerLocationManager startUpdatingHeading];
 }
 
 - (void)startUpdatingLocation
 {
-//    [self.locationManager startUpdatingLocation];
+//    [self.innerLocationManager startUpdatingLocation];
 }
 
 - (void)stopUpdatingHeading
 {
-    [self.locationManager stopUpdatingHeading];
+    [self.innerLocationManager stopUpdatingHeading];
 }
 
 - (void)stopUpdatingLocation
 {
-    [self.locationManager stopUpdatingLocation];
+//    [self.innerLocationManager stopUpdatingLocation];
 }
 
 - (void)dismissHeadingCalibrationDisplay
 {
-    [self.locationManager dismissHeadingCalibrationDisplay];
+    [self.innerLocationManager dismissHeadingCalibrationDisplay];
 }
 
 
@@ -173,6 +164,16 @@
     if ([self.delegate respondsToSelector:@selector(locationManager:didFailWithError:)]) {
         [self.delegate locationManager:self didFailWithError:error];
     }
+}
+
+
+#pragma mark - Lazy loading
+- (CLLocationManager *)innerLocationManager {
+    if (!_innerLocationManager) {
+        _innerLocationManager = [[CLLocationManager alloc] init];
+        _innerLocationManager.delegate = self;
+    }
+    return _innerLocationManager;
 }
 
 @end
