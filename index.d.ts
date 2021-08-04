@@ -602,7 +602,7 @@ export interface NavigationViewProps extends ViewProps {
 
 export interface SimulateLocationManagerProps extends ViewProps {
   showsUserHeadingIndicator?: boolean;
-  onUpdate?: (feature: object) => void;
+  onUpdate?: (feature: MapxusSdk.Location) => void;
 }
 
 export interface MapViewProps extends ViewProps {

@@ -6,6 +6,7 @@
 //
 
 @import MapxusComponentKit;
+#import <CoreLocation/CoreLocation.h>
 #import "RCTConvert+Mapxus.h"
 
 @implementation RCTConvert (Mapxus)
@@ -138,9 +139,7 @@
                                           horizontalAccuracy:[json[@"horizontalAccuracy"] doubleValue]
                                             verticalAccuracy:[json[@"verticalAccuracy"] doubleValue]
                                                       course:[json[@"course"] doubleValue]
-                                              courseAccuracy:[json[@"courseAccuracy"] doubleValue]
                                                        speed:[json[@"speed"] doubleValue]
-                                               speedAccuracy:[json[@"speedAccuracy"] doubleValue]
                                                    timestamp:[NSDate dateWithTimeIntervalSince1970:[json[@"timestamp"] doubleValue]]];
     
     CLFloor *floor = [CLFloor createFloorWihtLevel:[json[@"ordinal"] integerValue]];

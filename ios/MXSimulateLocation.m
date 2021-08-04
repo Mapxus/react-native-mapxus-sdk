@@ -12,6 +12,7 @@
 
 @property (nonatomic, strong) CLLocationManager *innerLocationManager;
 @property (nonatomic, strong) CLHeading *lastHeading;
+@property (nonatomic, strong) CLLocation *lastLocation;
 
 @end
 
@@ -45,20 +46,12 @@
 }
 
 - (void)reactSetSimulateLocation:(CLLocation *)location {
+    self.lastLocation = location;
+    
     if ([self.delegate respondsToSelector:@selector(locationManager:didUpdateLocations:)]) {
         [self.delegate locationManager:self didUpdateLocations:@[location]];
     }
-    
-    if (!self.onUpdate) {
-        return;
-    }
-    
-    RCTMGLLocation *userLocation = [[RCTMGLLocation alloc] init];
-    userLocation.location = location;
-    userLocation.heading = self.lastHeading;
-    
-    self.onUpdate([userLocation toJSON]);
-    
+    [self promptData];
 }
 
 - (void)setReactShowsUserHeadingIndicator:(BOOL)reactShowsUserHeadingIndicator {
@@ -66,6 +59,17 @@
     self.mapRendererView.showsUserHeadingIndicator = reactShowsUserHeadingIndicator;
 }
 
+- (void)promptData {
+    if (!self.onUpdate || !self.lastLocation || !self.lastHeading) {
+        return;
+    }
+    
+    RCTMGLLocation *userLocation = [[RCTMGLLocation alloc] init];
+    userLocation.location = self.lastLocation;
+    userLocation.heading = self.lastHeading;
+    
+    self.onUpdate([userLocation toJSON]);
+}
 
 #pragma mark - MGLLocationManager
 - (void)setHeadingOrientation:(CLDeviceOrientation)headingOrientation
@@ -149,6 +153,7 @@
     if ([self.delegate respondsToSelector:@selector(locationManager:didUpdateHeading:)]) {
         [self.delegate locationManager:self didUpdateHeading:newHeading];
     }
+    [self promptData];
 }
 
 - (BOOL)locationManagerShouldDisplayHeadingCalibration:(CLLocationManager *)manager
