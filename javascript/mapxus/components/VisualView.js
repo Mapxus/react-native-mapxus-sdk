@@ -69,8 +69,8 @@ class VisualView extends NativeBridgeComponent(React.Component) {
         this.props.onNodeChanged(event.nativeEvent);
     }
 
-    loadVisualViewWithFristImg(imageId) {
-        this._runNativeCommand('loadVisualViewWithFristImg', this._nativeRef, [
+    loadVisualViewWithFirstImg(imageId) {
+        this._runNativeCommand('loadVisualViewWithFirstImg', this._nativeRef, [
             imageId
         ]);
     }
