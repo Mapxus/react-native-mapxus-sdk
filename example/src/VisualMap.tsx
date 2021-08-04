@@ -1,5 +1,5 @@
 import React, {useRef, useState, useEffect} from 'react';
-import {View, TouchableOpacity, Image, StyleSheet} from 'react-native';
+import {View, TouchableOpacity, Image, StyleSheet, Button} from 'react-native';
 import MapxusSdk, {
 	BearingChangeObject,
 	IndoorSceneChangeObject,
@@ -99,14 +99,17 @@ export default function VisualMap() {
 		);
 	}
 
-	function clickWindow() {
-		console.log(!isSwitched);
-		setIsSwitched(!isSwitched);
+	function clickWindow(type: string) {
+		setIsSwitched(type === 'visual');
+		visualViewRef.current?.resize();
 	}
 
 	return (
 		<View style={{flex: 1}}>
-			<View style={styles.container_full}>
+			<TouchableOpacity
+				{...isSwitched && {onPress: () => clickWindow('map')}}
+				style={isSwitched ? styles.container_small : styles.container_full}
+			>
 				<MapxusSdk.MapxusMap
 					mapOption={{buildingId}}
 					onIndoorSceneChange={indoorSceneChange}
@@ -121,7 +124,11 @@ export default function VisualMap() {
 								>
 									<Image
 										source={require('./assets/light.png')}
-										style={{width: 50, height: 50, transform: [{rotate: `${lightMarker.bearing}deg`}]}}
+										style={{
+											width: 50,
+											height: 50,
+											transform: [{rotate: `${lightMarker.bearing}deg`}]
+										}}
 									/>
 								</MapxusSdk.PointAnnotation>
 							)
@@ -132,15 +139,15 @@ export default function VisualMap() {
 						onTappedFlag={clickNode}
 					/>
 				</MapxusSdk.MapxusMap>
-			</View>
-			<TouchableOpacity onPress={clickWindow}>
+			</TouchableOpacity>
+			<TouchableOpacity {...!isSwitched && {onPress: () => clickWindow('visual')}}>
 				<View style={[
-					styles.container_small,
+					isSwitched ? styles.container_full : styles.container_small,
 					{display: visualViewShown ? 'flex' : 'none'}
 				]}>
 					<MapxusSdk.VisualView
 						ref={visualViewRef}
-						style={styles.visualView}
+						style={[styles.visualView, {borderRadius: isSwitched ? 0 : 5}]}
 						onBearingChanged={bearingChange}
 					/>
 				</View>
@@ -174,19 +181,14 @@ const styles = StyleSheet.create({
 		height: 40
 	},
 	visualView: {
-		width: '100%',
-		height: '100%',
-		borderRadius: 5,
+		flex: 1,
 		overflow: 'hidden'
 	},
 	container_full: {
-		flex: 1,
-		borderWidth: 2,
-		borderColor: 'red'
+		width: '100%',
+		height: '100%'
 	},
 	container_small: {
-		borderWidth: 1,
-		borderColor: 'green',
 		position: 'absolute',
 		left: 10,
 		bottom: 40,
@@ -194,6 +196,7 @@ const styles = StyleSheet.create({
 		height: 136,
 		padding: 8,
 		borderRadius: 5,
-		backgroundColor: 'white'
+		backgroundColor: 'white',
+		zIndex: 1
 	}
 });
