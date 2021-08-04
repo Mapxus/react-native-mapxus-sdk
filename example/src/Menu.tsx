@@ -8,7 +8,7 @@ import {
 	SafeAreaView
 } from 'react-native';
 import {Drawer, List} from '@ant-design/react-native';
-import {navs, samples} from './utils/data';
+import {navs, samples} from './utils/navData';
 import styles from './styles/Menu';
 import CarouselList from './CarouselList';
 

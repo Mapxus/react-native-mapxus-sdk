@@ -82,7 +82,7 @@ export default function SearchPOINearby() {
 				</MapxusSdk.MapxusMap>
 			</View>
 			<ParamsScrollView>
-				<List>
+				<List style={{marginTop: 10}}>
 					<InputItem
 						labelNumber={5}
 						style={styles.input}
@@ -162,7 +162,7 @@ export default function SearchPOINearby() {
 				</View>
 				<Button
 					type={'primary'}
-					style={[styles.button, {marginTop: 15}]}
+					style={[styles.button, {marginTop: 15, marginBottom: 10}]}
 					onPress={handleClick}
 				>
 					Search

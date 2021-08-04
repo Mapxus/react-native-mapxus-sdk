@@ -186,7 +186,7 @@ export default function SurroundingIdentification() {
 				</MapxusSdk.MapxusMap>
 			</View>
 			<ParamsScrollView>
-				<List>
+				<List style={{marginTop: 10}}>
 					<InputItem
 						labelNumber={5}
 						style={styles.input}
@@ -209,7 +209,7 @@ export default function SurroundingIdentification() {
 				</View>
 				<Button
 					type={'primary'}
-					style={styles.button}
+					style={[styles.button, {marginBottom: 10}]}
 					onPress={handleSearch}
 				>
 					Search

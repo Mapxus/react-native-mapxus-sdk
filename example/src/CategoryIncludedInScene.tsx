@@ -124,7 +124,8 @@ function showPOIsList(categories: Array<Category>): Element {
 const styles = StyleSheet.create({
 	buttonWrapper: {
 		flexDirection: 'row',
-		justifyContent: 'space-around'
+		justifyContent: 'space-around',
+		marginTop: 15
 	},
 	button: {
 		width: '44%',

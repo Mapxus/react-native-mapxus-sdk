@@ -1,7 +1,7 @@
 import React from 'react'
 import {View, Text, SafeAreaView, TouchableOpacity, Image} from 'react-native'
 import styles from './styles/SampleMap';
-import {samples} from './utils/data';
+import {samples} from './utils/navData';
 
 export default function SampleMap(props: any) {
 	const {sampleId, category, statusBarHeight, setStage} = props;

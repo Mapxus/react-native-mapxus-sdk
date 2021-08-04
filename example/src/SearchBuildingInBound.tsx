@@ -101,7 +101,7 @@ export default function SearchBuildingInBound() {
 				</MapxusSdk.MapxusMap>
 			</View>
 			<ParamsScrollView>
-				<List>
+				<List style={{marginTop: 10}}>
 					<InputItem
 						labelNumber={5}
 						style={styles.input}
@@ -166,6 +166,7 @@ const styles = StyleSheet.create({
 		height: 'auto',
 		paddingVertical: 8,
 		marginTop: 15,
+		marginBottom: 10,
 		marginHorizontal: 15
 	},
 });
