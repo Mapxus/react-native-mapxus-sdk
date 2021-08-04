@@ -209,7 +209,7 @@ declare namespace MapxusSdk {
   }
 
   class VisualView extends Component<VisualViewProps> {
-    loadVisualViewWithFristImg(imageId: string): void;
+    loadVisualViewWithFirstImg(imageId: string): void;
     unloadVisualView(): void;
     moveToKey(key: string): void;
     moveCloseTo(buildingId: string, floor: string): void;

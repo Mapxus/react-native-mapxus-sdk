@@ -35,7 +35,7 @@ RCT_EXPORT_VIEW_PROPERTY(onLoadingChanged, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onBearingChanged, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onNodeChanged, RCTBubblingEventBlock)
 
-RCT_EXPORT_METHOD(loadVisualViewWithFristImg:(nonnull NSNumber*)reactTag
+RCT_EXPORT_METHOD(loadVisualViewWithFirstImg:(nonnull NSNumber*)reactTag
                   :(nullable NSString *)imageId
                   :(RCTPromiseResolveBlock)resolve
                   :(RCTPromiseRejectBlock)reject)
