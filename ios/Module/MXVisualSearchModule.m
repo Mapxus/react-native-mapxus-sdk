@@ -15,7 +15,6 @@
 
 @property (nonatomic, strong) MXMVisualSearch *api;
 
-
 @end
 
 @implementation MXVisualSearchModule

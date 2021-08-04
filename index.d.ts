@@ -187,7 +187,7 @@ declare namespace MapxusSdk {
   }
 
   class VisualSearchManager {
-    searchVisualDataInBuilding(params: VisualSearchProps): Promise<object[]>;
+    searchVisualDataInBuilding(params: VisualSearchProps): Promise<VisualNodeGroup[]>;
   }
 
   /**
@@ -203,7 +203,7 @@ declare namespace MapxusSdk {
   class MapxusMapLocation extends Component<MapxusMapLocationProps> { }
 
   class VisualNodeView extends Component<VisualNodeViewProps> {
-    renderFlagUsingNodes(nodes: any[]): void;
+    renderFlagUsingNodes(nodes: VisualNode[]): void;
     cleanLayer(): void;
     changeOn(buildingId: string, floor: string): void;
   }
@@ -216,8 +216,8 @@ declare namespace MapxusSdk {
     resize(): void;
     getBearing(): Promise<number>;
     setBearing(bearing: number): void;
-    getVisualCenter(): Promise<object>;
-    setVisualCenter(center: object): void;
+    getVisualCenter(): Promise<VisualCoordinate2D>;
+    setVisualCenter(center: VisualCoordinate2D): void;
     getZoom(): Promise<number>;
     setZoom(zoom: number): void;
     activateBearing(): void;
@@ -516,6 +516,11 @@ declare namespace MapxusSdk {
      */
     DIRECT,
   }
+
+  enum MapxusVisualSearchScopeType {
+    SIMPLE,
+    DETAIL,
+  }
 }
 
 export type AttributionPosition =
@@ -578,7 +583,7 @@ export interface MapxusMapLocationProps extends ViewProps {
 }
 
 export interface VisualNodeViewProps extends ViewProps {
-  onTappedFlag?: (feature: object) => void;
+  onTappedFlag?: (feature: VisualNode) => void;
 }
 
 export interface VisualViewProps extends ViewProps {
@@ -951,6 +956,11 @@ export interface Point {
 
 export interface LightProps extends Omit<ViewProps, 'style'> {
   style?: LightStyle;
+}
+
+export interface VisualCoordinate2D {
+  x: number;
+  y: number;
 }
 
 export interface TappedOnPoiObject {
@@ -1367,6 +1377,20 @@ export interface RouteSearchResult {
   paths: Path[];
 }
 
+export interface VisualNodeGroup {
+  floor: string;
+  nodes: VisualNode[];
+}
+
+export interface VisualNode {
+  key: string;
+  buildingId: string;
+  floor: string;
+  latitude: number;
+  longitude: number;
+  bearing: number;
+}
+
 export interface IndoorPoint extends GeoPoint {
   buildingId: string;
   floor: string;
@@ -1724,7 +1748,7 @@ export interface RouteSearchProps {
 
 export interface VisualSearchProps {
   buildingId: string;
-  scope: number;
+  scope: MapxusSdk.MapxusVisualSearchScopeType;
 }
 
 export interface PainterPathDtoProps {

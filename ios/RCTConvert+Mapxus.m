@@ -135,4 +135,11 @@
     return req;
 }
 
++ (MXMVisualCoordinate2D)MXMVisualCoordinate2D:(id)json {
+    json = [self NSDictionary:json];
+    double x = [json[@"x"] doubleValue];
+    double y = [json[@"y"] doubleValue];
+    MXMVisualCoordinate2D s = {x, y};
+    return s;
+}
 @end

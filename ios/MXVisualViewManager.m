@@ -8,6 +8,7 @@
 #import <React/RCTUIManager.h>
 #import "MXVisualViewManager.h"
 #import "MXVisualView.h"
+#import "RCTConvert+Mapxus.h"
 
 @interface MXVisualViewManager () <MXMVisualDelegate>
 
@@ -181,7 +182,7 @@ RCT_EXPORT_METHOD(getVisualCenter:(nonnull NSNumber*)reactTag
         
         MXVisualView *reactView = (MXVisualView *)view;
         [reactView getVisualCenter:^(MXMVisualCoordinate2D center) {
-            resolve(@{@"center":@{ @"x": @(center.x), @"y": @(center.y)}});
+            resolve(@{@"center": @{ @"x": @(center.x), @"y": @(center.y)}});
         }];
     }];
 }
@@ -200,7 +201,7 @@ RCT_EXPORT_METHOD(setVisualCenter:(nonnull NSNumber*)reactTag
         }
         
         MXVisualView *reactView = (MXVisualView *)view;
-        MXMVisualCoordinate2D c = {[center[@"x"] doubleValue], [center[@"y"] doubleValue]};
+        MXMVisualCoordinate2D c = [RCTConvert MXMVisualCoordinate2D:center];
         [reactView setVisualCenter:c];
         resolve(nil);
     }];
@@ -290,7 +291,7 @@ RCT_EXPORT_METHOD(deactivateBearing:(nonnull NSNumber*)reactTag
     if (!reactView.onLoadFail) {
         return;
     }
-    reactView.onLoadFail(@{});
+    reactView.onLoadFail(@{@"message": error.localizedDescription, @"code": @(error.code)});
 }
 
 - (void)visualViewRenderComplete:(MXMVisualView *)view {

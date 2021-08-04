@@ -34,6 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (MXMVisualBuildingSearchOption *)MXMVisualBuildingSearchOption:(id)json;
 
++ (MXMVisualCoordinate2D)MXMVisualCoordinate2D:(id)json;
+
 @end
 
 NS_ASSUME_NONNULL_END
