@@ -163,7 +163,7 @@ export default function VisualMap() {
 				</View>
 			</TouchableOpacity>
 			<TouchableOpacity
-				style={styles.iconArea}
+				style={[styles.iconArea, {display: isSwitched ? 'none' : 'flex'}]}
 				onPress={() => setActive(!active)}
 			>
 				{
