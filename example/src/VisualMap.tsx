@@ -21,6 +21,8 @@ export default function VisualMap() {
 	const [lightMarker, setLightMarker] = useState<any>(null);
 	const [visualViewShown, setVisualViewShown] = useState(false);
 	const [isSwitched, setIsSwitched] = useState(false);
+	const [floorControllerHidden, setFloorControllerHidden] = useState(false);
+
 	const nodeViewRef = useRef<MapxusSdk.VisualNodeView>(null);
 	const visualViewRef = useRef<MapxusSdk.VisualView>(null);
 
@@ -100,7 +102,14 @@ export default function VisualMap() {
 	}
 
 	function clickWindow(type: string) {
-		setIsSwitched(type === 'visual');
+		if (type === 'visual') {
+			setIsSwitched(true);
+			setFloorControllerHidden(true);
+		} else {
+			setIsSwitched(false);
+			setFloorControllerHidden(false);
+		}
+
 		visualViewRef.current?.resize();
 	}
 
@@ -112,6 +121,7 @@ export default function VisualMap() {
 			>
 				<MapxusSdk.MapxusMap
 					mapOption={{buildingId}}
+					indoorControllerAlwaysHidden={floorControllerHidden}
 					onIndoorSceneChange={indoorSceneChange}
 				>
 					<MapxusSdk.MapView style={{flex: 1}}>
