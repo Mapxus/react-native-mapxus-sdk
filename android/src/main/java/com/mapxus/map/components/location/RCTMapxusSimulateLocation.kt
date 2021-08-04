@@ -43,9 +43,9 @@ class RCTMapxusSimulateLocation(
 
     fun setSimulateLocation(args: ReadableArray?) {
         val fakeLocation = args?.getMap(1)
-        val lat = fakeLocation?.getDouble("lat")
-        val lon = fakeLocation?.getDouble("lon")
-        val floor = fakeLocation?.getString("floor")
+        val lat = fakeLocation?.getDouble("latitude")
+        val lon = fakeLocation?.getDouble("longitude")
+        val floor = fakeLocation?.getString("altitude")
         val buildingId = fakeLocation?.getString("buildingId")
         locationProvider?.setIndoorLocation(
             IndoorLocation(

@@ -42,7 +42,7 @@ class RCTMapxusNavigationViewManager (reactApplicationContext: ReactApplicationC
 
     @ReactProp(name = "distanceToDestination")
     fun setDistanceToDestination(navigationView: RCTMapxusNavigationView, distanceToDestination: Int?) {
-        navigationView.setDistanceToDestination(distanceToDestination)
+        navigationView.setDistanceToDestination(distanceToDestination?.toDouble())
     }
 
     override fun createViewInstance(reactContext: ThemedReactContext): RCTMapxusNavigationView {
