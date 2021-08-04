@@ -1,6 +1,7 @@
 import React, {useRef, useState, useEffect} from 'react';
 import {View, TouchableOpacity, Image, StyleSheet} from 'react-native';
-import MapxusSdk, {IndoorSceneChangeObject, VisualSearchProps} from '@mapxus/react-native-mapxus-sdk';
+import MapxusSdk, {IndoorSceneChangeObject, VisualNode, VisualSearchProps} from '@mapxus/react-native-mapxus-sdk';
+import {assign as _assign} from 'lodash';
 
 async function getVisualNodes(params: VisualSearchProps) {
 	const data: Array<any> = await MapxusSdk.visualSearchManager.searchVisualDataInBuilding(params);
@@ -11,8 +12,10 @@ export default function VisualMap() {
 	const [buildingId, setBuildingId] = useState<string>('tsuenwanplaza_hk_369d01');
 	const [floor, setFloor] = useState<string>('');
 	const [active, setActive] = useState(false);
-	const [nodes, setNodes] = useState<Array<any>>([]);
+	const [nodes, setNodes] = useState<Array<VisualNode>>([]);
 	const [lightMarker, setLightMarker] = useState<any>(null);
+	const [visualViewShown, setVisualViewShown] = useState(false);
+	const [isSwitched, setIsSwitched] = useState(false);
 	const nodeViewRef = useRef<MapxusSdk.VisualNodeView>(null);
 	const visualViewRef = useRef<MapxusSdk.VisualView>(null);
 
@@ -26,12 +29,18 @@ export default function VisualMap() {
 			filterVisualNodes(buildingId, floor);
 		} else {
 			nodeViewRef.current?.cleanLayer();
+			setLightMarker(null);
+			setVisualViewShown(false);
+			visualViewRef.current?.unloadVisualView();
 		}
 	}, [active]);
 
 	useEffect(() => {
 		if (active) {
 			filterVisualNodes(buildingId, floor);
+			setLightMarker(null);
+			setVisualViewShown(false);
+			visualViewRef.current?.unloadVisualView();
 		}
 	}, [floor]);
 
@@ -49,7 +58,7 @@ export default function VisualMap() {
 		setNodes(_nodes);
 	}
 
-	function renderVisualNodes(nodes: Array<any>) {
+	function renderVisualNodes(nodes: Array<VisualNode>) {
 		nodeViewRef.current?.renderFlagUsingNodes(nodes);
 	}
 
@@ -68,15 +77,22 @@ export default function VisualMap() {
 		const imgId: string = feature?.key;
 		if (imgId) {
 			renderVisualView(imgId);
+			setVisualViewShown(true);
 		}
 	}
 
 	function renderVisualView(imageId: string) {
-		visualViewRef.current?.loadVisualViewWithFristImg(imageId);
+		visualViewRef.current?.loadVisualViewWithFirstImg(imageId);
+	}
+
+	function bearingChange(feature: any) {
+		setLightMarker(
+			_assign({}, lightMarker, {bearing: feature.bearing})
+		);
 	}
 
 	return (
-		<View style={{flex: 1, position: 'relative'}}>
+		<View style={{flex: 1}}>
 			<MapxusSdk.MapxusMap
 				mapOption={{buildingId}}
 				onIndoorSceneChange={indoorSceneChange}
@@ -91,7 +107,7 @@ export default function VisualMap() {
 							>
 								<Image
 									source={require('./assets/light.png')}
-									style={{width: 50, height: 50, transform: [{rotate:`${lightMarker.bearing}deg`}]}}
+									style={{width: 50, height: 50, transform: [{rotate: `${lightMarker.bearing}deg`}]}}
 								/>
 							</MapxusSdk.PointAnnotation>
 						)
@@ -102,9 +118,18 @@ export default function VisualMap() {
 					onTappedFlag={clickNode}
 				/>
 			</MapxusSdk.MapxusMap>
-			<View style={styles.visualView_container}>
-				<MapxusSdk.VisualView ref={visualViewRef} style={styles.visualView}/>
-			</View>
+			<TouchableOpacity onPress={() => setIsSwitched(!isSwitched)}>
+				<View style={[
+					styles.visualView_container_small,
+					{display: visualViewShown ? 'flex' : 'none'}
+				]}>
+					<MapxusSdk.VisualView
+						ref={visualViewRef}
+						style={styles.visualView}
+						onBearingChanged={bearingChange}
+					/>
+				</View>
+			</TouchableOpacity>
 			<TouchableOpacity
 				style={styles.iconArea}
 				onPress={() => setActive(!active)}
@@ -133,10 +158,18 @@ const styles = StyleSheet.create({
 		width: 40,
 		height: 40
 	},
-	visualView_container: {
+	visualView_container_small: {
 		position: 'absolute',
 		left: 20,
 		bottom: 40,
+		padding: 8,
+		borderRadius: 5,
+		backgroundColor: 'white'
+	},
+	visualView_container_big: {
+		position: 'absolute',
+		left: 0,
+		bottom: 740,
 		padding: 8,
 		borderRadius: 5,
 		backgroundColor: 'white'

@@ -590,7 +590,7 @@ export interface VisualViewProps extends ViewProps {
   onLoadFail?: () => void;
   onRenderComplete?: () => void;
   onLoadingChanged?: (feature: object) => void;
-  onBearingChanged?: (feature: object) => void;
+  onBearingChanged?: (feature: any) => void;
   onNodeChanged?: (feature: object) => void;
 }
 
