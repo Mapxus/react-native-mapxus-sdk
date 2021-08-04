@@ -99,36 +99,43 @@ export default function VisualMap() {
 		);
 	}
 
+	function clickWindow() {
+		console.log(!isSwitched);
+		setIsSwitched(!isSwitched);
+	}
+
 	return (
 		<View style={{flex: 1}}>
-			<MapxusSdk.MapxusMap
-				mapOption={{buildingId}}
-				onIndoorSceneChange={indoorSceneChange}
-			>
-				<MapxusSdk.MapView style={{flex: 1}}>
-					{
-						lightMarker && (
-							<MapxusSdk.PointAnnotation
-								key={lightMarker.key}
-								id={lightMarker.key}
-								coordinate={[lightMarker.longitude, lightMarker.latitude]}
-							>
-								<Image
-									source={require('./assets/light.png')}
-									style={{width: 50, height: 50, transform: [{rotate: `${lightMarker.bearing}deg`}]}}
-								/>
-							</MapxusSdk.PointAnnotation>
-						)
-					}
-				</MapxusSdk.MapView>
-				<MapxusSdk.VisualNodeView
-					ref={nodeViewRef}
-					onTappedFlag={clickNode}
-				/>
-			</MapxusSdk.MapxusMap>
-			<TouchableOpacity onPress={() => setIsSwitched(!isSwitched)}>
+			<View style={styles.container_full}>
+				<MapxusSdk.MapxusMap
+					mapOption={{buildingId}}
+					onIndoorSceneChange={indoorSceneChange}
+				>
+					<MapxusSdk.MapView style={{flex: 1}}>
+						{
+							lightMarker && (
+								<MapxusSdk.PointAnnotation
+									key={lightMarker.key}
+									id={lightMarker.key}
+									coordinate={[lightMarker.longitude, lightMarker.latitude]}
+								>
+									<Image
+										source={require('./assets/light.png')}
+										style={{width: 50, height: 50, transform: [{rotate: `${lightMarker.bearing}deg`}]}}
+									/>
+								</MapxusSdk.PointAnnotation>
+							)
+						}
+					</MapxusSdk.MapView>
+					<MapxusSdk.VisualNodeView
+						ref={nodeViewRef}
+						onTappedFlag={clickNode}
+					/>
+				</MapxusSdk.MapxusMap>
+			</View>
+			<TouchableOpacity onPress={clickWindow}>
 				<View style={[
-					styles.visualView_container_small,
+					styles.container_small,
 					{display: visualViewShown ? 'flex' : 'none'}
 				]}>
 					<MapxusSdk.VisualView
@@ -166,26 +173,27 @@ const styles = StyleSheet.create({
 		width: 40,
 		height: 40
 	},
-	visualView_container_small: {
-		position: 'absolute',
-		left: 20,
-		bottom: 40,
-		padding: 8,
-		borderRadius: 5,
-		backgroundColor: 'white'
-	},
-	visualView_container_big: {
-		position: 'absolute',
-		left: 0,
-		bottom: 740,
-		padding: 8,
-		borderRadius: 5,
-		backgroundColor: 'white'
-	},
 	visualView: {
-		width: 120,
-		height: 120,
+		width: '100%',
+		height: '100%',
 		borderRadius: 5,
 		overflow: 'hidden'
+	},
+	container_full: {
+		flex: 1,
+		borderWidth: 2,
+		borderColor: 'red'
+	},
+	container_small: {
+		borderWidth: 1,
+		borderColor: 'green',
+		position: 'absolute',
+		left: 10,
+		bottom: 40,
+		width: 136,
+		height: 136,
+		padding: 8,
+		borderRadius: 5,
+		backgroundColor: 'white'
 	}
 });
