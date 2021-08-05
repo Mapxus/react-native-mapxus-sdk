@@ -23,6 +23,8 @@ class NavigationView extends NativeBridgeComponent(React.Component) {
 
         distanceToDestination: PropTypes.number,
 
+        showsUserHeadingIndicator: PropTypes.bool,
+
         onArrivalAtDestination: PropTypes.func,
 
         onExcessiveDrift: PropTypes.func,
@@ -31,6 +33,7 @@ class NavigationView extends NativeBridgeComponent(React.Component) {
 
         onGetNewPath: PropTypes.func,
 
+        onUpdate: PropTypes.func,
     };
 
     constructor(props) {
@@ -39,6 +42,15 @@ class NavigationView extends NativeBridgeComponent(React.Component) {
         this._onExcessiveDrift = this._onExcessiveDrift.bind(this);
         this._onRefreshTheAdsorptionLocation = this._onRefreshTheAdsorptionLocation.bind(this);
         this._onGetNewPath = this._onGetNewPath.bind(this);
+        this._onUpdate = this._onUpdate.bind(this);
+    }
+
+    _onUpdate(event) {
+        if (!this.props.onUpdate) {
+            return;
+        }
+        // process raw event...
+        this.props.onUpdate(event.nativeEvent);
     }
 
     _onArrivalAtDestination(event) {
@@ -105,6 +117,7 @@ class NavigationView extends NativeBridgeComponent(React.Component) {
             onExcessiveDrift: this._onExcessiveDrift,
             onRefreshTheAdsorptionLocation: this._onRefreshTheAdsorptionLocation,
             onGetNewPath: this._onGetNewPath,
+            onUpdate: this._onUpdate,
         };
 
         return <NaviView {...this.props} {...callbacks}>{this.props.children}</NaviView>;

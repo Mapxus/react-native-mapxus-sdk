@@ -14,6 +14,27 @@
 
 RCT_EXPORT_MODULE(MXRouteView)
 
+RCT_REMAP_VIEW_PROPERTY(indoorLineColor, reactIndoorLineColor, UIColor)
+RCT_REMAP_VIEW_PROPERTY(outdoorLineColor, reactOutdoorLineColor, UIColor)
+RCT_REMAP_VIEW_PROPERTY(dashLineColor, reactDashLineColor, UIColor)
+RCT_REMAP_VIEW_PROPERTY(arrowSymbolSpacing, reactArrowSymbolSpacing, NSNumber)
+RCT_REMAP_VIEW_PROPERTY(arrowIcon, reactArrowIcon, NSString)
+RCT_REMAP_VIEW_PROPERTY(startIcon, reactStartIcon, NSString)
+RCT_REMAP_VIEW_PROPERTY(endIcon, reactEndIcon, NSString)
+RCT_REMAP_VIEW_PROPERTY(elevatorUpIcon, reactElevatorUpIcon, NSString)
+RCT_REMAP_VIEW_PROPERTY(elevatorDownIcon, reactElevatorDownIcon, NSString)
+RCT_REMAP_VIEW_PROPERTY(escalatorUpIcon, reactEscalatorUpIcon, NSString)
+RCT_REMAP_VIEW_PROPERTY(escalatorDownIcon, reactEscalatorDownIcon, NSString)
+RCT_REMAP_VIEW_PROPERTY(rampUpIcon, reactRampUpIcon, NSString)
+RCT_REMAP_VIEW_PROPERTY(rampDownIcon, reactRampDownIcon, NSString)
+RCT_REMAP_VIEW_PROPERTY(stairsUpIcon, reactStairsUpIcon, NSString)
+RCT_REMAP_VIEW_PROPERTY(stairsDownIcon, reactStairsDownIcon, NSString)
+RCT_REMAP_VIEW_PROPERTY(buildingGateIcon, reactBuildingGateIcon, NSString)
+RCT_REMAP_VIEW_PROPERTY(isAddStartDash, reactIsAddStartDash, BOOL)
+RCT_REMAP_VIEW_PROPERTY(isAddEndDash, reactIsAddEndDash, BOOL)
+RCT_REMAP_VIEW_PROPERTY(hiddenTranslucentPaths, reactHiddenTranslucentPaths, BOOL)
+
+
 RCT_EXPORT_METHOD(getPainterPathDto:(nonnull NSNumber *)reactTag
                   :(RCTPromiseResolveBlock)resolve
                   :(RCTPromiseRejectBlock)reject) {

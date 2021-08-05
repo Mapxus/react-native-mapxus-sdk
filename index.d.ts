@@ -585,7 +585,25 @@ export interface AndroidCompass {
 }
 
 export interface RouteViewProps extends ViewProps {
-  routeAppearance?: object;
+  isAddStartDash?: boolean;
+  isAddEndDash?: boolean;
+  hiddenTranslucentPaths?: boolean;
+  indoorLineColor?: string | number;
+  outdoorLineColor?: string | number;
+  dashLineColor?: string | number;
+  arrowSymbolSpacing?: number;
+  arrowIcon?: string;
+  startIcon?: string;
+  endIcon?: string;
+  elevatorUpIcon?: string;
+  elevatorDownIcon?: string;
+  escalatorUpIcon?: string;
+  escalatorDownIcon?: string;
+  rampUpIcon?: string;
+  rampDownIcon?: string;
+  stairsUpIcon?: string;
+  stairsDownIcon?: string;
+  buildingGateIcon?: string;
 }
 
 export interface NavigationViewProps extends ViewProps {
@@ -594,10 +612,12 @@ export interface NavigationViewProps extends ViewProps {
   numberOfAllowedDrifts?: number,
   maximumDrift?: number,
   distanceToDestination?: number,
+  showsUserHeadingIndicator?: boolean,
   onArrivalAtDestination?: () => void,
   onExcessiveDrift?: () => void,
   onRefreshTheAdsorptionLocation?: (feature: AdsorptionLocationObject) => void,
   onGetNewPath?: (feature: NavigationNewPathObject) => void,
+  onUpdate?: (feature: MapxusSdk.Location) => void;
 }
 
 export interface SimulateLocationManagerProps extends ViewProps {
@@ -929,7 +949,9 @@ export interface AdsorptionLocationObject {
 
 export interface NavigationNewPathObject {
   newPath: Path;
+  originalPath: Path;
   fromInstructionIndex: number;
+  originalWayPoints: IndoorPoint[];
 }
 
 export interface Point {

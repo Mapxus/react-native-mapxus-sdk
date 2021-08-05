@@ -24,11 +24,39 @@
     }
 }
 
-- (void)setReactRouteAppearance:(NSDictionary *)reactRouteAppearance {
-    _reactRouteAppearance = reactRouteAppearance;
-    if (reactRouteAppearance[@"isAddStartDash"]) {
-        self.routePainter.isAddStartDash = [reactRouteAppearance[@"isAddStartDash"] boolValue];
-    }
+- (void)setReactIndoorLineColor:(UIColor *)reactIndoorLineColor {
+    _reactIndoorLineColor = reactIndoorLineColor;
+    self.routePainter.indoorLineColor = reactIndoorLineColor;
+}
+
+- (void)setReactOutdoorLineColor:(UIColor *)reactOutdoorLineColor {
+    _reactOutdoorLineColor = reactOutdoorLineColor;
+    self.routePainter.outdoorLineColor = reactOutdoorLineColor;
+}
+
+- (void)setReactDashLineColor:(UIColor *)reactDashLineColor {
+    _reactDashLineColor = reactDashLineColor;
+    self.routePainter.dashLineColor = reactDashLineColor;
+}
+
+- (void)setReactArrowSymbolSpacing:(NSNumber *)reactArrowSymbolSpacing {
+    _reactArrowSymbolSpacing = reactArrowSymbolSpacing;
+    self.routePainter.arrowSymbolSpacing = reactArrowSymbolSpacing;
+}
+
+- (void)setReactIsAddStartDash:(BOOL)reactIsAddStartDash {
+    _reactIsAddStartDash = reactIsAddStartDash;
+    self.routePainter.isAddStartDash = reactIsAddStartDash;
+}
+
+- (void)setReactIsAddEndDash:(BOOL)reactIsAddEndDash {
+    _reactIsAddEndDash = reactIsAddEndDash;
+    self.routePainter.isAddEndDash = reactIsAddEndDash;
+}
+
+- (void)setReactHiddenTranslucentPaths:(BOOL)reactHiddenTranslucentPaths {
+    _reactHiddenTranslucentPaths = reactHiddenTranslucentPaths;
+    self.routePainter.hiddenTranslucentPaths = reactHiddenTranslucentPaths;
 }
 
 - (NSDictionary *)reactPainterPathDto {
