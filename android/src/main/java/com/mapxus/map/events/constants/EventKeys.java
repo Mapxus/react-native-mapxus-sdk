@@ -42,6 +42,16 @@ public class EventKeys {
     public static final String USER_LOCATION_UPDATE = ns("user.location.update");
     public static final String MAPXUS_USER_LOCATION_UPDATE = ns("map.location.update");
 
+    // visual node events
+    public static final String VISUAL_ON_TAPPED_FLAG = ns("visual.node.on.tapped.flag");
+
+    // visual events
+    public static final String VISUAL_ON_LOAD_FAIL = ns("visual.on.load.fail");
+    public static final String VISUAL_ON_RENDER_COMPLETE = ns("visual.on.render.complete");
+    public static final String VISUAL_ON_LOADING_CHANGED = ns("visual.on.loading.changed");
+    public static final String VISUAL_ON_BEARING_CHANGED = ns("visual.on.bearing.changed");
+    public static final String VISUAL_ON_NODE_CHANGED = ns("visual.on.node.changed");
+
     private static String ns(String name) {
         return String.format("%s.%s", NAMESPACE, name);
     }

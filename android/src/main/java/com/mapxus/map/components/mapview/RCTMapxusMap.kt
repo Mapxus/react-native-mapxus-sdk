@@ -25,6 +25,8 @@ import com.mapxus.map.components.annotation.RCTMapxusPointAnnotation
 import com.mapxus.map.components.location.RCTMapxusLocation
 import com.mapxus.map.components.mapview.helpers.RCTMapxusMapHelper
 import com.mapxus.map.components.mapview.helpers.RCTMapxusMapOptions
+import com.mapxus.map.components.visual.RCTMapxusVisualNodeView
+import com.mapxus.map.components.visual.RCTMapxusVisualView
 import com.mapxus.map.events.MapxusMapBuildingChangeEvent
 import com.mapxus.map.events.MapxusMapClickEvent
 import com.mapxus.map.events.MapxusMapFloorChangeEvent
@@ -65,6 +67,8 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
     private var mLocation: RCTMapxusLocation? = null
     private var mNavigationView: RCTMapxusNavigationView? = null
     private var mPointAnnotation: RCTMapxusPointAnnotation? = null
+    private var mVisualView : RCTMapxusVisualView? = null
+    private var mVisualNodeView: RCTMapxusVisualNodeView? = null
 
     //settings
     var rctMapxusMapOptions: RCTMapxusMapOptions? = null
@@ -133,6 +137,14 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
             }
             is RCTMapxusNavigationView -> {
                 mNavigationView = childView
+                feature = childView
+            }
+            is RCTMapxusVisualNodeView -> {
+                mVisualNodeView = childView
+                feature = childView
+            }
+            is RCTMapxusVisualView -> {
+                mVisualView = childView
                 feature = childView
             }
             is RCTMapxusPointAnnotation -> {
