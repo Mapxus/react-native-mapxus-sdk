@@ -22,7 +22,9 @@ import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapxus.map.components.MapxusMapFeature
 import com.mapxus.map.components.annotation.RCTMapxusNavigationView
 import com.mapxus.map.components.annotation.RCTMapxusPointAnnotation
+import com.mapxus.map.components.annotation.RCTMapxusRouteView
 import com.mapxus.map.components.location.RCTMapxusLocation
+import com.mapxus.map.components.location.RCTMapxusSimulateLocation
 import com.mapxus.map.components.mapview.helpers.RCTMapxusMapHelper
 import com.mapxus.map.components.mapview.helpers.RCTMapxusMapOptions
 import com.mapxus.map.components.visual.RCTMapxusVisualNodeView
@@ -65,7 +67,9 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
     private var mapViewProvider: MapViewProvider? = null
     var mMapxusMap: MapxusMap? = null
     private var mLocation: RCTMapxusLocation? = null
+    private var mFakeLocation: RCTMapxusSimulateLocation? = null
     private var mNavigationView: RCTMapxusNavigationView? = null
+    private var mRouteView: RCTMapxusRouteView? = null
     private var mPointAnnotation: RCTMapxusPointAnnotation? = null
     private var mVisualView : RCTMapxusVisualView? = null
     private var mVisualNodeView: RCTMapxusVisualNodeView? = null
@@ -135,8 +139,16 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
                 mLocation = childView
                 feature = childView
             }
+            is RCTMapxusSimulateLocation -> {
+                mFakeLocation = childView
+                feature = childView
+            }
             is RCTMapxusNavigationView -> {
                 mNavigationView = childView
+                feature = childView
+            }
+            is RCTMapxusRouteView -> {
+                mRouteView = childView
                 feature = childView
             }
             is RCTMapxusVisualNodeView -> {

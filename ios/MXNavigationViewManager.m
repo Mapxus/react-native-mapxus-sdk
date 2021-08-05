@@ -5,8 +5,8 @@
 //  Created by chenghao guo on 2021/4/21.
 //
 
-#import <React/RCTUIManager.h>
 #import <YYModel/YYModel.h>
+#import <React/RCTUIManager.h>
 #import "MXNavigationViewManager.h"
 #import "MXNavigationView.h"
 
@@ -14,24 +14,23 @@
 
 RCT_EXPORT_MODULE(MXNavigationView)
 
-RCT_EXPORT_METHOD(getPainterPathDto:(nonnull NSNumber *)reactTag
-                  :(RCTPromiseResolveBlock)resolve
-                  :(RCTPromiseRejectBlock)reject) {
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
-        id view = viewRegistry[reactTag];
-        
-        if (![view isKindOfClass:[MXNavigationView class]]) {
-            RCTLogError(@"Invalid react tag, could not find MXNavigationView");
-            return;
-        }
-        
-        __weak MXNavigationView *reactView = (MXNavigationView *)view;
-        NSDictionary *dto = reactView.reactPainterPathDto?:@{};
-        resolve(@{@"painterPathDto": dto});
-    }];
+- (UIView *)view {
+    return [[MXNavigationView alloc] init];
 }
 
-RCT_EXPORT_METHOD(paintRouteUsingPath:(nonnull NSNumber *)reactTag
+RCT_REMAP_VIEW_PROPERTY(adsorbable, reactAdsorbable, BOOL)
+RCT_REMAP_VIEW_PROPERTY(shortenable, reactShortenable, BOOL)
+RCT_REMAP_VIEW_PROPERTY(numberOfAllowedDrifts, reactNumberOfAllowedDrifts, NSUInteger)
+RCT_REMAP_VIEW_PROPERTY(maximumDrift, reactMaximumDrift, float)
+RCT_REMAP_VIEW_PROPERTY(distanceToDestination, reactDistanceToDestination, float)
+RCT_REMAP_VIEW_PROPERTY(showsUserHeadingIndicator, reactShowsUserHeadingIndicator, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(onArrivalAtDestination, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onExcessiveDrift, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onRefreshTheAdsorptionLocation, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onGetNewPath, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onUpdate, RCTBubblingEventBlock)
+
+RCT_EXPORT_METHOD(updatePath:(nonnull NSNumber *)reactTag
                   path:(nonnull NSDictionary *)path
                   wayPoints:(nonnull NSArray *)points
                   resolver:(RCTPromiseResolveBlock)resolve
@@ -64,12 +63,12 @@ RCT_EXPORT_METHOD(paintRouteUsingPath:(nonnull NSNumber *)reactTag
         tPath.points = geometry;
         tPath.instructions = [NSArray yy_modelArrayWithClass:[MXMInstruction class] json:path[@"instructions"]];
 
-        [reactView reactPaintRouteUsingPath:tPath wayPoints:list];
+        [reactView updatePath:tPath wayPoints:list];
         resolve(nil);
     }];
 }
 
-RCT_EXPORT_METHOD(cleanRoute:(nonnull NSNumber *)reactTag
+RCT_EXPORT_METHOD(start:(nonnull NSNumber *)reactTag
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
@@ -82,14 +81,12 @@ RCT_EXPORT_METHOD(cleanRoute:(nonnull NSNumber *)reactTag
         
         __weak MXNavigationView *reactView = (MXNavigationView *)view;
         
-        [reactView reactCleanRoute];
+        [reactView start];
         resolve(nil);
     }];
 }
 
-RCT_EXPORT_METHOD(changeOn:(nonnull NSNumber *)reactTag
-                  building:(NSString *)buildingId
-                  floor:(NSString *)floor
+RCT_EXPORT_METHOD(stop:(nonnull NSNumber *)reactTag
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
@@ -102,35 +99,10 @@ RCT_EXPORT_METHOD(changeOn:(nonnull NSNumber *)reactTag
         
         __weak MXNavigationView *reactView = (MXNavigationView *)view;
         
-        [reactView reactChangeOnBuilding:buildingId floor:floor];
+        [reactView stop];
         resolve(nil);
     }];
 }
 
-RCT_EXPORT_METHOD(focusOn:(nonnull NSNumber *)reactTag
-                  keys:(NSArray<NSString *> *)keys
-                  edgePadding:(NSDictionary *)insets
-                  resolver:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject) {
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
-        id view = viewRegistry[reactTag];
-        
-        if (![view isKindOfClass:[MXNavigationView class]]) {
-            RCTLogError(@"Invalid react tag, could not find MXNavigationView");
-            return;
-        }
-        
-        __weak MXNavigationView *reactView = (MXNavigationView *)view;
-        UIEdgeInsets edge = [RCTConvert UIEdgeInsets:insets];
-
-        [reactView reactFocusOnKeys:keys edgePadding:edge];
-        resolve(nil);
-    }];
-}
-
-
-- (UIView *)view {
-    return [[MXNavigationView alloc] init];
-}
 
 @end

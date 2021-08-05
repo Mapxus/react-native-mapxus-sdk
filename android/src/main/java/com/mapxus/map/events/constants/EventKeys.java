@@ -30,6 +30,12 @@ public class EventKeys {
     public static final String POINT_ANNOTATION_DRAG = ns("pointannotation.drag");
     public static final String POINT_ANNOTATION_DRAG_END = ns("pointannotation.dragend");
 
+    // navi view  events
+    public static final String NAVI_ON_ARRIVAL_AT_DESTINATION = ns("navi.arrival.at.destination");
+    public static final String NAVI_ON_EXCESSIVE_DRIFT = ns("navi.excessive.drift");
+    public static final String NAVI_ON_REFRESH_THE_ADSORPTION_LOCATION = ns("navi.refresh.the.adsorption.location");
+    public static final String NAVI_ON_GET_NEWPATH = ns("navi.get.newpath");
+
     // source events
     public static final String SHAPE_SOURCE_LAYER_CLICK = ns("shapesource.layer.pressed");
     public static final String VECTOR_SOURCE_LAYER_CLICK = ns("vectorsource.layer.pressed");

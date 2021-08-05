@@ -1,5 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import MapxusSdk, {
 	GeoPoint,
 	TappedOnBlankObject,
@@ -7,10 +7,12 @@ import MapxusSdk, {
 	MapxusPointAnnotationViewProps,
 	RouteSearchResult,
 	IndoorSceneChangeObject,
+	NavigationNewPathObject,
+	AdsorptionLocationObject,
 } from '@mapxus/react-native-mapxus-sdk';
-import {Switch, SegmentedControl, WhiteSpace, Button} from '@ant-design/react-native';
+import { Switch, SegmentedControl, WhiteSpace, Button } from '@ant-design/react-native';
 import ParamsScrollView from './ParamsScrollView';
-import {map as _map, assign as _assign, find as _find} from 'lodash';
+import { map as _map, assign as _assign, find as _find } from 'lodash';
 import language from './utils/language';
 
 export default function Route() {
@@ -24,7 +26,15 @@ export default function Route() {
 	const [toFloor, setToFloor] = useState('');
 	const [vehicle, setVehicle] = useState('foot');
 	const [markers, setMarkers] = useState<Array<MapxusPointAnnotationViewProps>>([]);
-	const navRef = useRef<MapxusSdk.NavigationView>(null);
+	const [currentBuilding, setCurrentBuilding] = useState('');
+	const [currentFloor, setCurrentFloor] = useState('');
+	const [isNavigation, setIsNavigation] = useState(false);
+	const [isAddStartDash, setIsAddStartDash] = useState(true);
+	const [centerCoordinate, setCenterCoordinate] = useState([0, 0]);
+	const [heading, setHeading] = useState(0);
+	const [firstIn, setFirstIn] = useState(true);
+	const routeRef = useRef<MapxusSdk.RouteView>(null);
+	const naviRef = useRef<MapxusSdk.NavigationView>(null);
 	const mapRef = useRef<MapxusSdk.MapxusMap>(null);
 
 	useEffect(function updateStartMarker() {
@@ -91,7 +101,7 @@ export default function Route() {
 		} else {
 			arr = _map(markers, m => {
 				return m.id === type
-					? _assign(m, {coordinate: [point?.longitude, point?.latitude]})
+					? _assign(m, { coordinate: [point?.longitude, point?.latitude] })
 					: m;
 			});
 		}
@@ -100,41 +110,91 @@ export default function Route() {
 	}
 
 	async function renderPath(result: RouteSearchResult) {
-		navRef.current?.paintRouteUsingPath(
+		setIsAddStartDash(true);
+		routeRef.current?.cleanRoute();
+
+		routeRef.current?.paintRouteUsingPath(
 			result?.paths[0],
 			result?.wayPointList
 		);
+		naviRef.current?.updatePath(
+			result?.paths[0],
+			result?.wayPointList
+		)
 
-		var dto = await navRef.current?.getPainterPathDto();
+		var dto = await routeRef.current?.getPainterPathDto();
 		for (const key in dto?.paragraphs) {
 			if (dto?.paragraphs.hasOwnProperty(key) && !key.includes('outdoor')) {
 				var paragraph = dto.paragraphs[key];
-				mapRef.current?.selectIndoorScene(MapxusSdk.MapxusZoomMode.DISABLE, {top:0, left:0, bottom:0, right:0}, paragraph.buildingId, paragraph.floor);
-				navRef.current?.focusOn([key], {top:130, left:30, bottom:110, right:80})
+				mapRef.current?.selectIndoorScene(MapxusSdk.MapxusZoomMode.DISABLE, { top: 0, left: 0, bottom: 0, right: 0 }, paragraph.buildingId, paragraph.floor);
+				routeRef.current?.changeOn(currentBuilding, currentFloor);
+				routeRef.current?.focusOn([key], { top: 130, left: 30, bottom: 110, right: 80 })
 				break;
 			}
 		}
 	}
 
 	function handelIndoorSceneChange(feature: IndoorSceneChangeObject) {
-		navRef.current?.changeOn(feature.building.identifier, feature.floor);
+		setCurrentBuilding(feature.building.identifier);
+		setCurrentFloor(feature.floor);
+		routeRef.current?.changeOn(feature.building.identifier, feature.floor);
+	}
+
+	function handleGo() {
+		setIsNavigation(!isNavigation)
+		if (isNavigation) {
+			naviRef.current?.stop();
+		} else {
+			naviRef.current?.start();
+			setIsAddStartDash(false);
+		}
+	}
+
+	function onRedrawPath(feature: NavigationNewPathObject) {
+		routeRef.current?.cleanRoute;
+		routeRef.current?.paintRouteUsingPath(
+			feature.newPath,
+			feature.originalWayPoints
+		);
+		routeRef.current?.changeOn(currentBuilding, currentFloor);
+	}
+
+	function onArrivalDestination() {
+		setIsNavigation(false);
+		naviRef.current?.stop();
+		routeRef.current?.cleanRoute();
+	}
+
+	function onRefreshAdsorptionLocation(feature: AdsorptionLocationObject) {
+		if (feature.adsorptionLocation.coords.heading != undefined) {
+			setHeading(feature.adsorptionLocation.coords.heading);
+		}
+		mapRef.current?.selectIndoorScene(MapxusSdk.MapxusZoomMode.DISABLE, { top: 0, left: 0, bottom: 0, right: 0 }, feature.buildingId, feature.floor);
+		setCenterCoordinate([feature.adsorptionLocation.coords.longitude, feature.adsorptionLocation.coords.latitude]);
+	}
+
+	function onUpdate(feature: MapxusSdk.Location) {
+		if (!isNavigation && firstIn) {
+			setFirstIn(false);
+			setCenterCoordinate([feature.coords.longitude, feature.coords.latitude]);
+		}
 	}
 
 	return (
-		<View style={{flex: 1}}>
+		<View style={{ flex: 1 }}>
 			<View style={styles.container}>
 				<View>
 					<Button
 						style={[styles.button, styles.button_white]}
-						{...startEndClicked === 'start' ? {type: 'primary'} : {}}
+						{...startEndClicked === 'start' ? { type: 'primary' } : {}}
 						onPress={() => setStartEndClicked(startEndClicked === 'start' ? '' : 'start')}
 					>
 						{startEndClicked === 'start' ? 'Tap screen for Start' : 'Start'}
 					</Button>
-					<WhiteSpace/>
+					<WhiteSpace />
 					<Button
 						style={[styles.button, styles.button_white]}
-						{...startEndClicked === 'end' ? {type: 'primary'} : {}}
+						{...startEndClicked === 'end' ? { type: 'primary' } : {}}
 						onPress={() => setStartEndClicked(startEndClicked === 'end' ? '' : 'end')}
 					>
 						{startEndClicked === 'end' ? 'Tap screen for End' : 'End'}
@@ -143,25 +203,34 @@ export default function Route() {
 				<View style={styles.button_blue_wrapper}>
 					<Button
 						type={'primary'}
-						style={[styles.button, {marginRight: 15}]}
+						style={[styles.button, { marginRight: 15 }]}
 						onPress={handleSearch}
 					>
 						Search
 					</Button>
+					<Button
+						type={'primary'}
+						style={[styles.button, { marginRight: 15 }]}
+						onPress={handleGo}
+					>
+						{isNavigation ? 'Stop' : 'Go'}
+					</Button>
 				</View>
 			</View>
-			<View style={{flex: 5}}>
+			<View style={{ flex: 5 }}>
 				<MapxusSdk.MapxusMap
 					ref={mapRef}
-					mapOption={{
-						buildingId: 'tsuenwanplaza_hk_369d01',
-						zoomInsets: {left: -100, right: -100}
-					}}
 					onTappedOnBlank={selectPoint}
 					onTappedOnPoi={selectPoint}
 					onIndoorSceneChange={handelIndoorSceneChange}
 				>
-					<MapxusSdk.MapView style={{flex: 1}}/>
+					<MapxusSdk.MapView style={{ flex: 1 }} >
+						<MapxusSdk.Camera
+							centerCoordinate={centerCoordinate}
+							zoomLevel={19}
+							heading={heading}
+						/>
+					</MapxusSdk.MapView>
 					{
 						markers.map((marker: MapxusPointAnnotationViewProps) => (
 							<MapxusSdk.MapxusPointAnnotationView
@@ -174,13 +243,27 @@ export default function Route() {
 								<TouchableOpacity style={styles.marker}>
 									<Image
 										source={require('./assets/startPoint.png')}
-										style={{width: '100%', height: '100%'}}
+										style={{ width: '100%', height: '100%' }}
 									/>
 								</TouchableOpacity>
 							</MapxusSdk.MapxusPointAnnotationView>
 						))
 					}
-					<MapxusSdk.NavigationView ref={navRef}/>
+					<MapxusSdk.RouteView
+						ref={routeRef}
+						isAddStartDash={isAddStartDash}
+					/>
+					<MapxusSdk.NavigationView
+						distanceToDestination={3}
+						ref={naviRef}
+						adsorbable={true}
+						shortenable={true}
+						showsUserHeadingIndicator={true}
+						onGetNewPath={onRedrawPath}
+						onArrivalAtDestination={onArrivalDestination}
+						onRefreshTheAdsorptionLocation={onRefreshAdsorptionLocation}
+						onUpdate={onUpdate}
+					/>
 				</MapxusSdk.MapxusMap>
 			</View>
 			<ParamsScrollView>
@@ -189,10 +272,10 @@ export default function Route() {
 						values={['foot', 'wheelchair']}
 						onValueChange={setVehicle}
 					/>
-					<WhiteSpace/>
+					<WhiteSpace />
 					<View style={styles.inner}>
 						<Text style={styles.fontStyle}>toDoor</Text>
-						<Switch checked={isToDoor} onChange={setIsToDoor}/>
+						<Switch checked={isToDoor} onChange={setIsToDoor} />
 					</View>
 				</View>
 			</ParamsScrollView>
@@ -215,7 +298,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center'
 	},
 	button_white: {
-		width: 192,
+		width: 160,
 		borderWidth: 1,
 		borderColor: '#ccc',
 	},

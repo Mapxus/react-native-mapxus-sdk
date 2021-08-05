@@ -23,7 +23,9 @@
     coords[@"course"] = @(_location.course);
     coords[@"speed"] = @(_location.speed);
 #warning "mapxus add"
-    coords[@"ordinal"] = @(_location.floor.level);
+    if (_location.floor) {
+        coords[@"ordinal"] = @(_location.floor.level);
+    }
     
     json[@"coords"] = coords;
     json[@"timestamp"] = @([_location.timestamp timeIntervalSince1970]);

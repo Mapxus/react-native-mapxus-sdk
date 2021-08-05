@@ -122,8 +122,7 @@ export default function SearchIntegrate() {
 						>
 							Explore Harbour City
 						</Button>
-						: controllerStatus === 1 || controllerStatus === 2
-						? <View style={{margin: 15}}>
+						: <View style={{margin: 15}}>
 							<View style={styles.category_header}>
 								<TouchableOpacity
 									style={styles.close_icon}
@@ -149,9 +148,6 @@ export default function SearchIntegrate() {
 										: renderPOIsByCategory(pois, categoryType, categoryName, clickPOI)
 								}
 							</View>
-						</View>
-						: <View>
-							<Text>333</Text>
 						</View>
 				}
 			</ParamsScrollView>

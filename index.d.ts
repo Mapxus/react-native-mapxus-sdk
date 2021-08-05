@@ -224,12 +224,22 @@ declare namespace MapxusSdk {
     deactivateBearing(): void;
   }
 
-  class NavigationView extends Component<NavigationViewProps> {
+  class RouteView extends Component<RouteViewProps> {
     getPainterPathDto(): Promise<PainterPathDtoProps>;
     paintRouteUsingPath(path: Path, points: IndoorPoint[]): void;
     cleanRoute(): void;
     changeOn(buildingId: string, floor: string): void;
     focusOn(keys: string[], insets: Insets): void;
+  }
+
+  class NavigationView extends Component<NavigationViewProps> {
+    updatePath(path: Path, points: IndoorPoint[]): void;
+    start(): void;
+    stop(): void;
+  }
+
+  class SimulateLocationManager extends Component<SimulateLocationManagerProps> {
+    setSimulateLocation(location: InputLocation): void;
   }
 
   class MapView extends Component<MapViewProps> {
@@ -528,6 +538,20 @@ export interface RegionPayload {
   pitch: number;
 }
 
+export interface InputLocation {
+  latitude?: number;
+  longitude?: number;
+  altitude?: number;
+  horizontalAccuracy?: number;
+  verticalAccuracy?: number;
+  course?: number;
+  courseAccuracy?: number;
+  speed?: number;
+  speedAccuracy?: number;
+  ordinal?: number;
+  timestamp?: number;
+}
+
 export interface Configuration {
   outdoorHidden?: boolean;
   defaultStyle?: MapxusSdk.MapxusMapStyle;
@@ -603,8 +627,45 @@ export interface AndroidCompass {
   sensorAccuracy: number;
 }
 
-export interface NavigationViewProps extends ViewProps {
+export interface RouteViewProps extends ViewProps {
+  isAddStartDash?: boolean;
+  isAddEndDash?: boolean;
+  hiddenTranslucentPaths?: boolean;
+  indoorLineColor?: string | number;
+  outdoorLineColor?: string | number;
+  dashLineColor?: string | number;
+  arrowSymbolSpacing?: number;
+  arrowIcon?: string;
+  startIcon?: string;
+  endIcon?: string;
+  elevatorUpIcon?: string;
+  elevatorDownIcon?: string;
+  escalatorUpIcon?: string;
+  escalatorDownIcon?: string;
+  rampUpIcon?: string;
+  rampDownIcon?: string;
+  stairsUpIcon?: string;
+  stairsDownIcon?: string;
+  buildingGateIcon?: string;
+}
 
+export interface NavigationViewProps extends ViewProps {
+  adsorbable?: boolean,
+  shortenable?: boolean,
+  numberOfAllowedDrifts?: number,
+  maximumDrift?: number,
+  distanceToDestination?: number,
+  showsUserHeadingIndicator?: boolean,
+  onArrivalAtDestination?: () => void,
+  onExcessiveDrift?: () => void,
+  onRefreshTheAdsorptionLocation?: (feature: AdsorptionLocationObject) => void,
+  onGetNewPath?: (feature: NavigationNewPathObject) => void,
+  onUpdate?: (feature: MapxusSdk.Location) => void;
+}
+
+export interface SimulateLocationManagerProps extends ViewProps {
+  showsUserHeadingIndicator?: boolean;
+  onUpdate?: (feature: MapxusSdk.Location) => void;
 }
 
 export interface MapViewProps extends ViewProps {
@@ -922,6 +983,20 @@ export interface HeatmapLayerStyle {
   heatmapOpacityTransition?: Transition | Expression;
 }
 
+export interface AdsorptionLocationObject {
+  adsorptionLocation: MapxusSdk.Location;
+  actualLocation: MapxusSdk.Location;
+  buildingId?: string;
+  floor?: string;
+}
+
+export interface NavigationNewPathObject {
+  newPath: Path;
+  originalPath: Path;
+  fromInstructionIndex: number;
+  originalWayPoints: IndoorPoint[];
+}
+
 export interface Point {
   x: number;
   y: number;
@@ -1102,7 +1177,7 @@ export interface Building {
    */
   address_default?: Address;
 
-  /** 
+  /**
    * Adress in English
    */
   address_en?: Address;
@@ -1481,7 +1556,7 @@ export interface Instruction {
   time: number;
 
   /**
-   * Connection type, only returned if sign is `MXMDownstairs` and `MXMUpstairs`, possible values are elevator_customer, 
+   * Connection type, only returned if sign is `MXMDownstairs` and `MXMUpstairs`, possible values are elevator_customer,
    * elevator_good, escalator, ramp, stairs
    */
   type?: string;
@@ -1629,7 +1704,7 @@ export interface ImageSourceProps extends ViewProps {
     GeoJSON.Position,
     GeoJSON.Position,
     GeoJSON.Position,
-    GeoJSON.Position,
+    GeoJSON.Position
   ];
 }
 
@@ -1753,7 +1828,7 @@ export interface PainterPathDtoProps {
   endPoint: IndoorPoint;
 
   /**
-   * Key in planning order, where outdoor passages are separated by indoor passages by outdoor 1, outdoor 2 
+   * Key in planning order, where outdoor passages are separated by indoor passages by outdoor 1, outdoor 2
    * or buildingId-floor 1... to distinguish them.The indoor sections are grouped together by buildingId-floor.
    */
   keys: string[];
@@ -1766,7 +1841,7 @@ export interface PainterPathDtoProps {
 
 export interface Paragraph {
   /**
-   * Key in planning order, where outdoor passages are separated by indoor passages by outdoor 1, outdoor 2 
+   * Key in planning order, where outdoor passages are separated by indoor passages by outdoor 1, outdoor 2
    * or buildingId-floor 1... to distinguish them.The indoor sections are grouped together by buildingId-floor.
    */
   key: string;

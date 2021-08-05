@@ -13,20 +13,76 @@ class NavigationView extends NativeBridgeComponent(React.Component) {
     static propTypes = {
         ...ViewPropTypes,
 
-        selected: PropTypes.bool,
+        adsorbable: PropTypes.bool,
+
+        shortenable: PropTypes.bool,
+
+        numberOfAllowedDrifts: PropTypes.number,
+
+        maximumDrift: PropTypes.number,
+
+        distanceToDestination: PropTypes.number,
+
+        showsUserHeadingIndicator: PropTypes.bool,
+
+        onArrivalAtDestination: PropTypes.func,
+
+        onExcessiveDrift: PropTypes.func,
+
+        onRefreshTheAdsorptionLocation: PropTypes.func,
+
+        onGetNewPath: PropTypes.func,
+
+        onUpdate: PropTypes.func,
     };
 
     constructor(props) {
         super(props, NATIVE_MODULE_NAME);
+        this._onArrivalAtDestination = this._onArrivalAtDestination.bind(this);
+        this._onExcessiveDrift = this._onExcessiveDrift.bind(this);
+        this._onRefreshTheAdsorptionLocation = this._onRefreshTheAdsorptionLocation.bind(this);
+        this._onGetNewPath = this._onGetNewPath.bind(this);
+        this._onUpdate = this._onUpdate.bind(this);
     }
 
-    /**
-     * Get the data generated before drawing the route, such as 'keys' represent the identification value of the route section.
-     * @returns {Promise}
-     */
-    async getPainterPathDto() {
-        const res = await this._runNativeCommand('getPainterPathDto', this._nativeRef);
-        return res.painterPathDto;
+    _onUpdate(event) {
+        if (!this.props.onUpdate) {
+            return;
+        }
+        // process raw event...
+        this.props.onUpdate(event.nativeEvent);
+    }
+
+    _onArrivalAtDestination(event) {
+        if (!this.props.onArrivalAtDestination) {
+            return;
+        }
+        // process raw event...
+        this.props.onArrivalAtDestination(event.nativeEvent);
+    }
+
+    _onExcessiveDrift(event) {
+        if (!this.props.onExcessiveDrift) {
+            return;
+        }
+        // process raw event...
+        this.props.onExcessiveDrift(event.nativeEvent);
+    }
+
+    _onRefreshTheAdsorptionLocation(event) {
+        if (!this.props.onRefreshTheAdsorptionLocation) {
+            return;
+        }
+        // process raw event...
+        this.props.onRefreshTheAdsorptionLocation(event.nativeEvent);
+    }
+
+    _onGetNewPath(event) {
+        if (!this.props.onGetNewPath) {
+            return;
+        }
+        // process raw event...
+        this.props.onGetNewPath(event.nativeEvent);
     }
 
     /**
@@ -34,43 +90,19 @@ class NavigationView extends NativeBridgeComponent(React.Component) {
      * @param {Path} path the route which you want to display.
      * @param {Array<IndoorPoint>} points the waypoint list.
      */
-    paintRouteUsingPath(path, points) {
-        this._runNativeCommand('paintRouteUsingPath', this._nativeRef, [
+     updatePath(path, points) {
+        this._runNativeCommand('updatePath', this._nativeRef, [
             path,
             points
         ]);
     }
 
-    /**
-     * Clear the route that has been drawn on the map.
-     */
-    cleanRoute() {
-        this._runNativeCommand('cleanRoute', this._nativeRef, [
-        ]);
+    start() {
+        this._runNativeCommand('start', this._nativeRef, []);
     }
 
-    /**
-     * Show the route of the specified scene, usually called when `MapxusMap.onIndoorSceneChange` is triggered.
-     * @param {String} buildingId id of the building to be selected
-     * @param {String} floor name of the floor to be selected
-     */
-    changeOn(buildingId, floor) {
-        this._runNativeCommand('changeOn', this._nativeRef, [
-            buildingId,
-            floor
-        ]);
-    }
-
-    /**
-     * Let the map zoom to the appropriate level to show the specified route section.
-     * @param {Array<String>} keys The route sections you want to show in full.
-     * @param {Insets} insets The margins when displayed.
-     */
-    focusOn(keys, insets) {
-        this._runNativeCommand('focusOn', this._nativeRef, [
-            keys,
-            insets,
-        ]);
+    stop() {
+        this._runNativeCommand('stop', this._nativeRef, []);
     }
 
     _setNativeRef(nativeRef) {
@@ -80,7 +112,12 @@ class NavigationView extends NativeBridgeComponent(React.Component) {
 
     render() {
         const callbacks = {
-            ref: (nativeRef) => this._setNativeRef(nativeRef)
+            ref: (nativeRef) => this._setNativeRef(nativeRef),
+            onArrivalAtDestination: this._onArrivalAtDestination,
+            onExcessiveDrift: this._onExcessiveDrift,
+            onRefreshTheAdsorptionLocation: this._onRefreshTheAdsorptionLocation,
+            onGetNewPath: this._onGetNewPath,
+            onUpdate: this._onUpdate,
         };
 
         return <NaviView {...this.props} {...callbacks}>{this.props.children}</NaviView>;

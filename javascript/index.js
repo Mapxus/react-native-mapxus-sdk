@@ -42,6 +42,7 @@ import MapxusMap from './mapxus/components/MapxusMap';
 import MapxusMapLocationAndroid from './mapxus/components/MapxusMapLocation.android';
 import UserLocation from './components/UserLocation'; // eslint-disable-line import/no-cycle
 import MapxusPointAnnotationView from './mapxus/components/MapxusPointAnnotationView';
+import RouteView from './mapxus/components/RouteView';
 import VisualNodeView from './mapxus/components/VisualNodeView';
 import VisualView from './mapxus/components/VisualView';
 import NavigationView from './mapxus/components/NavigationView';
@@ -50,6 +51,7 @@ import geocodeSearchManager from './mapxus/module/geocodeSearchManager';
 import poiCategorySearchManager from './mapxus/module/poiCategorySearchManager';
 import poiSearchManager from './mapxus/module/poiSearchManager';
 import routeSearchManager from './mapxus/module/routeSearchManager';
+import SimulateLocationManager from './mapxus/components/SimulateLocationManager';
 import visualSearchManager from './mapxus/module/visualSearchManager';
 
 const {MapxusSdk} = NativeModules;
@@ -86,9 +88,11 @@ MapxusSdk.UserTrackingModes = Camera.UserTrackingModes;
 // components
 MapxusSdk.MapxusMap = MapxusMap;
 MapxusSdk.MapxusPointAnnotationView = MapxusPointAnnotationView;
+MapxusSdk.RouteView = RouteView;
 MapxusSdk.VisualNodeView = VisualNodeView;
 MapxusSdk.VisualView = VisualView;
 MapxusSdk.NavigationView = NavigationView;
+MapxusSdk.SimulateLocationManager = SimulateLocationManager;
 MapxusSdk.buildingSearchManager = buildingSearchManager;
 MapxusSdk.geocodeSearchManager = geocodeSearchManager;
 MapxusSdk.poiCategorySearchManager = poiCategorySearchManager;
@@ -150,9 +154,11 @@ const {LineJoin} = MapxusSdk;
 export {
 	MapxusMap,
 	MapxusPointAnnotationView,
+	RouteView,
 	VisualNodeView,
 	VisualView,
 	NavigationView,
+	SimulateLocationManager,
 	buildingSearchManager,
 	geocodeSearchManager,
 	poiCategorySearchManager,

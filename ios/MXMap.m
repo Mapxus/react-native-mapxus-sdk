@@ -10,14 +10,16 @@
 #import <React/UIView+React.h>
 #import <YYModel/YYModel.h>
 #import "MXPointAnnotationView.h"
+#import "MXRouteView.h"
+#import "RCTMXUserLocationProtocol.h"
 #import "MXNavigationView.h"
 #import "MXVisualNodeView.h"
 
 
 @interface MXMap () <MapxusMapDelegate>
 
-@property (nonatomic, strong) MapxusMap *map;
-@property (nonatomic, weak) RCTMGLMapView *mapView;
+@property (nonatomic, strong) MapxusMap *mapxusMap;
+@property (nonatomic, weak) RCTMGLMapView *mapRendererView;
 @property (nonatomic, strong) NSMutableArray<NSLayoutConstraint *> *constraints;
 
 @end
@@ -45,11 +47,11 @@
 }
 
 - (void)addMXMPointAnnotations:(MXMPointAnnotation *)annotation {
-    [self.map addMXMPointAnnotations:@[annotation]];
+    [self.mapxusMap addMXMPointAnnotations:@[annotation]];
 }
 
 - (void)removeMXMPointAnnotaions:(MXMPointAnnotation *)annotation {
-    [self.map removeMXMPointAnnotaions:@[annotation]];
+    [self.mapxusMap removeMXMPointAnnotaions:@[annotation]];
 }
 
 
@@ -57,19 +59,22 @@
 {
     if ([subview isKindOfClass:[RCTMGLMapView class]]) {
         RCTMGLMapView *mapView = (RCTMGLMapView*)subview;
-        self.mapView = mapView;
-        self.map = [[MapxusMap alloc] initWithMapView:mapView configuration:self.reactMapOption];
+        self.mapRendererView = mapView;
+        self.mapxusMap = [[MapxusMap alloc] initWithMapView:mapView configuration:self.reactMapOption];
         [self delayedConfigurationMap];
     } else if ([subview isKindOfClass:[MXPointAnnotationView class]]) {
         MXPointAnnotationView *pointAnnotation = (MXPointAnnotationView *)subview;
-        pointAnnotation.map = self.mapView;
+        pointAnnotation.map = self.mapRendererView;
         pointAnnotation.mapxusMap = self;
+    } else if ([subview isKindOfClass:[MXRouteView class]]) {
+        MXRouteView *routeView = (MXRouteView *)subview;
+        routeView.mapRendererView = self.mapRendererView;
+    } else if ([subview conformsToProtocol:@protocol(RCTMXUserLocationProtocol)]) {
+        id<RCTMXUserLocationProtocol> locationView = (id<RCTMXUserLocationProtocol>)subview;
+        locationView.mapRendererView = self.mapRendererView;
     } else if ([subview isKindOfClass:[MXVisualNodeView class]]) {
         MXVisualNodeView *nodeView = (MXVisualNodeView *)subview;
-        nodeView.mapRendererView = self.mapView;
-    } else if ([subview isKindOfClass:[MXNavigationView class]]) {
-        MXNavigationView *navigationView = (MXNavigationView *)subview;
-        navigationView.mapRenderer = self.mapView;
+        nodeView.mapRendererView = self.mapRendererView;
     } else {
         NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
 
@@ -82,17 +87,20 @@
 - (void)removeFromMap:(id<RCTComponent>)subview
 {
     if ([subview isKindOfClass:[RCTMGLMapView class]]) {
-        self.map = nil;
+        self.mapxusMap = nil;
     } else if ([subview isKindOfClass:[MXPointAnnotationView class]]) {
         MXPointAnnotationView *pointAnnotation = (MXPointAnnotationView *)subview;
         pointAnnotation.map = nil;
         pointAnnotation.mapxusMap = nil;
+    } else if ([subview isKindOfClass:[MXRouteView class]]) {
+        MXRouteView *routeView = (MXRouteView *)subview;
+        routeView.mapRendererView = nil;
+    } else if ([subview conformsToProtocol:@protocol(RCTMXUserLocationProtocol)]) {
+        id<RCTMXUserLocationProtocol> locationView = (id<RCTMXUserLocationProtocol>)subview;
+        locationView.mapRendererView = nil;
     } else if ([subview isKindOfClass:[MXVisualNodeView class]]) {
         MXVisualNodeView *nodeView = (MXVisualNodeView *)subview;
         nodeView.mapRendererView = nil;
-    } else if ([subview isKindOfClass:[MXNavigationView class]]) {
-        MXNavigationView *navigationView = (MXNavigationView *)subview;
-        navigationView.mapRenderer = nil;
     } else {
         NSArray<id<RCTComponent>> *childSubViews = [subview reactSubviews];
         
@@ -130,36 +138,36 @@
 
 // 未生成地图前设置的配置需要需要在生成后重新设置进去
 - (void)delayedConfigurationMap {
-    self.map.delegate = self;
+    self.mapxusMap.delegate = self;
     if (self.reactSelectFontColor) {
-        self.map.floorBar.selectFontColor = self.reactSelectFontColor;
+        self.mapxusMap.floorBar.selectFontColor = self.reactSelectFontColor;
     }
     if (self.reactSelectBoxColor) {
-        self.map.floorBar.selectBoxColor = self.reactSelectBoxColor;
+        self.mapxusMap.floorBar.selectBoxColor = self.reactSelectBoxColor;
     }
     if (self.reactFontColor) {
-        self.map.floorBar.fontColor = self.reactFontColor;
+        self.mapxusMap.floorBar.fontColor = self.reactFontColor;
     }
     if (self.reactIndoorControllerAlwaysHidden) {
-        self.map.indoorControllerAlwaysHidden = [self.reactIndoorControllerAlwaysHidden boolValue];
+        self.mapxusMap.indoorControllerAlwaysHidden = [self.reactIndoorControllerAlwaysHidden boolValue];
     }
     if (self.reactLogoBottomMargin) {
-        self.map.logoBottomMargin = [self.reactLogoBottomMargin floatValue];
+        self.mapxusMap.logoBottomMargin = [self.reactLogoBottomMargin floatValue];
     }
     if (self.reactOpenStreetSourceBottomMargin) {
-        self.map.openStreetSourceBottomMargin = [self.reactOpenStreetSourceBottomMargin floatValue];
+        self.mapxusMap.openStreetSourceBottomMargin = [self.reactOpenStreetSourceBottomMargin floatValue];
     }
     if (self.reactOutdoorHidden) {
-        self.map.outdoorHidden = [self.reactOutdoorHidden boolValue];
+        self.mapxusMap.outdoorHidden = [self.reactOutdoorHidden boolValue];
     }
     if (self.reactGestureSwitchingBuilding) {
-        self.map.gestureSwitchingBuilding = [self.reactGestureSwitchingBuilding boolValue];
+        self.mapxusMap.gestureSwitchingBuilding = [self.reactGestureSwitchingBuilding boolValue];
     }
     if (self.reactAutoChangeBuilding) {
-        self.map.autoChangeBuilding = [self.reactAutoChangeBuilding boolValue];
+        self.mapxusMap.autoChangeBuilding = [self.reactAutoChangeBuilding boolValue];
     }
     
-    self.map.selectorPosition = self.reactSelectorPosition;
+    self.mapxusMap.selectorPosition = self.reactSelectorPosition;
     if (!CGPointEqualToPoint(self.reactSelectorPositionCustom, CGPointMake(-1, -1))) {
         [self setReactSelectorPositionCustom:self.reactSelectorPositionCustom];
     }
@@ -167,40 +175,40 @@
 
 - (void)setReactSelectFontColor:(UIColor *)reactSelectFontColor {
     _reactSelectFontColor = reactSelectFontColor;
-    self.map.floorBar.selectFontColor = reactSelectFontColor;
+    self.mapxusMap.floorBar.selectFontColor = reactSelectFontColor;
 }
 
 - (void)setReactSelectBoxColor:(UIColor *)reactSelectBoxColor {
     _reactSelectBoxColor = reactSelectBoxColor;
-    self.map.floorBar.selectBoxColor = reactSelectBoxColor;
+    self.mapxusMap.floorBar.selectBoxColor = reactSelectBoxColor;
 }
 
 - (void)setReactFontColor:(UIColor *)reactFontColor {
     _reactFontColor = reactFontColor;
-    self.map.floorBar.fontColor = reactFontColor;
+    self.mapxusMap.floorBar.fontColor = reactFontColor;
 }
 
 - (void)setReactIndoorControllerAlwaysHidden:(NSNumber *)reactIndoorControllerAlwaysHidden {
     _reactIndoorControllerAlwaysHidden = reactIndoorControllerAlwaysHidden;
-    self.map.indoorControllerAlwaysHidden = [reactIndoorControllerAlwaysHidden boolValue];
+    self.mapxusMap.indoorControllerAlwaysHidden = [reactIndoorControllerAlwaysHidden boolValue];
 }
 
 - (void)setReactSelectorPosition:(MXMSelectorPosition)reactSelectorPosition {
     _reactSelectorPosition = reactSelectorPosition;
-    self.map.selectorPosition = reactSelectorPosition;
+    self.mapxusMap.selectorPosition = reactSelectorPosition;
 }
 
 - (void)setReactSelectorPositionCustom:(CGPoint)reactSelectorPositionCustom {
     _reactSelectorPositionCustom = reactSelectorPositionCustom;
-    if (self.map) {
+    if (self.mapxusMap) {
         if (self.constraints.count == 0) {
-            [self.map.buildingSelectButton removeFromSuperview];
-            [self.map.floorBar removeFromSuperview];
-            [self.mapView addSubview:self.map.buildingSelectButton];
-            [self.mapView addSubview:self.map.floorBar];
+            [self.mapxusMap.buildingSelectButton removeFromSuperview];
+            [self.mapxusMap.floorBar removeFromSuperview];
+            [self.mapRendererView addSubview:self.mapxusMap.buildingSelectButton];
+            [self.mapRendererView addSubview:self.mapxusMap.floorBar];
         }
-        MXMFloorSelectorBar *floorBar = self.map.floorBar;
-        UIButton *buildingButton = self.map.buildingSelectButton;
+        MXMFloorSelectorBar *floorBar = self.mapxusMap.floorBar;
+        UIButton *buildingButton = self.mapxusMap.buildingSelectButton;
         CGFloat x = MAX(reactSelectorPositionCustom.x, 0);
         CGFloat y = MAX(reactSelectorPositionCustom.y, 0);
         
@@ -209,24 +217,24 @@
         [updatedConstraints addObject:[buildingButton.bottomAnchor constraintEqualToAnchor:floorBar.topAnchor constant:-4]];
         [updatedConstraints addObject:[buildingButton.centerXAnchor constraintEqualToAnchor:floorBar.centerXAnchor]];
         
-        switch (self.map.selectorPosition) {
+        switch (self.mapxusMap.selectorPosition) {
             case MXMSelectorPositionTopLeft:
             case MXMSelectorPositionCenterLeft:
-                [updatedConstraints addObject:[buildingButton.topAnchor constraintEqualToAnchor:self.mapView.topAnchor constant:y]];
-                [updatedConstraints addObject:[buildingButton.leadingAnchor constraintEqualToAnchor:self.mapView.leadingAnchor constant:x]];
+                [updatedConstraints addObject:[buildingButton.topAnchor constraintEqualToAnchor:self.mapRendererView.topAnchor constant:y]];
+                [updatedConstraints addObject:[buildingButton.leadingAnchor constraintEqualToAnchor:self.mapRendererView.leadingAnchor constant:x]];
                 break;
             case MXMSelectorPositionTopRight:
             case MXMSelectorPositionCenterRight:
-                [updatedConstraints addObject:[buildingButton.topAnchor constraintEqualToAnchor:self.mapView.topAnchor constant:y]];
-                [updatedConstraints addObject:[self.mapView.trailingAnchor constraintEqualToAnchor:buildingButton.trailingAnchor constant:x]];
+                [updatedConstraints addObject:[buildingButton.topAnchor constraintEqualToAnchor:self.mapRendererView.topAnchor constant:y]];
+                [updatedConstraints addObject:[self.mapRendererView.trailingAnchor constraintEqualToAnchor:buildingButton.trailingAnchor constant:x]];
                 break;
             case MXMSelectorPositionBottomLeft:
-                [updatedConstraints addObject:[self.mapView.bottomAnchor constraintEqualToAnchor:floorBar.bottomAnchor constant:y]];
-                [updatedConstraints addObject:[buildingButton.leadingAnchor constraintEqualToAnchor:self.mapView.leadingAnchor constant:x]];
+                [updatedConstraints addObject:[self.mapRendererView.bottomAnchor constraintEqualToAnchor:floorBar.bottomAnchor constant:y]];
+                [updatedConstraints addObject:[buildingButton.leadingAnchor constraintEqualToAnchor:self.mapRendererView.leadingAnchor constant:x]];
                 break;
             case MXMSelectorPositionBottomRight:
-                [updatedConstraints addObject:[self.mapView.bottomAnchor constraintEqualToAnchor:floorBar.bottomAnchor constant:y]];
-                [updatedConstraints addObject: [self.mapView.trailingAnchor constraintEqualToAnchor:buildingButton.trailingAnchor constant:x]];
+                [updatedConstraints addObject:[self.mapRendererView.bottomAnchor constraintEqualToAnchor:floorBar.bottomAnchor constant:y]];
+                [updatedConstraints addObject: [self.mapRendererView.trailingAnchor constraintEqualToAnchor:buildingButton.trailingAnchor constant:x]];
                 break;
         }
         
@@ -239,50 +247,50 @@
 
 - (void)setReactLogoBottomMargin:(NSNumber *)reactLogoBottomMargin {
     _reactLogoBottomMargin = reactLogoBottomMargin;
-    self.map.logoBottomMargin = [reactLogoBottomMargin floatValue];
+    self.mapxusMap.logoBottomMargin = [reactLogoBottomMargin floatValue];
 }
 
 - (void)setReactOpenStreetSourceBottomMargin:(NSNumber *)reactOpenStreetSourceBottomMargin {
     _reactOpenStreetSourceBottomMargin = reactOpenStreetSourceBottomMargin;
-    self.map.openStreetSourceBottomMargin = [reactOpenStreetSourceBottomMargin floatValue];
+    self.mapxusMap.openStreetSourceBottomMargin = [reactOpenStreetSourceBottomMargin floatValue];
 }
 
 - (void)setReactOutdoorHidden:(NSNumber *)reactOutdoorHidden {
     _reactOutdoorHidden = reactOutdoorHidden;
-    self.map.outdoorHidden = [reactOutdoorHidden boolValue];
+    self.mapxusMap.outdoorHidden = [reactOutdoorHidden boolValue];
 }
 
 - (void)setReactGestureSwitchingBuilding:(NSNumber *)reactGestureSwitchingBuilding {
     _reactGestureSwitchingBuilding = reactGestureSwitchingBuilding;
-    self.map.gestureSwitchingBuilding = [reactGestureSwitchingBuilding boolValue];
+    self.mapxusMap.gestureSwitchingBuilding = [reactGestureSwitchingBuilding boolValue];
 }
 
 - (void)setReactAutoChangeBuilding:(NSNumber *)reactAutoChangeBuilding {
     _reactAutoChangeBuilding = reactAutoChangeBuilding;
-    self.map.autoChangeBuilding = [reactAutoChangeBuilding boolValue];
+    self.mapxusMap.autoChangeBuilding = [reactAutoChangeBuilding boolValue];
 }
 
 - (NSArray<MXMPointAnnotation *> *)reactMXMAnnotations {
-    return self.map.MXMAnnotations;
+    return self.mapxusMap.MXMAnnotations;
 }
 
 - (void)reactSetMapSytle:(MXMStyle)style {
-    [self.map setMapSytle:style];
+    [self.mapxusMap setMapSytle:style];
 }
 
 - (void)reactSetMapStyleWithName:(NSString *)styleName {
-    [self.map setMapStyleWithName:styleName];
+    [self.mapxusMap setMapStyleWithName:styleName];
 }
 
 - (void)reactSetMapLanguage:(NSString *)language {
-    [self.map setMapLanguage:language];
+    [self.mapxusMap setMapLanguage:language];
 }
 
 - (void)reactSelectBuilding:(nullable NSString *)buildingId
                       floor:(nullable NSString *)floor
                    zoomMode:(MXMZoomMode)zoomMode
                 edgePadding:(UIEdgeInsets)insets {
-    [self.map selectBuilding:buildingId floor:floor zoomMode:zoomMode edgePadding:insets];
+    [self.mapxusMap selectBuilding:buildingId floor:floor zoomMode:zoomMode edgePadding:insets];
 }
 
 

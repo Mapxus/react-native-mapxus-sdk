@@ -239,7 +239,7 @@ const poiType: any = {
 		style={styles.poi_icon}
 	/>,
 	'shopping.clothes.mens_cloth': <Image
-		source={require('../assets/POIType/FittingRoom.png')}
+		source={require('../assets/POIType/Cloths.png')}
 		style={styles.poi_icon}
 	/>,
 	'shopping.sport_goods': <Image

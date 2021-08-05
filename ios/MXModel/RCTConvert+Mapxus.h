@@ -36,6 +36,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (MXMVisualCoordinate2D)MXMVisualCoordinate2D:(id)json;
 
++ (CLLocation *)CLLocation:(id)json;
+
 @end
 
 NS_ASSUME_NONNULL_END
