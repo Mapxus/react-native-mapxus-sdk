@@ -1,5 +1,5 @@
 import React, {useRef, useState, useEffect} from 'react';
-import {View, TouchableOpacity, Image, StyleSheet, Button} from 'react-native';
+import {View, TouchableOpacity, Image, StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import MapxusSdk, {
 	BearingChangeObject,
 	IndoorSceneChangeObject,
@@ -25,6 +25,7 @@ export default function VisualMap() {
 
 	const nodeViewRef = useRef<MapxusSdk.VisualNodeView>(null);
 	const visualViewRef = useRef<MapxusSdk.VisualView>(null);
+	const cameraRef = useRef<MapxusSdk.Camera>(null);
 
 	useEffect(() => {
 		initVisualData({buildingId, scope: 1});
@@ -83,6 +84,7 @@ export default function VisualMap() {
 
 	function clickNode(feature: VisualNode) {
 		setLightMarker(feature);
+		cameraRef.current?.moveTo([feature.longitude, feature.latitude]);
 
 		const imgId: string = feature?.key;
 		if (imgId) {
@@ -115,42 +117,42 @@ export default function VisualMap() {
 
 	return (
 		<View style={{flex: 1}}>
-			<TouchableOpacity
-				{...isSwitched && {onPress: () => clickWindow('map')}}
-				style={isSwitched ? styles.container_small : styles.container_full}
-			>
-				<MapxusSdk.MapxusMap
-					mapOption={{buildingId}}
-					indoorControllerAlwaysHidden={floorControllerHidden}
-					onIndoorSceneChange={indoorSceneChange}
-				>
-					<MapxusSdk.MapView style={{flex: 1}}>
-						{
-							lightMarker && (
-								<MapxusSdk.PointAnnotation
-									key={lightMarker.key}
-									id={lightMarker.key}
-									coordinate={[lightMarker.longitude, lightMarker.latitude]}
-								>
-									<Image
-										source={require('./assets/light.png')}
-										style={{
-											width: 50,
-											height: 50,
-											transform: [{rotate: `${lightMarker.bearing}deg`}]
-										}}
-									/>
-								</MapxusSdk.PointAnnotation>
-							)
-						}
-					</MapxusSdk.MapView>
-					<MapxusSdk.VisualNodeView
-						ref={nodeViewRef}
-						onTappedFlag={clickNode}
-					/>
-				</MapxusSdk.MapxusMap>
-			</TouchableOpacity>
-			<TouchableOpacity {...!isSwitched && {onPress: () => clickWindow('visual')}}>
+			<TouchableWithoutFeedback {...isSwitched && {onPress: () => clickWindow('map')}}>
+				<View style={isSwitched ? styles.container_small : styles.container_full}>
+					<MapxusSdk.MapxusMap
+						mapOption={{buildingId}}
+						indoorControllerAlwaysHidden={floorControllerHidden}
+						onIndoorSceneChange={indoorSceneChange}
+					>
+						<MapxusSdk.MapView style={{flex: 1}}>
+							<MapxusSdk.Camera ref={cameraRef}/>
+							{
+								lightMarker && (
+									<MapxusSdk.PointAnnotation
+										key={lightMarker.key}
+										id={lightMarker.key}
+										coordinate={[lightMarker.longitude, lightMarker.latitude]}
+									>
+										<Image
+											source={require('./assets/light.png')}
+											style={{
+												width: 50,
+												height: 50,
+												transform: [{rotate: `${lightMarker.bearing}deg`}]
+											}}
+										/>
+									</MapxusSdk.PointAnnotation>
+								)
+							}
+						</MapxusSdk.MapView>
+						<MapxusSdk.VisualNodeView
+							ref={nodeViewRef}
+							onTappedFlag={clickNode}
+						/>
+					</MapxusSdk.MapxusMap>
+				</View>
+			</TouchableWithoutFeedback>
+			<TouchableWithoutFeedback {...!isSwitched && {onPress: () => clickWindow('visual')}}>
 				<View style={[
 					isSwitched ? styles.container_full : styles.container_small,
 					{display: visualViewShown ? 'flex' : 'none'}
@@ -161,7 +163,7 @@ export default function VisualMap() {
 						onBearingChanged={bearingChange}
 					/>
 				</View>
-			</TouchableOpacity>
+			</TouchableWithoutFeedback>
 			<TouchableOpacity
 				style={[styles.iconArea, {display: isSwitched ? 'none' : 'flex'}]}
 				onPress={() => setActive(!active)}
