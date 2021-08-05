@@ -5,6 +5,8 @@
 //  Created by chenghao guo on 2021/5/10.
 //
 
+@import MapxusComponentKit;
+#import <CoreLocation/CoreLocation.h>
 #import "RCTConvert+Mapxus.h"
 
 @implementation RCTConvert (Mapxus)
@@ -142,4 +144,24 @@
     MXMVisualCoordinate2D s = {x, y};
     return s;
 }
+
++ (CLLocation *)CLLocation:(id)json {
+    json = [self NSDictionary:json];
+    
+    CLLocationCoordinate2D coor = CLLocationCoordinate2DMake([json[@"latitude"] doubleValue], [json[@"longitude"] doubleValue]);
+    
+    CLLocation *lon = [[CLLocation alloc] initWithCoordinate:coor
+                                                    altitude:[json[@"altitude"] doubleValue]
+                                          horizontalAccuracy:[json[@"horizontalAccuracy"] doubleValue]
+                                            verticalAccuracy:[json[@"verticalAccuracy"] doubleValue]
+                                                      course:[json[@"course"] doubleValue]
+                                                       speed:[json[@"speed"] doubleValue]
+                                                   timestamp:[NSDate dateWithTimeIntervalSince1970:[json[@"timestamp"] doubleValue]]];
+    
+    CLFloor *floor = [CLFloor createFloorWihtLevel:[json[@"ordinal"] integerValue]];
+    lon.myFloor = floor;
+    return lon;
+}
+
+
 @end

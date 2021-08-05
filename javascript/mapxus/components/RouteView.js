@@ -13,36 +13,34 @@ class RouteView extends NativeBridgeComponent(React.Component) {
     static propTypes = {
         ...ViewPropTypes,
 
-        routeAppearance: PropTypes.shape({
-            isAddStartDash: PropTypes.bool,
-            isAddEndDash: PropTypes.bool,
-            hiddenTranslucentPaths: PropTypes.bool,
-            indoorLineColor: PropTypes.oneOfType([
-                PropTypes.string,
-                PropTypes.number
-            ]),
-            outdoorLineColor: PropTypes.oneOfType([
-                PropTypes.string,
-                PropTypes.number
-            ]),
-            dashLineColor: PropTypes.oneOfType([
-                PropTypes.string,
-                PropTypes.number
-            ]),
-            arrowSymbolSpacing: PropTypes.number,
-            arrowIcon: PropTypes.string,
-            startIcon: PropTypes.string,
-            endIcon: PropTypes.string,
-            elevatorUpIcon: PropTypes.string,
-            elevatorDownIcon: PropTypes.string,
-            escalatorUpIcon: PropTypes.string,
-            escalatorDownIcon: PropTypes.string,
-            rampUpIcon: PropTypes.string,
-            rampDownIcon: PropTypes.string,
-            stairsUpIcon: PropTypes.string,
-            stairsDownIcon: PropTypes.string,
-            buildingGateIcon: PropTypes.string,
-        }),
+        isAddStartDash: PropTypes.bool,
+        isAddEndDash: PropTypes.bool,
+        hiddenTranslucentPaths: PropTypes.bool,
+        indoorLineColor: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number
+        ]),
+        outdoorLineColor: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number
+        ]),
+        dashLineColor: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number
+        ]),
+        arrowSymbolSpacing: PropTypes.number,
+        arrowIcon: PropTypes.string,
+        startIcon: PropTypes.string,
+        endIcon: PropTypes.string,
+        elevatorUpIcon: PropTypes.string,
+        elevatorDownIcon: PropTypes.string,
+        escalatorUpIcon: PropTypes.string,
+        escalatorDownIcon: PropTypes.string,
+        rampUpIcon: PropTypes.string,
+        rampDownIcon: PropTypes.string,
+        stairsUpIcon: PropTypes.string,
+        stairsDownIcon: PropTypes.string,
+        buildingGateIcon: PropTypes.string,
 
     };
 

@@ -23,10 +23,12 @@ RCT_REMAP_VIEW_PROPERTY(shortenable, reactShortenable, BOOL)
 RCT_REMAP_VIEW_PROPERTY(numberOfAllowedDrifts, reactNumberOfAllowedDrifts, NSUInteger)
 RCT_REMAP_VIEW_PROPERTY(maximumDrift, reactMaximumDrift, float)
 RCT_REMAP_VIEW_PROPERTY(distanceToDestination, reactDistanceToDestination, float)
+RCT_REMAP_VIEW_PROPERTY(showsUserHeadingIndicator, reactShowsUserHeadingIndicator, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(onArrivalAtDestination, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onExcessiveDrift, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onRefreshTheAdsorptionLocation, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onGetNewPath, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onUpdate, RCTBubblingEventBlock)
 
 RCT_EXPORT_METHOD(updatePath:(nonnull NSNumber *)reactTag
                   path:(nonnull NSDictionary *)path

@@ -239,7 +239,7 @@ declare namespace MapxusSdk {
   }
 
   class SimulateLocationManager extends Component<SimulateLocationManagerProps> {
-    setSimulateLocation(location: any): void;
+    setSimulateLocation(location: InputLocation): void;
   }
 
   class MapView extends Component<MapViewProps> {
@@ -538,6 +538,20 @@ export interface RegionPayload {
   pitch: number;
 }
 
+export interface InputLocation {
+  latitude?: number;
+  longitude?: number;
+  altitude?: number;
+  horizontalAccuracy?: number;
+  verticalAccuracy?: number;
+  course?: number;
+  courseAccuracy?: number;
+  speed?: number;
+  speedAccuracy?: number;
+  ordinal?: number;
+  timestamp?: number;
+}
+
 export interface Configuration {
   outdoorHidden?: boolean;
   defaultStyle?: MapxusSdk.MapxusMapStyle;
@@ -614,7 +628,25 @@ export interface AndroidCompass {
 }
 
 export interface RouteViewProps extends ViewProps {
-  routeAppearance?: object;
+  isAddStartDash?: boolean;
+  isAddEndDash?: boolean;
+  hiddenTranslucentPaths?: boolean;
+  indoorLineColor?: string | number;
+  outdoorLineColor?: string | number;
+  dashLineColor?: string | number;
+  arrowSymbolSpacing?: number;
+  arrowIcon?: string;
+  startIcon?: string;
+  endIcon?: string;
+  elevatorUpIcon?: string;
+  elevatorDownIcon?: string;
+  escalatorUpIcon?: string;
+  escalatorDownIcon?: string;
+  rampUpIcon?: string;
+  rampDownIcon?: string;
+  stairsUpIcon?: string;
+  stairsDownIcon?: string;
+  buildingGateIcon?: string;
 }
 
 export interface NavigationViewProps extends ViewProps {
@@ -623,15 +655,17 @@ export interface NavigationViewProps extends ViewProps {
   numberOfAllowedDrifts?: number,
   maximumDrift?: number,
   distanceToDestination?: number,
+  showsUserHeadingIndicator?: boolean,
   onArrivalAtDestination?: () => void,
   onExcessiveDrift?: () => void,
-  onRefreshTheAdsorptionLocation?: (feature: object) => void,
-  onGetNewPath?: (feature: object) => void,
+  onRefreshTheAdsorptionLocation?: (feature: AdsorptionLocationObject) => void,
+  onGetNewPath?: (feature: NavigationNewPathObject) => void,
+  onUpdate?: (feature: MapxusSdk.Location) => void;
 }
 
 export interface SimulateLocationManagerProps extends ViewProps {
   showsUserHeadingIndicator?: boolean;
-  onUpdate?: (feature: object) => void;
+  onUpdate?: (feature: MapxusSdk.Location) => void;
 }
 
 export interface MapViewProps extends ViewProps {
@@ -947,6 +981,20 @@ export interface HeatmapLayerStyle {
   heatmapColor?: string | Expression;
   heatmapOpacity?: number | Expression;
   heatmapOpacityTransition?: Transition | Expression;
+}
+
+export interface AdsorptionLocationObject {
+  adsorptionLocation: MapxusSdk.Location;
+  actualLocation: MapxusSdk.Location;
+  buildingId?: string;
+  floor?: string;
+}
+
+export interface NavigationNewPathObject {
+  newPath: Path;
+  originalPath: Path;
+  fromInstructionIndex: number;
+  originalWayPoints: IndoorPoint[];
 }
 
 export interface Point {

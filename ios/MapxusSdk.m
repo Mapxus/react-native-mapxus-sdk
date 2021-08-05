@@ -260,6 +260,7 @@ RCT_EXPORT_MODULE()
          @"LocationCallbackName": locationModuleEvents,
          @"MapxusMapStyle": mapxusStyle,
          @"MapxusSelectorPosition": mapxusSelectorPosition,
+         @"MapxusZoomMode": mapxusZoomMode,
          @"MapxusVisualSearchScopeType": visualSearchScopeType,
     };
 }

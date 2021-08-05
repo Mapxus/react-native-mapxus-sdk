@@ -9,6 +9,7 @@
 #import <MapxusComponentKit/MapxusComponentKit.h>
 #import "MXSimulateLocationManager.h"
 #import "MXSimulateLocation.h"
+#import "RCTConvert+Mapxus.h"
 
 @implementation MXSimulateLocationManager
 
@@ -21,7 +22,6 @@ RCT_EXPORT_MODULE(MXSimulateLocation)
 
 
 RCT_REMAP_VIEW_PROPERTY(showsUserHeadingIndicator, reactShowsUserHeadingIndicator, BOOL)
-
 RCT_EXPORT_VIEW_PROPERTY(onUpdate, RCTBubblingEventBlock)
 
 RCT_EXPORT_METHOD(setSimulateLocation:(nonnull NSNumber *)reactTag
@@ -38,11 +38,8 @@ RCT_EXPORT_METHOD(setSimulateLocation:(nonnull NSNumber *)reactTag
 
         __weak MXSimulateLocation *reactLocation = (MXSimulateLocation *)view;
 
-        CLFloor *floor = [CLFloor createFloorWihtLevel:[location[@"ordinal"] integerValue]];
-        CLLocation *lon = [[CLLocation alloc] initWithLatitude:[location[@"latitude"] doubleValue] longitude:[location[@"longitude"] doubleValue]];
-        lon.myFloor = floor;
-
-        [reactLocation setSimulateLocation:lon];
+        CLLocation *lon = [RCTConvert CLLocation:location];
+        [reactLocation reactSetSimulateLocation:lon];
         resolve(nil);
     }];
 }

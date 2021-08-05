@@ -21,7 +21,17 @@ class SimulateLocationManager extends NativeBridgeComponent(React.Component) {
 
     constructor(props) {
         super(props, NATIVE_MODULE_NAME);
+        this._onUpdate = this._onUpdate.bind(this);
+
     }
+
+    _onUpdate(event) {
+        if (!this.props.onUpdate) {
+          return;
+        }
+        // process raw event...
+        this.props.onUpdate(event.nativeEvent);
+      }
 
     setSimulateLocation(location) {
         this._runNativeCommand('setSimulateLocation', this._nativeRef, [
@@ -36,7 +46,8 @@ class SimulateLocationManager extends NativeBridgeComponent(React.Component) {
 
     render() {
         const callbacks = {
-            ref: (nativeRef) => this._setNativeRef(nativeRef)
+            ref: (nativeRef) => this._setNativeRef(nativeRef),
+            onUpdate: this._onUpdate,
         };
 
         return <SimView {...this.props} {...callbacks}>{this.props.children}</SimView>;

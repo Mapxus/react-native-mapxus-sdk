@@ -7,6 +7,8 @@ import MapxusSdk, {
 	MapxusPointAnnotationViewProps,
 	RouteSearchResult,
 	IndoorSceneChangeObject,
+	NavigationNewPathObject,
+	AdsorptionLocationObject,
 } from '@mapxus/react-native-mapxus-sdk';
 import { Switch, SegmentedControl, WhiteSpace, Button } from '@ant-design/react-native';
 import ParamsScrollView from './ParamsScrollView';
@@ -24,6 +26,13 @@ export default function Route() {
 	const [toFloor, setToFloor] = useState('');
 	const [vehicle, setVehicle] = useState('foot');
 	const [markers, setMarkers] = useState<Array<MapxusPointAnnotationViewProps>>([]);
+	const [currentBuilding, setCurrentBuilding] = useState('');
+	const [currentFloor, setCurrentFloor] = useState('');
+	const [isNavigation, setIsNavigation] = useState(false);
+	const [isAddStartDash, setIsAddStartDash] = useState(true);
+	const [centerCoordinate, setCenterCoordinate] = useState([0, 0]);
+	const [heading, setHeading] = useState(0);
+	const [firstIn, setFirstIn] = useState(true);
 	const routeRef = useRef<MapxusSdk.RouteView>(null);
 	const naviRef = useRef<MapxusSdk.NavigationView>(null);
 	const mapRef = useRef<MapxusSdk.MapxusMap>(null);
@@ -101,6 +110,9 @@ export default function Route() {
 	}
 
 	async function renderPath(result: RouteSearchResult) {
+		setIsAddStartDash(true);
+		routeRef.current?.cleanRoute();
+
 		routeRef.current?.paintRouteUsingPath(
 			result?.paths[0],
 			result?.wayPointList
@@ -109,11 +121,13 @@ export default function Route() {
 			result?.paths[0],
 			result?.wayPointList
 		)
+
 		var dto = await routeRef.current?.getPainterPathDto();
 		for (const key in dto?.paragraphs) {
 			if (dto?.paragraphs.hasOwnProperty(key) && !key.includes('outdoor')) {
 				var paragraph = dto.paragraphs[key];
 				mapRef.current?.selectIndoorScene(MapxusSdk.MapxusZoomMode.DISABLE, { top: 0, left: 0, bottom: 0, right: 0 }, paragraph.buildingId, paragraph.floor);
+				routeRef.current?.changeOn(currentBuilding, currentFloor);
 				routeRef.current?.focusOn([key], { top: 130, left: 30, bottom: 110, right: 80 })
 				break;
 			}
@@ -121,14 +135,50 @@ export default function Route() {
 	}
 
 	function handelIndoorSceneChange(feature: IndoorSceneChangeObject) {
+		setCurrentBuilding(feature.building.identifier);
+		setCurrentFloor(feature.floor);
 		routeRef.current?.changeOn(feature.building.identifier, feature.floor);
 	}
 
 	function handleGo() {
-		naviRef.current?.start()
+		setIsNavigation(!isNavigation)
+		if (isNavigation) {
+			naviRef.current?.stop();
+		} else {
+			naviRef.current?.start();
+			setIsAddStartDash(false);
+		}
 	}
 
+	function onRedrawPath(feature: NavigationNewPathObject) {
+		routeRef.current?.cleanRoute;
+		routeRef.current?.paintRouteUsingPath(
+			feature.newPath,
+			feature.originalWayPoints
+		);
+		routeRef.current?.changeOn(currentBuilding, currentFloor);
+	}
 
+	function onArrivalDestination() {
+		setIsNavigation(false);
+		naviRef.current?.stop();
+		routeRef.current?.cleanRoute();
+	}
+
+	function onRefreshAdsorptionLocation(feature: AdsorptionLocationObject) {
+		if (feature.adsorptionLocation.coords.heading != undefined) {
+			setHeading(feature.adsorptionLocation.coords.heading);
+		}
+		mapRef.current?.selectIndoorScene(MapxusSdk.MapxusZoomMode.DISABLE, { top: 0, left: 0, bottom: 0, right: 0 }, feature.buildingId, feature.floor);
+		setCenterCoordinate([feature.adsorptionLocation.coords.longitude, feature.adsorptionLocation.coords.latitude]);
+	}
+
+	function onUpdate(feature: MapxusSdk.Location) {
+		if (!isNavigation && firstIn) {
+			setFirstIn(false);
+			setCenterCoordinate([feature.coords.longitude, feature.coords.latitude]);
+		}
+	}
 
 	return (
 		<View style={{ flex: 1 }}>
@@ -163,22 +213,24 @@ export default function Route() {
 						style={[styles.button, { marginRight: 15 }]}
 						onPress={handleGo}
 					>
-						Go
+						{isNavigation ? 'Stop' : 'Go'}
 					</Button>
 				</View>
 			</View>
 			<View style={{ flex: 5 }}>
 				<MapxusSdk.MapxusMap
 					ref={mapRef}
-					mapOption={{
-						buildingId: 'tsuenwanplaza_hk_369d01',
-						zoomInsets: { left: -100, right: -100 }
-					}}
 					onTappedOnBlank={selectPoint}
 					onTappedOnPoi={selectPoint}
 					onIndoorSceneChange={handelIndoorSceneChange}
 				>
-					<MapxusSdk.MapView style={{ flex: 1 }} />
+					<MapxusSdk.MapView style={{ flex: 1 }} >
+						<MapxusSdk.Camera
+							centerCoordinate={centerCoordinate}
+							zoomLevel={19}
+							heading={heading}
+						/>
+					</MapxusSdk.MapView>
 					{
 						markers.map((marker: MapxusPointAnnotationViewProps) => (
 							<MapxusSdk.MapxusPointAnnotationView
@@ -197,11 +249,20 @@ export default function Route() {
 							</MapxusSdk.MapxusPointAnnotationView>
 						))
 					}
-					<MapxusSdk.RouteView ref={routeRef} />
+					<MapxusSdk.RouteView
+						ref={routeRef}
+						isAddStartDash={isAddStartDash}
+					/>
 					<MapxusSdk.NavigationView
+						distanceToDestination={3}
 						ref={naviRef}
 						adsorbable={true}
 						shortenable={true}
+						showsUserHeadingIndicator={true}
+						onGetNewPath={onRedrawPath}
+						onArrivalAtDestination={onArrivalDestination}
+						onRefreshTheAdsorptionLocation={onRefreshAdsorptionLocation}
+						onUpdate={onUpdate}
 					/>
 				</MapxusSdk.MapxusMap>
 			</View>
@@ -237,7 +298,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center'
 	},
 	button_white: {
-		width: 192,
+		width: 160,
 		borderWidth: 1,
 		borderColor: '#ccc',
 	},

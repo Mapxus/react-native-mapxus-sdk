@@ -4,11 +4,16 @@ import android.annotation.SuppressLint
 import android.view.View
 import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.ReadableArray
+import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.WritableNativeMap
 import com.facebook.react.views.view.ReactViewGroup
 import com.mapxus.map.components.MapxusMapFeature
+import com.mapxus.map.components.annotation.model.RouteAppearance
 import com.mapxus.map.components.mapview.RCTMapxusMap
+import com.mapxus.map.events.AndroidCallbackEvent
 import com.mapxus.map.mapxusmap.api.services.model.IndoorLatLng
 import com.mapxus.map.mapxusmap.api.services.model.planning.*
+import com.mapxus.map.mapxusmap.overlay.model.WalkRouteResource
 import com.mapxus.map.mapxusmap.overlay.route.WalkRouteOverlay
 
 /**
@@ -17,11 +22,13 @@ import com.mapxus.map.mapxusmap.overlay.route.WalkRouteOverlay
  */
 
 @SuppressLint("ViewConstructor")
-class RCTMapxusNavigationView(
-    var mContext: ReactContext, private val mManager: RCTMapxusNavigationViewManager,
+class RCTMapxusRouteView(
+    var mContext: ReactContext, private val mManager: RCTMapxusRouteViewManager,
 ) : ReactViewGroup(mContext), MapxusMapFeature {
     private var mMapView: RCTMapxusMap? = null
     private var walkRouteOverlay: WalkRouteOverlay? = null
+    private var originalRouteData: ReadableMap? = null
+    private var routeAppearance: RouteAppearance? = null
 
     override fun addToMap(mapView: RCTMapxusMap?) {
         mMapView = mapView
@@ -36,6 +43,7 @@ class RCTMapxusNavigationView(
     fun paintRouteUsingPath(args: ReadableArray?) {
         mMapView?.symbolManager?.deleteAll()
         val routedata = args?.getMap(1)
+        originalRouteData = routedata
 
         val route = RouteResponseDto().apply {
             hints = HintDto()
@@ -55,8 +63,8 @@ class RCTMapxusNavigationView(
                     routedata?.getMap("points")?.getArray("coordinates")?.let {
                         val resultArr = Array(it.size()) { DoubleArray(2) }
                         for (i in 0 until it.size()) {
-                            resultArr[i][0] = it.getMap(i).getDouble("longitude")
-                            resultArr[i][1] = it.getMap(i).getDouble("latitude")
+                            resultArr[i][0] = it.getMap(i)!!.getDouble("longitude")
+                            resultArr[i][1] = it.getMap(i)!!.getDouble("latitude")
                         }
                         coordinates = resultArr
                     }
@@ -141,6 +149,30 @@ class RCTMapxusNavigationView(
             destination,
             true
         ).apply {
+            routeAppearance?.let { routeRes ->
+                changeDefaultLayerRes(WalkRouteResource().apply {
+                    routeRes.isAddStartDash?.let { isAddStartDash = it }
+                    routeRes.isAddEndDash?.let { isAddEndDash = it }
+                    routeRes.hiddenTranslucentPaths?.let { hiddenTranslucentPaths = it }
+                    routeRes.indoorLineColor?.let { indoorLineColor = it as Int }
+                    routeRes.outdoorLineColor?.let { outdoorLineColor = it as Int }
+                    routeRes.dashLineColor?.let { dashLineColor = it as Int }
+                    routeRes.arrowSymbolSpacing?.let { arrowSymbolSpacing = it.toFloat() }
+                    routeRes.arrowIcon?.let { arrowIcon = it.toInt() }
+                    routeRes.startIcon?.let { startIcon = it.toInt() }
+                    routeRes.endIcon?.let { endIcon = it.toInt() }
+                    routeRes.elevatorUpIcon?.let { elevatorUpIcon = it.toInt() }
+                    routeRes.elevatorDownIcon?.let { elevatorDownIcon = it.toInt() }
+                    routeRes.escalatorUpIcon?.let { escalatorUpIcon = it.toInt() }
+                    routeRes.escalatorDownIcon?.let { escalatorDownIcon = it.toInt() }
+                    routeRes.rampUpIcon?.let { rampUpIcon = it.toInt() }
+                    routeRes.rampDownIcon?.let { rampDownIcon = it.toInt() }
+                    routeRes.stairsUpIcon?.let { stairsUpIcon = it.toInt() }
+                    routeRes.stairsDownIcon?.let { stairsDownIcon = it.toInt() }
+                    routeRes.buildingGateIcon?.let { buildingGateIcon = it.toInt() }
+                })
+            }
+
             addToMap()
         }
     }
@@ -156,5 +188,17 @@ class RCTMapxusNavigationView(
 
     fun focusOn(args: ReadableArray?) {
         //todo
+    }
+
+    fun setRouteAppearance(args: ReadableMap?) {
+        routeAppearance = RouteAppearance().apply {
+            initData(args)
+        }
+    }
+
+    fun getPainterPathDto(callbackID: String?, args: ReadableArray?) {
+        mManager.handleEvent(AndroidCallbackEvent(this, callbackID, WritableNativeMap().apply {
+            putMap("painterPathDto", originalRouteData)
+        }))
     }
 }
