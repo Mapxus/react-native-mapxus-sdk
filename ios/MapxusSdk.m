@@ -1,5 +1,9 @@
 // MapxusSdk.m
 
+@import MapxusBaseSDK;
+@import MapxusMapSDK;
+@import MapxusVisualSDK;
+
 #import "MapxusSdk.h"
 #import "RCTMGLEventTypes.h"
 #import "MGLOfflineModule.h"
@@ -7,8 +11,6 @@
 #import "RCTMGLSource.h"
 #import "MGLCustomHeaders.h"
 
-@import MapxusBaseSDK;
-@import MapxusMapSDK;
 
 
 @implementation MapxusSdk
@@ -221,6 +223,10 @@ RCT_EXPORT_MODULE()
     [mapxusZoomMode setObject:@(MXMZoomAnimated) forKey:@"ANIMATED"];
     [mapxusZoomMode setObject:@(MXMZoomDirect) forKey:@"DIRECT"];
 
+    NSMutableDictionary *visualSearchScopeType = [NSMutableDictionary dictionary];
+    [visualSearchScopeType setObject:@(MXMVisualSearchScopeSimple) forKey:@"SIMPLE"];
+    [visualSearchScopeType setObject:@(MXMVisualSearchScopeDetail) forKey:@"DETAIL"];
+
     return @{
          @"StyleURL": styleURLS,
          @"EventTypes": eventTypes,
@@ -254,7 +260,7 @@ RCT_EXPORT_MODULE()
          @"LocationCallbackName": locationModuleEvents,
          @"MapxusMapStyle": mapxusStyle,
          @"MapxusSelectorPosition": mapxusSelectorPosition,
-         @"MapxusZoomMode": mapxusZoomMode,
+         @"MapxusVisualSearchScopeType": visualSearchScopeType,
     };
 }
 

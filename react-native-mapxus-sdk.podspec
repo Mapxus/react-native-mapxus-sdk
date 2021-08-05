@@ -48,6 +48,7 @@ Pod::Spec.new do |s|
 
   s.dependency 'MapxusBaseSDK'
   s.dependency 'MapxusMapSDK'
+  s.dependency "MapxusVisualSDK"
   s.dependency 'MapxusComponentKit'
   s.dependency "React"
   s.dependency 'React-Core'

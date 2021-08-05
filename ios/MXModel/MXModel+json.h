@@ -6,7 +6,7 @@
 //
 
 #import <MapxusMapSDK/MapxusMapSDK.h>
-
+#import <MapxusVisualSDK/MapxusVisualSDK.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -43,5 +43,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MXMInstruction (json)
 @end
 
+@interface MXMNodeGroup (json)
+- (NSDictionary<NSString*, id> *)toJson;
+@end
 
 NS_ASSUME_NONNULL_END

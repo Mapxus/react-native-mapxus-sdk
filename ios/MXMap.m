@@ -12,6 +12,8 @@
 #import "MXPointAnnotationView.h"
 #import "MXRouteView.h"
 #import "RCTMXUserLocationProtocol.h"
+#import "MXNavigationView.h"
+#import "MXVisualNodeView.h"
 
 
 @interface MXMap () <MapxusMapDelegate>
@@ -70,6 +72,9 @@
     } else if ([subview conformsToProtocol:@protocol(RCTMXUserLocationProtocol)]) {
         id<RCTMXUserLocationProtocol> locationView = (id<RCTMXUserLocationProtocol>)subview;
         locationView.mapRendererView = self.mapRendererView;
+    } else if ([subview isKindOfClass:[MXVisualNodeView class]]) {
+        MXVisualNodeView *nodeView = (MXVisualNodeView *)subview;
+        nodeView.mapRendererView = self.mapRendererView;
     } else {
         NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
 
@@ -93,6 +98,9 @@
     } else if ([subview conformsToProtocol:@protocol(RCTMXUserLocationProtocol)]) {
         id<RCTMXUserLocationProtocol> locationView = (id<RCTMXUserLocationProtocol>)subview;
         locationView.mapRendererView = nil;
+    } else if ([subview isKindOfClass:[MXVisualNodeView class]]) {
+        MXVisualNodeView *nodeView = (MXVisualNodeView *)subview;
+        nodeView.mapRendererView = nil;
     } else {
         NSArray<id<RCTComponent>> *childSubViews = [subview reactSubviews];
         
