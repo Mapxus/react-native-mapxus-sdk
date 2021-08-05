@@ -220,10 +220,6 @@ export default function Route() {
 			<View style={{ flex: 5 }}>
 				<MapxusSdk.MapxusMap
 					ref={mapRef}
-					// mapOption={{
-					// 	buildingId: 'tsuenwanplaza_hk_369d01',
-					// 	zoomInsets: { left: -100, right: -100 }
-					// }}
 					onTappedOnBlank={selectPoint}
 					onTappedOnPoi={selectPoint}
 					onIndoorSceneChange={handelIndoorSceneChange}

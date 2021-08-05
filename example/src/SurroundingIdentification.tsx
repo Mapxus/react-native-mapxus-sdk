@@ -29,6 +29,7 @@ export default function SurroundingIdentification() {
 	const [isIndoor, setIsIndoor] = useState(false);
 	const [ordinal, setOrdinal] = useState('0');
 	const [coordinate, setCoordinate] = useState('114.111375, 22.370787');
+	const [centerCoordinate, setCenterCoordinate] = useState([0, 0]);
 
 	const refSortButton = useRef(null);
 	const locationRef = useRef<MapxusSdk.SimulateLocationManager>(null);
@@ -48,7 +49,7 @@ export default function SurroundingIdentification() {
 				longitude: num_coordinate[0]
 			}
 			locationRef.current?.setSimulateLocation(simulate);
-
+			setCenterCoordinate(num_coordinate);
 		}
 	}
 
@@ -68,6 +69,8 @@ export default function SurroundingIdentification() {
 
 	async function getReverseGeoCode(params: ReverseGeoCodeSearchProps): Promise<GeocodeSearchResult> {
 		const data: GeocodeSearchResult = await MapxusSdk.geocodeSearchManager.reverseGeoCode(params);
+		// console.log(data);
+		
 		return data || {};
 	}
 
@@ -79,15 +82,20 @@ export default function SurroundingIdentification() {
 					location: { latitude: location.lat, longitude: location.lon },
 					ordinalFloor: location.ordinal!
 				});
+				// console.log(scenes);
 
 				if (scenes.floor != null) {
 					setLocation({
 						lat: location.lat,
 						lon: location.lon,
 						angle: location.angle,
+						ordinal: location.ordinal,
 						buildingId: scenes.building.buildingId,
 						floor: scenes.floor.code
 					})
+					
+					// console.log(location);
+					
 				}
 			}
 			if (Platform.OS == 'android') {
@@ -99,7 +107,8 @@ export default function SurroundingIdentification() {
 					angle: location.angle
 				})
 			}
-
+			// console.log(location);
+			
 			const pois: Array<Poi> = await getPoisNearby({
 				center: { latitude: location.lat!, longitude: location.lon! },
 				distance: Number(distance.trim()),
@@ -141,7 +150,12 @@ export default function SurroundingIdentification() {
 		<View style={{ flex: 1 }}>
 			<View style={{ flex: 2 }}>
 				<MapxusSdk.MapxusMap onIndoorStatusChange={object => setIsIndoor(object.flag)}>
-					<MapxusSdk.MapView style={{ flex: 1 }} />
+					<MapxusSdk.MapView style={{ flex: 1 }} >
+					<MapxusSdk.Camera
+							centerCoordinate={centerCoordinate}
+							zoomLevel={19}
+						/>
+						</MapxusSdk.MapView>
 					<MapxusSdk.SimulateLocationManager
 						showsUserHeadingIndicator={true}
 						ref={locationRef}
