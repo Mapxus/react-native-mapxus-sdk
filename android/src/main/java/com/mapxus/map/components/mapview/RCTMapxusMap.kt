@@ -71,7 +71,6 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
     private var mNavigationView: RCTMapxusNavigationView? = null
     private var mRouteView: RCTMapxusRouteView? = null
     private var mPointAnnotation: RCTMapxusPointAnnotation? = null
-    private var mVisualView : RCTMapxusVisualView? = null
     private var mVisualNodeView: RCTMapxusVisualNodeView? = null
 
     //settings
@@ -153,10 +152,6 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
             }
             is RCTMapxusVisualNodeView -> {
                 mVisualNodeView = childView
-                feature = childView
-            }
-            is RCTMapxusVisualView -> {
-                mVisualView = childView
                 feature = childView
             }
             is RCTMapxusPointAnnotation -> {

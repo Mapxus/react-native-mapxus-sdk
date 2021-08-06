@@ -4,3 +4,4 @@ gradle.properties
 ./.settings
 keystore.properties
 maphive.jks
+secret.properties

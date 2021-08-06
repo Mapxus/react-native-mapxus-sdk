@@ -1,5 +1,6 @@
 package com.mapxus.map.components.visual
 
+import android.view.View
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.common.MapBuilder
@@ -34,6 +35,7 @@ class RCTMapxusVisualViewManager(reactApplicationContext: ReactApplicationContex
             .put(EventKeys.VISUAL_ON_LOADING_CHANGED, "onLoadingChanged")
             .put(EventKeys.VISUAL_ON_BEARING_CHANGED, "onBearingChanged")
             .put(EventKeys.VISUAL_ON_NODE_CHANGED, "onNodeChanged")
+            .put(EventKeys.MAP_ANDROID_CALLBACK, "onAndroidCallback")
             .build()
     }
 
@@ -87,5 +89,15 @@ class RCTMapxusVisualViewManager(reactApplicationContext: ReactApplicationContex
 
     companion object {
         const val REACT_CLASS = "MXVisualView"
+    }
+
+    override fun removeAllViews(parent: RCTMapxusVisualView?) {
+        super.removeAllViews(parent)
+        parent?.diposeView()
+    }
+
+    override fun removeView(parent: RCTMapxusVisualView?, view: View?) {
+        super.removeView(parent, view)
+        parent?.diposeView()
     }
 }
