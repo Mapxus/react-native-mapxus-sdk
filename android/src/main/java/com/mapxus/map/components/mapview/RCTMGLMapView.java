@@ -245,7 +245,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         }
 
         if (feature != null) {
-            if (mQueuedFeatures == null) {
+            if (mQueuedFeatures == null || (childView instanceof RCTMGLPointAnnotation && mQueuedFeatures.isEmpty())) {
                 feature.addToMap(this);
                 mFeatures.add(childPosition, feature);
             } else {
