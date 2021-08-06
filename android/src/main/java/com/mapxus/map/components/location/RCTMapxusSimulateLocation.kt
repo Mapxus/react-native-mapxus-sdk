@@ -8,8 +8,12 @@ import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.views.view.ReactViewGroup
 import com.mapxus.map.components.MapxusMapFeature
 import com.mapxus.map.components.mapview.RCTMapxusMap
+import com.mapxus.map.events.MapxusMapNaiviEvent
+import com.mapxus.map.events.constants.EventKeys
 import com.mapxus.map.mapxusmap.api.map.FollowUserMode
+import com.mapxus.map.mapxusmap.positioning.ErrorInfo
 import com.mapxus.map.mapxusmap.positioning.IndoorLocation
+import com.mapxus.map.mapxusmap.positioning.IndoorLocationProviderListener
 
 /**
  * Created by Edison on 3/29/21.
@@ -38,21 +42,45 @@ class RCTMapxusSimulateLocation(
         locationProvider = FakePositioningProvider(
             mContext.currentActivity as LifecycleOwner,
             mContext
-        )
+        ).apply {
+            addListener(object : IndoorLocationProviderListener{
+                override fun onProviderStarted() {
+                }
+
+                override fun onProviderStopped() {
+                }
+
+                override fun onProviderError(errorInfo: ErrorInfo?) {
+                }
+
+                override fun onIndoorLocationChange(indoorLocation: IndoorLocation?) {
+                }
+
+                override fun onCompassChanged(angle: Float, sensorAccuracy: Int) {
+                    mManager.handleEvent(
+                        MapxusMapNaiviEvent(
+                            this@RCTMapxusSimulateLocation,
+                            EventKeys.MAPXUS_USER_SIMULATE_LOCATION_UPDATE,
+                        )
+                    )
+                }
+
+            })
+        }
     }
 
     fun setSimulateLocation(args: ReadableArray?) {
         val fakeLocation = args?.getMap(1)
         val lat = fakeLocation?.getDouble("latitude")
         val lon = fakeLocation?.getDouble("longitude")
-        val floor = fakeLocation?.getString("altitude")
+        val floor = fakeLocation?.getInt("floor")
         val buildingId = fakeLocation?.getString("buildingId")
         locationProvider?.setIndoorLocation(
             IndoorLocation(
                 "Fake",
                 lat ?: 0.0,
                 lon ?: 0.0,
-                floor,
+                floor.toString(),
                 buildingId,
                 System.currentTimeMillis()
             )

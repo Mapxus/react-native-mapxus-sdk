@@ -47,6 +47,7 @@ public class EventKeys {
     // location events
     public static final String USER_LOCATION_UPDATE = ns("user.location.update");
     public static final String MAPXUS_USER_LOCATION_UPDATE = ns("map.location.update");
+    public static final String MAPXUS_USER_SIMULATE_LOCATION_UPDATE = ns("map.simulate.location.update");
 
     // visual node events
     public static final String VISUAL_ON_TAPPED_FLAG = ns("visual.node.on.tapped.flag");
