@@ -8,7 +8,7 @@ import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.views.view.ReactViewGroup
 import com.mapxus.map.components.MapxusMapFeature
 import com.mapxus.map.components.mapview.RCTMapxusMap
-import com.mapxus.map.events.MapxusMapNaiviEvent
+import com.mapxus.map.events.MapxusMapCommonEvent
 import com.mapxus.map.events.constants.EventKeys
 import com.mapxus.map.mapxusmap.api.map.FollowUserMode
 import com.mapxus.map.mapxusmap.positioning.ErrorInfo
@@ -58,7 +58,7 @@ class RCTMapxusSimulateLocation(
 
                 override fun onCompassChanged(angle: Float, sensorAccuracy: Int) {
                     mManager.handleEvent(
-                        MapxusMapNaiviEvent(
+                        MapxusMapCommonEvent(
                             this@RCTMapxusSimulateLocation,
                             EventKeys.MAPXUS_USER_SIMULATE_LOCATION_UPDATE,
                         )

@@ -12,7 +12,7 @@ import com.mapxus.map.mapxusmap.api.map.model.IndoorBuilding
  * Created by Edison on 3/31/21.
  * Describe:
  */
-class MapxusMapNaiviEvent(
+class MapxusMapCommonEvent(
     view: View?,
     private val eventType: String,
     private val data: WritableNativeMap = WritableNativeMap(),
