@@ -1444,7 +1444,13 @@ export interface RouteSearchResult {
 
 export interface VisualNodeGroup {
   floor: string;
-  nodes: VisualNode[];
+  nodes: VisualNode[] | VisualSequenceImage[];
+}
+
+//only in Android
+export interface VisualSequenceImage {
+  sequenceId: string;
+  nodes: VisualNode[]
 }
 
 export interface VisualNode {

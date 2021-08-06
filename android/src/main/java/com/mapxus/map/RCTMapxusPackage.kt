@@ -39,6 +39,7 @@ class RCTMapxusPackage : ReactPackage {
             RCTMapxusPoiSearchModule(reactApplicationContext),
             RCTMapxusPoiCategorySearchModule(reactApplicationContext),
             RCTMapxusRouteSearchModule(reactApplicationContext),
+            RCTMapxusVisualSearchModule(reactApplicationContext),
         )
     }
 
