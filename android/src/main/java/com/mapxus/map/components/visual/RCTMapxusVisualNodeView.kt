@@ -4,9 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.View
 import com.facebook.react.bridge.ReadableArray
+import com.facebook.react.bridge.WritableNativeMap
 import com.facebook.react.views.view.ReactViewGroup
 import com.mapxus.map.components.MapxusMapFeature
 import com.mapxus.map.components.mapview.RCTMapxusMap
+import com.mapxus.map.events.MapxusMapVisualNodeEvent
+import com.mapxus.map.events.constants.EventKeys
 import com.mapxus.visual.models.*
 import com.mapxus.visual.overlay.polyline.VisualPolylineOverlay
 
@@ -20,6 +23,7 @@ class RCTMapxusVisualNodeView(
 
     private var visualPolylineOverlay: VisualPolylineOverlay? = null
     private var mMapView: RCTMapxusMap? = null
+    private var buildingImage: BuildingImage? = null
 
     override fun addView(childView: View, childPosition: Int) {
 
@@ -42,7 +46,7 @@ class RCTMapxusVisualNodeView(
 
     fun renderFlagUsingNodes(args: ReadableArray?) {
         val buildingImageJson = args?.getArray(1)
-        val buildingImage = BuildingImage().apply {
+        buildingImage = BuildingImage().apply {
             buildingId = mMapView?.mMapxusMap?.currentIndoorBuilding?.buildingId
             floorImages = mutableListOf<FloorImage>().apply {
                 buildingImageJson?.toArrayList()?.forEach {
@@ -100,10 +104,33 @@ class RCTMapxusVisualNodeView(
             buildingImage
         )
         visualPolylineOverlay?.addToMap()
+        visualPolylineOverlay?.setOnPolylineClickListener { imageKey ->
+            buildingImage?.floorImages?.filter { it.floor == mMapView?.mMapxusMap?.currentFloor }
+                ?.forEach {
+                    it.sequenceImages.forEach {
+                        it.images.filter { imageKey == it.key }.forEach {
+                            mManager.handleEvent(MapxusMapVisualNodeEvent(
+                                this,
+                                EventKeys.VISUAL_ON_TAPPED_FLAG,
+                                WritableNativeMap().apply {
+                                    putString("key", it.key)
+                                    putString("buildingId", it.buildingId)
+                                    putString("floor", it.floorName)
+                                    putDouble("latitude", it.location.lat)
+                                    putDouble("longitude", it.location.lon)
+                                    putDouble("bearing", it.ca)
+                                }
+                            ))
+                        }
+                    }
+                }
+            visualPolylineOverlay?.setMapMarker(imageKey)
+        }
     }
 
     fun cleanLayer() {
         visualPolylineOverlay?.removeFromMap()
+        buildingImage = null
     }
 
     fun changeOn(args: ReadableArray?) {

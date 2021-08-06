@@ -18,8 +18,6 @@ import com.mapxus.map.mapxusmap.api.services.model.IndoorLatLng
 import com.mapxus.map.mapxusmap.api.services.model.planning.InstructionDto
 import com.mapxus.map.mapxusmap.api.services.model.planning.LineString
 import com.mapxus.map.mapxusmap.api.services.model.planning.PathDto
-import com.mapxus.map.mapxusmap.overlay.navi.Navigation
-import com.mapxus.map.mapxusmap.overlay.navi.RouteShortener
 import com.mapxus.map.mapxusmap.positioning.ErrorInfo
 import com.mapxus.map.mapxusmap.positioning.IndoorLocation
 import com.mapxus.map.mapxusmap.positioning.IndoorLocationProviderListener
@@ -61,19 +59,23 @@ class RCTMapxusNavigationView(
 
     fun updatePath(args: ReadableArray?) {
         mapxusPositioningProvider?.setOnReachListener {
-            MapxusMapNaiviEvent(
-                this@RCTMapxusNavigationView,
-                EventKeys.NAVI_ON_ARRIVAL_AT_DESTINATION,
+            mManager.handleEvent(
+                MapxusMapNaiviEvent(
+                    this@RCTMapxusNavigationView,
+                    EventKeys.NAVI_ON_ARRIVAL_AT_DESTINATION,
+                )
             )
         }
         mapxusPositioningProvider?.navigation?.setOnDriftsNumberExceededListener {
-            MapxusMapNaiviEvent(
+            mManager.handleEvent(
+                MapxusMapNaiviEvent(
                 this@RCTMapxusNavigationView,
                 EventKeys.NAVI_ON_EXCESSIVE_DRIFT,
-            )
+            ))
         }
         mapxusPositioningProvider?.routeShortener?.setOnPathChangeListener { pathDto ->
-            MapxusMapNaiviEvent(
+            mManager.handleEvent(
+                MapxusMapNaiviEvent(
                 this@RCTMapxusNavigationView,
                 EventKeys.NAVI_ON_GET_NEWPATH,
 
@@ -121,10 +123,10 @@ class RCTMapxusNavigationView(
                         }
                     })
                 }
-            )
+            ))
         }
 
-        mapxusPositioningProvider?.addListener(object :IndoorLocationProviderListener{
+        mapxusPositioningProvider?.addListener(object : IndoorLocationProviderListener {
             override fun onProviderStarted() {
             }
 
@@ -135,10 +137,11 @@ class RCTMapxusNavigationView(
             }
 
             override fun onIndoorLocationChange(indoorLocation: IndoorLocation?) {
-                MapxusMapNaiviEvent(
+                mManager.handleEvent(
+                    MapxusMapNaiviEvent(
                     this@RCTMapxusNavigationView,
                     EventKeys.NAVI_ON_REFRESH_THE_ADSORPTION_LOCATION,
-                )
+                ))
             }
 
             override fun onCompassChanged(angle: Float, sensorAccuracy: Int) {
