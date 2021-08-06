@@ -119,6 +119,18 @@ allprojects {
 
 Check the current version of the SDK [here](https://map-service.mapxus.com/dpw/digitalMapAndroid).
 
+If you want to user visual map  , Configure the following codes in AndroidManifest.xml:
+
+``` java
+	<meta-data
+	        android:name="com.mapxus.api.v1.appid"
+	        android:value="acquiredkey" />
+	<meta-data
+	    android:name="com.mapxus.api.v1.secret"
+	    android:value="acquiredsecret" />
+```
+
+
 ## Usage
 ```javascript
 import MapxusSdk from '@mapxus/react-native-mapxus-sdk';
