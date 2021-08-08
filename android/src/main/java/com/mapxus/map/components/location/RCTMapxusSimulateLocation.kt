@@ -5,6 +5,7 @@ import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.ReadableArray
+import com.facebook.react.bridge.WritableNativeMap
 import com.facebook.react.views.view.ReactViewGroup
 import com.mapxus.map.components.MapxusMapFeature
 import com.mapxus.map.components.mapview.RCTMapxusMap
@@ -26,6 +27,7 @@ class RCTMapxusSimulateLocation(
     private var mMapView: RCTMapxusMap? = null
     private var mFollowUserMode: Int = FollowUserMode.FOLLOW_USER
     private var locationProvider: FakePositioningProvider? = null
+    private var indoorLocation: IndoorLocation? = null
 
     override fun addToMap(mapView: RCTMapxusMap?) {
         mMapView = mapView
@@ -43,7 +45,7 @@ class RCTMapxusSimulateLocation(
             mContext.currentActivity as LifecycleOwner,
             mContext
         ).apply {
-            addListener(object : IndoorLocationProviderListener{
+            addListener(object : IndoorLocationProviderListener {
                 override fun onProviderStarted() {
                 }
 
@@ -54,6 +56,7 @@ class RCTMapxusSimulateLocation(
                 }
 
                 override fun onIndoorLocationChange(indoorLocation: IndoorLocation?) {
+                    this@RCTMapxusSimulateLocation.indoorLocation = indoorLocation
                 }
 
                 override fun onCompassChanged(angle: Float, sensorAccuracy: Int) {
@@ -61,6 +64,13 @@ class RCTMapxusSimulateLocation(
                         MapxusMapCommonEvent(
                             this@RCTMapxusSimulateLocation,
                             EventKeys.MAPXUS_USER_SIMULATE_LOCATION_UPDATE,
+                            WritableNativeMap().apply {
+                                putDouble("longitude", indoorLocation?.longitude ?: 0.0)
+                                putDouble("latitude", indoorLocation?.latitude ?: 0.0)
+                                putString("floor", indoorLocation?.floor)
+                                putString("buildingId", indoorLocation?.building)
+                                putDouble("orientation", angle.toDouble())
+                            }
                         )
                     )
                 }
@@ -73,14 +83,14 @@ class RCTMapxusSimulateLocation(
         val fakeLocation = args?.getMap(1)
         val lat = fakeLocation?.getDouble("latitude")
         val lon = fakeLocation?.getDouble("longitude")
-        val floor = fakeLocation?.getInt("floor")
+        val floor = fakeLocation?.getString("floor")
         val buildingId = fakeLocation?.getString("buildingId")
         locationProvider?.setIndoorLocation(
             IndoorLocation(
                 "Fake",
                 lat ?: 0.0,
                 lon ?: 0.0,
-                floor.toString(),
+                floor,
                 buildingId,
                 System.currentTimeMillis()
             )

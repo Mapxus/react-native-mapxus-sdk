@@ -121,6 +121,25 @@ class MapxusNavigationPositioningProvider(
                 val building = mapxusLocation.buildingId
                 val indoorLocation = IndoorLocation(location, building, floor)
                 indoorLocation.accuracy = mapxusLocation.accuracy
+
+                mManager.handleEvent(
+                    MapxusMapCommonEvent(
+                        mView,
+                        EventKeys.NAVI_ON_UPDATE,
+                        WritableNativeMap().apply {
+                            putDouble("longitude", indoorLocation?.longitude ?: 0.0)
+                            putDouble("latitude", indoorLocation?.latitude ?: 0.0)
+                            putString("floor", indoorLocation?.floor)
+                            putString("buildingId", indoorLocation?.building)
+                            putDouble(
+                                "accuracy",
+                                indoorLocation?.accuracy?.toDouble() ?: 0.0
+                            )
+                            putDouble("timestamp", indoorLocation?.time?.toDouble() ?: 0.0)
+                        })
+                )
+                val actualLocation = indoorLocation
+
                 if (null != navigation && isNavigation) {
                     var indoorLatLon = indoorLocation
 
@@ -143,8 +162,6 @@ class MapxusNavigationPositioningProvider(
                         mView,
                         EventKeys.NAVI_ON_REFRESH_THE_ADSORPTION_LOCATION,
                         WritableNativeMap().apply {
-                            putString("floor", floor)
-                            putString("buildingId", building)
                             putMap("adsorptionLocation", WritableNativeMap().apply {
                                 putDouble("longitude", indoorLocation?.longitude ?: 0.0)
                                 putDouble("latitude", indoorLocation?.latitude ?: 0.0)
@@ -157,15 +174,15 @@ class MapxusNavigationPositioningProvider(
                                 putDouble("timestamp", indoorLocation?.time?.toDouble() ?: 0.0)
                             })
                             putMap("actualLocation", WritableNativeMap().apply {
-                                putDouble("longitude", indoorLocation?.longitude ?: 0.0)
-                                putDouble("latitude", indoorLocation?.latitude ?: 0.0)
-                                putString("floor", indoorLocation?.floor)
-                                putString("buildingId", indoorLocation?.building)
+                                putDouble("longitude", actualLocation?.longitude ?: 0.0)
+                                putDouble("latitude", actualLocation?.latitude ?: 0.0)
+                                putString("floor", actualLocation?.floor)
+                                putString("buildingId", actualLocation?.building)
                                 putDouble(
                                     "accuracy",
-                                    indoorLocation?.accuracy?.toDouble() ?: 0.0
+                                    actualLocation?.accuracy?.toDouble() ?: 0.0
                                 )
-                                putDouble("timestamp", indoorLocation?.time?.toDouble() ?: 0.0)
+                                putDouble("timestamp", actualLocation?.time?.toDouble() ?: 0.0)
                             })
                         }
                     )

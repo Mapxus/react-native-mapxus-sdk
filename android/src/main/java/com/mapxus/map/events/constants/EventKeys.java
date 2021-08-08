@@ -35,6 +35,7 @@ public class EventKeys {
     public static final String NAVI_ON_EXCESSIVE_DRIFT = ns("navi.excessive.drift");
     public static final String NAVI_ON_REFRESH_THE_ADSORPTION_LOCATION = ns("navi.refresh.the.adsorption.location");
     public static final String NAVI_ON_GET_NEWPATH = ns("navi.get.newpath");
+    public static final String NAVI_ON_UPDATE = ns("navi.update");
 
     // source events
     public static final String SHAPE_SOURCE_LAYER_CLICK = ns("shapesource.layer.pressed");

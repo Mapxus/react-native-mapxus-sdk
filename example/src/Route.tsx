@@ -9,11 +9,14 @@ import MapxusSdk, {
 	IndoorSceneChangeObject,
 	NavigationNewPathObject,
 	AdsorptionLocationObject,
+	AndroidLocation,
+	AdsorptionAndroidLocationObject,
 } from '@mapxus/react-native-mapxus-sdk';
 import { Switch, SegmentedControl, WhiteSpace, Button } from '@ant-design/react-native';
 import ParamsScrollView from './ParamsScrollView';
 import { map as _map, assign as _assign, find as _find } from 'lodash';
 import language from './utils/language';
+import { any } from 'prop-types';
 
 export default function Route() {
 	const [startEndClicked, setStartEndClicked] = useState('');
@@ -165,18 +168,32 @@ export default function Route() {
 		routeRef.current?.cleanRoute();
 	}
 
-	function onRefreshAdsorptionLocation(feature: AdsorptionLocationObject) {
-		if (feature.adsorptionLocation.coords.heading != undefined) {
-			setHeading(feature.adsorptionLocation.coords.heading);
+	function onRefreshAdsorptionLocation(feature: any) {
+		if ("buildingId" in feature) {
+			const location: AdsorptionLocationObject = feature
+			if (location.adsorptionLocation.coords.heading != undefined) {
+				setHeading(location.adsorptionLocation.coords.heading);
+			}
+			mapRef.current?.selectIndoorScene(MapxusSdk.MapxusZoomMode.DISABLE, { top: 0, left: 0, bottom: 0, right: 0 }, location.buildingId, location.floor);
+			setCenterCoordinate([location.adsorptionLocation.coords.longitude, location.adsorptionLocation.coords.latitude]);
+		} else {
+			const location: AdsorptionAndroidLocationObject = feature
+			mapRef.current?.selectIndoorScene(MapxusSdk.MapxusZoomMode.DISABLE, { top: 0, left: 0, bottom: 0, right: 0 }, location.adsorptionLocation.buildingId, location.adsorptionLocation.floor);
+			setCenterCoordinate([location.adsorptionLocation.longitude, location.adsorptionLocation.latitude]);
 		}
-		mapRef.current?.selectIndoorScene(MapxusSdk.MapxusZoomMode.DISABLE, { top: 0, left: 0, bottom: 0, right: 0 }, feature.buildingId, feature.floor);
-		setCenterCoordinate([feature.adsorptionLocation.coords.longitude, feature.adsorptionLocation.coords.latitude]);
+
 	}
 
-	function onUpdate(feature: MapxusSdk.Location) {
+	function onUpdate(feature: any) {
 		if (!isNavigation && firstIn) {
 			setFirstIn(false);
-			setCenterCoordinate([feature.coords.longitude, feature.coords.latitude]);
+			if ("coords" in feature) {
+				const location: MapxusSdk.Location = feature
+				setCenterCoordinate([location.coords.longitude, location.coords.latitude]);
+			} else {
+				const location: AndroidLocation = feature
+				setCenterCoordinate([location.longitude, location.latitude]);
+			}
 		}
 	}
 

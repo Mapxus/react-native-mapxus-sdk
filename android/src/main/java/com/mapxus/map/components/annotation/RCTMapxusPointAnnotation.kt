@@ -383,7 +383,7 @@ class RCTMapxusPointAnnotation(
 
     override fun onBuildingChange(indoorBuilding: IndoorBuilding?) {
         if (marker != null && !mBuildingId.isNullOrEmpty()) {
-            marker!!.iconOpacity = if (indoorBuilding != null) 0f else 1f
+            marker!!.iconOpacity = if (mBuildingId == indoorBuilding?.buildingId) 1f else 0f
             mMapxus!!.symbolManager?.update(marker)
         }
         if (mCalloutSymbol != null) {
