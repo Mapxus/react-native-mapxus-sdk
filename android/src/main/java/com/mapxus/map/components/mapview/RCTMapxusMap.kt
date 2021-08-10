@@ -28,7 +28,6 @@ import com.mapxus.map.components.location.RCTMapxusSimulateLocation
 import com.mapxus.map.components.mapview.helpers.RCTMapxusMapHelper
 import com.mapxus.map.components.mapview.helpers.RCTMapxusMapOptions
 import com.mapxus.map.components.visual.RCTMapxusVisualNodeView
-import com.mapxus.map.components.visual.RCTMapxusVisualView
 import com.mapxus.map.events.MapxusMapBuildingChangeEvent
 import com.mapxus.map.events.MapxusMapClickEvent
 import com.mapxus.map.events.MapxusMapFloorChangeEvent
@@ -240,6 +239,45 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
             it.addOnMapLongClickListener(this)
             it.addOnMapClickListener(this)
             it.addOnIndoorPoiClickListener(this)
+            rctMapxusMapOptions?.let { mapOptions ->
+                if (mapxusMap.currentIndoorBuilding == null) {
+                    BuildingSearch.newInstance().apply {
+                        setBuildingSearchResultListener(object :
+                            BuildingSearch.BuildingSearchResultListenerAdapter() {
+                            override fun onGetBuildingDetailResult(buildingDetailResult: BuildingDetailResult) {
+                                if (buildingDetailResult.status != 0) {
+                                    Toast.makeText(
+                                        reactContext,
+                                        buildingDetailResult.error.toString(),
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    return
+                                }
+                                if (buildingDetailResult.indoorBuildingList.isNullOrEmpty()) {
+                                    Toast.makeText(
+                                        reactContext,
+                                        "Building not found",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    return
+                                }
+
+                                mMapview?.mapboxMap?.moveCamera(
+                                    CameraUpdateFactory.newLatLngBounds(
+                                        LatLngBounds.from(
+                                            buildingDetailResult.indoorBuildingInfo.bbox.maxLat,
+                                            buildingDetailResult.indoorBuildingInfo.bbox.maxLon,
+                                            buildingDetailResult.indoorBuildingInfo.bbox.minLat,
+                                            buildingDetailResult.indoorBuildingInfo.bbox.minLon
+                                        ), 0
+                                    )
+                                )
+                            }
+                        })
+                        searchBuildingDetail(DetailSearchOption().ids(mutableListOf(mapOptions.buildingId)))
+                    }
+                }
+            }
         }
     }
 
@@ -448,6 +486,10 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
         val floor = args?.getString(2)
         val mode = args?.getString(3)
         val insets = args?.getMap(4)
+        if (mMapxusMap?.currentIndoorBuilding?.buildingId == buildingId) {
+            mMapxusMap?.switchFloor(floor)
+            return
+        }
         switchBuildingIdSelectIndoorScene = buildingId
         BuildingSearch.newInstance().apply {
             setBuildingSearchResultListener(object :
@@ -495,7 +537,7 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
         val right = insets?.getDouble("right") ?: 0.0
         when (zoomMode) {
             "DISABLE" -> {
-                mMapview?.mapboxMap?.easeCamera(
+                mMapview?.mapboxMap?.moveCamera(
                     CameraUpdateFactory.newLatLngPadding(
                         latLng,
                         left,
@@ -504,7 +546,7 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
                         bottom
                     )
                 )
-                mMapview?.mapboxMap?.cancelTransitions()
+//                mMapview?.mapboxMap?.cancelTransitions()
             }
             "ANIMATED" -> {
                 val cameraPosition1 = CameraPosition.Builder()
