@@ -10,7 +10,7 @@ import language from './utils/language';
 
 export default function SearchPOIInBound() {
 	const [words, setWords] = useState('');
-	const [category, setCategory] = useState('shopping');
+	const [category, setCategory] = useState('shopping.clothes');
 	const [southWest, setSouthWest] = useState('114.158608, 22.292540');
 	const [northEast, setNorthEast] = useState('114.172422, 22.310600');
 	const [offset, setOffset] = useState('10');
