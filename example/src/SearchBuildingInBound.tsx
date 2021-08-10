@@ -44,7 +44,7 @@ export default function SearchBuildingInBound() {
 				const _markers: Array<any> = buildings.map((b: Building | any) => (
 					{
 						coordinate: [Number(b?.labelCenter?.longitude), Number(b?.labelCenter?.latitude)],
-						name: b[`name_${lang}`]
+						name: b[`name_${lang}`] || b.name_default
 					}
 				));
 

@@ -163,7 +163,7 @@ export default function SurroundingIdentification() {
 					_markers = _markers.concat(
 						{
 							coordinate: [Number(poi?.location?.longitude), Number(poi?.location?.latitude)],
-							name: poi[`name_${lang}`] + sub,
+							name: poi[`name_${lang}`] || poi.name_default + sub,
 							buildingId: poi.buildingId,
 							floor: poi.floor
 						}
