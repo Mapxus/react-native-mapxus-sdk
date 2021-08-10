@@ -31,7 +31,7 @@ export default function SearchBuildingByID() {
 				buildings.forEach((b: Building | any) => {
 					_coordinate = [Number(b?.labelCenter?.longitude), Number(b?.labelCenter?.latitude)];
 					_coordinates.push(_coordinate);
-					_markers.push({coordinate: _coordinate, name: b[`name_${lang}`]});
+					_markers.push({coordinate: _coordinate, name: b[`name_${lang}`] || b.name_default});
 				});
 
 				setMarkers(_markers);
