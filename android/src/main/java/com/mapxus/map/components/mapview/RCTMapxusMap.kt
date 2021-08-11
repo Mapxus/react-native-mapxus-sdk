@@ -486,10 +486,6 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
         val floor = args?.getString(2)
         val mode = args?.getString(3)
         val insets = args?.getMap(4)
-        if (mMapxusMap?.currentIndoorBuilding?.buildingId == buildingId) {
-            mMapxusMap?.switchFloor(floor)
-            return
-        }
         switchBuildingIdSelectIndoorScene = buildingId
         BuildingSearch.newInstance().apply {
             setBuildingSearchResultListener(object :
@@ -537,16 +533,8 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
         val right = insets?.getDouble("right") ?: 0.0
         when (zoomMode) {
             "DISABLE" -> {
-                mMapview?.mapboxMap?.moveCamera(
-                    CameraUpdateFactory.newLatLngPadding(
-                        latLng,
-                        left,
-                        top,
-                        right,
-                        bottom
-                    )
-                )
-//                mMapview?.mapboxMap?.cancelTransitions()
+                mMapxusMap?.switchBuilding(switchBuildingIdSelectIndoorScene)
+                mMapxusMap?.switchFloor(floor)
             }
             "ANIMATED" -> {
                 val cameraPosition1 = CameraPosition.Builder()
@@ -637,6 +625,7 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
     private fun createSymbolManager(style: Style?) {
         symbolManager = SymbolManager(mMapview!!, mMapview?.mapboxMap!!, style!!)
         symbolManager?.iconAllowOverlap = true
+        symbolManager?.iconIgnorePlacement = true
         symbolManager?.addClickListener(OnSymbolClickListener { symbol: Symbol ->
             onMarkerClick(symbol)
             false
