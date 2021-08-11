@@ -536,6 +536,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     public void createSymbolManager(Style style) {
         symbolManager = new SymbolManager(this, mMap, style);
         symbolManager.setIconAllowOverlap(true);
+        symbolManager.setIconIgnorePlacement(true);
         symbolManager.addClickListener(symbol -> {
             onMarkerClick(symbol);
             return false;

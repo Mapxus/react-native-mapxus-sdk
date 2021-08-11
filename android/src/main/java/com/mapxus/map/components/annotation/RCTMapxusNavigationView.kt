@@ -48,6 +48,7 @@ class RCTMapxusNavigationView(
             mContext,
             mManager, this
         )
+        mMapView?.mMapxusMap?.setLocationProvider(mapxusPositioningProvider)
     }
 
     override fun removeFromMap(mapView: RCTMapxusMap?) {
@@ -128,36 +129,11 @@ class RCTMapxusNavigationView(
                 ))
         }
 
-        mapxusPositioningProvider?.addListener(object : IndoorLocationProviderListener {
-            override fun onProviderStarted() {
-            }
-
-            override fun onProviderStopped() {
-            }
-
-            override fun onProviderError(errorInfo: ErrorInfo?) {
-            }
-
-            override fun onIndoorLocationChange(indoorLocation: IndoorLocation?) {
-                mManager.handleEvent(
-                    MapxusMapCommonEvent(
-                        this@RCTMapxusNavigationView,
-                        EventKeys.NAVI_ON_REFRESH_THE_ADSORPTION_LOCATION,
-                    )
-                )
-            }
-
-            override fun onCompassChanged(angle: Float, sensorAccuracy: Int) {
-            }
-
-        })
-
         mAdsorbable?.let { mapxusPositioningProvider?.mAdsorbable = it }
         mShortenable?.let { mapxusPositioningProvider?.mShortenable = it }
         mNumberOfAllowedDrifts?.let { mapxusPositioningProvider?.mNumberOfAllowedDrifts = it }
         mMaximumDrift?.let { mapxusPositioningProvider?.mMaximumDrift = it }
         mDistanceToDestination?.let { mapxusPositioningProvider?.mDistanceToDestination = it }
-        isNavigation?.let { mapxusPositioningProvider?.isNavigation = it }
         val routedata = args?.getMap(1)
         mPathDto = PathDto().apply {
             distance = routedata?.getDouble("distance")
@@ -243,12 +219,13 @@ class RCTMapxusNavigationView(
 
     fun start() {
         isNavigation = true
-        mMapView?.mMapxusMap?.setLocationProvider(mapxusPositioningProvider)
+        mapxusPositioningProvider?.isNavigation = true
         mMapView?.mMapxusMap?.followUserMode = FollowUserMode.FOLLOW_USER_AND_HEADING
     }
 
     fun stop() {
         isNavigation = false
+        mapxusPositioningProvider?.isNavigation = false
         mMapView?.mMapxusMap?.followUserMode = FollowUserMode.NONE
     }
 

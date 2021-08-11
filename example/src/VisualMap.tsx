@@ -116,7 +116,6 @@ export default function VisualMap() {
 	}
 
 	function clickWindow(type: string) {
-		console.log("test1")
 		if (type === 'visual') {
 			setIsSwitched(true);
 			setFloorControllerHidden(true);
@@ -141,20 +140,21 @@ export default function VisualMap() {
 							<MapxusSdk.Camera ref={cameraRef} />
 							{
 								lightMarker && (
-									<MapxusSdk.PointAnnotation
-										key={lightMarker.key}
-										id={lightMarker.key}
-										coordinate={[lightMarker.longitude, lightMarker.latitude]}
-									>
-										<Image
-											source={require('./assets/light.png')}
-											style={{
-												width: 50,
-												height: 50,
-												transform: [{ rotate: `${lightMarker.bearing}deg` }]
-											}}
-										/>
-									</MapxusSdk.PointAnnotation>
+									Platform.OS == 'ios' ?
+										<MapxusSdk.PointAnnotation
+											key={lightMarker.key}
+											id={lightMarker.key}
+											coordinate={[lightMarker.longitude, lightMarker.latitude]}
+										>
+											<Image
+												source={require('./assets/light.png')}
+												style={{
+													width: 50,
+													height: 50,
+													transform: [{ rotate: `${lightMarker.bearing}deg` }]
+												}}
+											/>
+										</MapxusSdk.PointAnnotation> : null
 								)
 							}
 						</MapxusSdk.MapView>
