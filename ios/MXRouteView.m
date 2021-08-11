@@ -7,7 +7,9 @@
 
 #import <MapxusComponentKit/MapxusComponentKit.h>
 #import <YYModel/YYModel.h>
+#import <React/RCTConvert.h>
 #import "MXRouteView.h"
+#import "RCTMGLUtils.h"
 
 @interface MXRouteView()
 
@@ -24,39 +26,132 @@
     }
 }
 
-- (void)setReactIndoorLineColor:(UIColor *)reactIndoorLineColor {
-    _reactIndoorLineColor = reactIndoorLineColor;
-    self.routePainter.indoorLineColor = reactIndoorLineColor;
+- (void)setReactRouteAppearance:(NSDictionary *)reactRouteAppearance {
+    
+    NSArray<NSString*> *props = [reactRouteAppearance allKeys];
+    for (NSString *prop in props) {
+
+      if ([prop isEqualToString:@"isAddStartDash"]) {
+          self.routePainter.isAddStartDash = [RCTConvert BOOL:reactRouteAppearance[prop]];
+          
+      } else if ([prop isEqualToString:@"isAddEndDash"]) {
+          self.routePainter.isAddEndDash = [RCTConvert BOOL:reactRouteAppearance[prop]];
+
+      } else if ([prop isEqualToString:@"hiddenTranslucentPaths"]) {
+          self.routePainter.hiddenTranslucentPaths = [RCTConvert BOOL:reactRouteAppearance[prop]];
+
+      } else if ([prop isEqualToString:@"indoorLineColor"]) {
+          self.routePainter.indoorLineColor = [RCTConvert UIColor:reactRouteAppearance[prop]];
+          
+      } else if ([prop isEqualToString:@"outdoorLineColor"]) {
+          self.routePainter.outdoorLineColor = [RCTConvert UIColor:reactRouteAppearance[prop]];
+
+      } else if ([prop isEqualToString:@"dashLineColor"]) {
+          self.routePainter.dashLineColor = [RCTConvert UIColor:reactRouteAppearance[prop]];
+
+      } else if ([prop isEqualToString:@"arrowSymbolSpacing"]) {
+          self.routePainter.arrowSymbolSpacing = [RCTConvert NSNumber:reactRouteAppearance[prop]];
+          
+      } else if ([prop isEqualToString:@"arrowIcon"]) {
+          NSDictionary *valueDic = reactRouteAppearance[prop];
+          __weak typeof(self) weakSelf = self;
+          [self setImageWithValue:valueDic callback:^(UIImage *image) {
+              weakSelf.routePainter.arrowIcon = image;
+          }];
+          
+      } else if ([prop isEqualToString:@"startIcon"]) {
+          NSDictionary *valueDic = reactRouteAppearance[prop];
+          __weak typeof(self) weakSelf = self;
+          [self setImageWithValue:valueDic callback:^(UIImage *image) {
+              weakSelf.routePainter.startIcon = image;
+          }];
+          
+      } else if ([prop isEqualToString:@"endIcon"]) {
+          NSDictionary *valueDic = reactRouteAppearance[prop];
+          __weak typeof(self) weakSelf = self;
+          [self setImageWithValue:valueDic callback:^(UIImage *image) {
+              weakSelf.routePainter.endIcon = image;
+          }];
+          
+      } else if ([prop isEqualToString:@"elevatorUpIcon"]) {
+          NSDictionary *valueDic = reactRouteAppearance[prop];
+          __weak typeof(self) weakSelf = self;
+          [self setImageWithValue:valueDic callback:^(UIImage *image) {
+              weakSelf.routePainter.elevatorUpIcon = image;
+          }];
+          
+      } else if ([prop isEqualToString:@"elevatorDownIcon"]) {
+          NSDictionary *valueDic = reactRouteAppearance[prop];
+          __weak typeof(self) weakSelf = self;
+          [self setImageWithValue:valueDic callback:^(UIImage *image) {
+              weakSelf.routePainter.elevatorDownIcon = image;
+          }];
+          
+      } else if ([prop isEqualToString:@"escalatorUpIcon"]) {
+          NSDictionary *valueDic = reactRouteAppearance[prop];
+          __weak typeof(self) weakSelf = self;
+          [self setImageWithValue:valueDic callback:^(UIImage *image) {
+              weakSelf.routePainter.escalatorUpIcon = image;
+          }];
+          
+      } else if ([prop isEqualToString:@"escalatorDownIcon"]) {
+          NSDictionary *valueDic = reactRouteAppearance[prop];
+          __weak typeof(self) weakSelf = self;
+          [self setImageWithValue:valueDic callback:^(UIImage *image) {
+              weakSelf.routePainter.escalatorDownIcon = image;
+          }];
+          
+      } else if ([prop isEqualToString:@"rampUpIcon"]) {
+          NSDictionary *valueDic = reactRouteAppearance[prop];
+          __weak typeof(self) weakSelf = self;
+          [self setImageWithValue:valueDic callback:^(UIImage *image) {
+              weakSelf.routePainter.rampUpIcon = image;
+          }];
+          
+      } else if ([prop isEqualToString:@"rampDownIcon"]) {
+          NSDictionary *valueDic = reactRouteAppearance[prop];
+          __weak typeof(self) weakSelf = self;
+          [self setImageWithValue:valueDic callback:^(UIImage *image) {
+              weakSelf.routePainter.rampDownIcon = image;
+          }];
+          
+      } else if ([prop isEqualToString:@"stairsUpIcon"]) {
+          NSDictionary *valueDic = reactRouteAppearance[prop];
+          __weak typeof(self) weakSelf = self;
+          [self setImageWithValue:valueDic callback:^(UIImage *image) {
+              weakSelf.routePainter.stairsUpIcon = image;
+          }];
+          
+      } else if ([prop isEqualToString:@"stairsDownIcon"]) {
+          NSDictionary *valueDic = reactRouteAppearance[prop];
+          __weak typeof(self) weakSelf = self;
+          [self setImageWithValue:valueDic callback:^(UIImage *image) {
+              weakSelf.routePainter.stairsDownIcon = image;
+          }];
+          
+      } else if ([prop isEqualToString:@"buildingGateIcon"]) {
+          NSDictionary *valueDic = reactRouteAppearance[prop];
+          __weak typeof(self) weakSelf = self;
+          [self setImageWithValue:valueDic callback:^(UIImage *image) {
+              weakSelf.routePainter.buildingGateIcon = image;
+          }];
+          
+      } else {
+        // TODO throw exception
+      }
+    }
 }
 
-- (void)setReactOutdoorLineColor:(UIColor *)reactOutdoorLineColor {
-    _reactOutdoorLineColor = reactOutdoorLineColor;
-    self.routePainter.outdoorLineColor = reactOutdoorLineColor;
-}
-
-- (void)setReactDashLineColor:(UIColor *)reactDashLineColor {
-    _reactDashLineColor = reactDashLineColor;
-    self.routePainter.dashLineColor = reactDashLineColor;
-}
-
-- (void)setReactArrowSymbolSpacing:(NSNumber *)reactArrowSymbolSpacing {
-    _reactArrowSymbolSpacing = reactArrowSymbolSpacing;
-    self.routePainter.arrowSymbolSpacing = reactArrowSymbolSpacing;
-}
-
-- (void)setReactIsAddStartDash:(BOOL)reactIsAddStartDash {
-    _reactIsAddStartDash = reactIsAddStartDash;
-    self.routePainter.isAddStartDash = reactIsAddStartDash;
-}
-
-- (void)setReactIsAddEndDash:(BOOL)reactIsAddEndDash {
-    _reactIsAddEndDash = reactIsAddEndDash;
-    self.routePainter.isAddEndDash = reactIsAddEndDash;
-}
-
-- (void)setReactHiddenTranslucentPaths:(BOOL)reactHiddenTranslucentPaths {
-    _reactHiddenTranslucentPaths = reactHiddenTranslucentPaths;
-    self.routePainter.hiddenTranslucentPaths = reactHiddenTranslucentPaths;
+- (void)setImageWithValue:(NSDictionary *)value callback:(void (^)(UIImage *image))callback {
+    NSString *imageURI = value[@"uri"];
+    NSNumber *scale = value[@"scale"];
+    [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[scale doubleValue] callback:^(NSError *error, UIImage *image) {
+      if (image != nil) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            callback(image);
+        });
+      }
+    }];
 }
 
 - (NSDictionary *)reactPainterPathDto {
