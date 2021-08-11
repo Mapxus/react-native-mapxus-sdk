@@ -151,7 +151,6 @@ class RCTMapxusRouteView(
         ).apply {
             routeAppearance?.let { routeRes ->
                 changeDefaultLayerRes(WalkRouteResource().apply {
-                    routeRes.isAddStartDash?.let { isAddStartDash = it }
                     routeRes.isAddEndDash?.let { isAddEndDash = it }
                     routeRes.hiddenTranslucentPaths?.let { hiddenTranslucentPaths = it }
                     routeRes.indoorLineColor?.let { indoorLineColor = it as Int }
@@ -194,6 +193,32 @@ class RCTMapxusRouteView(
         routeAppearance = RouteAppearance().apply {
             initData(args)
         }
+        walkRouteOverlay?.removeFromMap()
+        routeAppearance?.let { routeRes ->
+            walkRouteOverlay?.changeDefaultLayerRes(WalkRouteResource().apply {
+                routeRes.isAddStartDash?.let { isAddStartDash = it }
+                routeRes.isAddEndDash?.let { isAddEndDash = it }
+                routeRes.hiddenTranslucentPaths?.let { hiddenTranslucentPaths = it }
+                routeRes.indoorLineColor?.let { indoorLineColor = it as Int }
+                routeRes.outdoorLineColor?.let { outdoorLineColor = it as Int }
+                routeRes.dashLineColor?.let { dashLineColor = it as Int }
+                routeRes.arrowSymbolSpacing?.let { arrowSymbolSpacing = it.toFloat() }
+                routeRes.arrowIcon?.let { arrowIcon = it.toInt() }
+                routeRes.startIcon?.let { startIcon = it.toInt() }
+                routeRes.endIcon?.let { endIcon = it.toInt() }
+                routeRes.elevatorUpIcon?.let { elevatorUpIcon = it.toInt() }
+                routeRes.elevatorDownIcon?.let { elevatorDownIcon = it.toInt() }
+                routeRes.escalatorUpIcon?.let { escalatorUpIcon = it.toInt() }
+                routeRes.escalatorDownIcon?.let { escalatorDownIcon = it.toInt() }
+                routeRes.rampUpIcon?.let { rampUpIcon = it.toInt() }
+                routeRes.rampDownIcon?.let { rampDownIcon = it.toInt() }
+                routeRes.stairsUpIcon?.let { stairsUpIcon = it.toInt() }
+                routeRes.stairsDownIcon?.let { stairsDownIcon = it.toInt() }
+                routeRes.buildingGateIcon?.let { buildingGateIcon = it.toInt() }
+            })
+        }
+        walkRouteOverlay?.addToMap()
+
     }
 
     fun getPainterPathDto(callbackID: String?, args: ReadableArray?) {
