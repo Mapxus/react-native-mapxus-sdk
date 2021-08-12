@@ -213,7 +213,7 @@ declare namespace MapxusSdk {
     loadVisualViewWithFirstImg(imageId: string): void;
     unloadVisualView(): void;
     moveToKey(key: string): void;
-    moveCloseTo(buildingId: string, floor: string): void;
+    moveCloseTo(buildingId: string, floor: string, latitude: number, longitude: number): void;
     resize(): void;
     getBearing(): Promise<number>;
     setBearing(bearing: number): void;

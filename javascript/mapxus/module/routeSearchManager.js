@@ -11,7 +11,7 @@ class RouteSearchManager {
      * Searh for the route planning
      * @param {*} params parameters for route planning: fromBuilding (optional), fromFloor (optional), fromLon, 
      * fromLat, toBuilding (optional), toFloor (optional), toLon, toLat, vehicle (optional), locale, toDoor (optional).
-     * @returns 
+     * @returns {Promise}
      */
     async routeSearch(params) {
         try {
