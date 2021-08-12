@@ -80,8 +80,8 @@ class RCTMapxusVisualView(
 
     fun moveCloseTo(args: ReadableArray?) {
         moveCloseTo(IndoorLatLng().apply {
-            lat = 0.0
-            lon = 0.0
+            lat = args?.getDouble(3) ?: 0.0
+            lon = args?.getDouble(4) ?: 0.0
             buildingId = args?.getString(1)
             floor = args?.getString(2)
         })

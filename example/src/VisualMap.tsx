@@ -168,7 +168,7 @@ export default function VisualMap() {
 			<TouchableWithoutFeedback {...!isSwitched && { onPress: () => clickWindow('visual') }}>
 				<View style={[
 					isSwitched ? styles.container_full : styles.container_small,
-					{ display: visualViewShown ? 'flex' : 'none' }
+					{ display: visualViewShown ? 'flex' : 'none', opacity: visualViewShown ? 1 : 0 }
 				]}>
 					<MapxusSdk.VisualView
 						ref={visualViewRef}
@@ -177,6 +177,16 @@ export default function VisualMap() {
 					/>
 				</View>
 			</TouchableWithoutFeedback>
+			{
+				Platform.OS == 'android' ?
+					<TouchableWithoutFeedback onPress={() => clickWindow(!isSwitched ? 'visual' : "map")}>
+						<View style={[
+							styles.container_small,
+							{ opacity: 0 }
+						]}>
+						</View>
+					</TouchableWithoutFeedback> : null
+			}
 			<TouchableOpacity
 				style={[styles.iconArea, { display: isSwitched ? 'none' : 'flex' }]}
 				onPress={() => setActive(!active)}
@@ -185,11 +195,11 @@ export default function VisualMap() {
 					active
 						? <Image
 							source={require('./assets/onIcon360.png')}
-							style={{ width: '100%', height: '100%' }}
+							style={{ width: '100%', height: '100%', opacity: isSwitched ? 0 : 1 }}
 						/>
 						: <Image
 							source={require('./assets/offIcon360.png')}
-							style={{ width: '100%', height: '100%' }}
+							style={{ width: '100%', height: '100%', opacity: isSwitched ? 0 : 1 }}
 						/>
 				}
 			</TouchableOpacity>
@@ -222,6 +232,7 @@ const styles = StyleSheet.create({
 		padding: 8,
 		borderRadius: 5,
 		backgroundColor: 'white',
-		zIndex: 1
+		zIndex: 1,
+		elevation: 1
 	}
 });
