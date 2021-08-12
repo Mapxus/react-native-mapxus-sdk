@@ -644,6 +644,10 @@ export interface AndroidCompass {
 }
 
 export interface RouteViewProps extends ViewProps {
+  routeAppearance?: StyleProp<Appearance>;
+}
+
+export interface Appearance {
   isAddStartDash?: boolean;
   isAddEndDash?: boolean;
   hiddenTranslucentPaths?: boolean;
@@ -651,18 +655,18 @@ export interface RouteViewProps extends ViewProps {
   outdoorLineColor?: string | number;
   dashLineColor?: string | number;
   arrowSymbolSpacing?: number;
-  arrowIcon?: string;
-  startIcon?: string;
-  endIcon?: string;
-  elevatorUpIcon?: string;
-  elevatorDownIcon?: string;
-  escalatorUpIcon?: string;
-  escalatorDownIcon?: string;
-  rampUpIcon?: string;
-  rampDownIcon?: string;
-  stairsUpIcon?: string;
-  stairsDownIcon?: string;
-  buildingGateIcon?: string;
+  arrowIcon?: number;
+  startIcon?: number;
+  endIcon?: number;
+  elevatorUpIcon?: number;
+  elevatorDownIcon?: number;
+  escalatorUpIcon?: number;
+  escalatorDownIcon?: number;
+  rampUpIcon?: number;
+  rampDownIcon?: number;
+  stairsUpIcon?: number;
+  stairsDownIcon?: number;
+  buildingGateIcon?: number;
 }
 
 export interface NavigationViewProps extends ViewProps {

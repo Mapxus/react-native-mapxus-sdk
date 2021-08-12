@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import MapxusSdk, {
+	Appearance,
 	GeoPoint,
 	TappedOnBlankObject,
 	TappedOnPoiObject,
@@ -32,13 +33,14 @@ export default function Route() {
 	const [currentBuilding, setCurrentBuilding] = useState('');
 	const [currentFloor, setCurrentFloor] = useState('');
 	const [isNavigation, setIsNavigation] = useState(false);
-	const [isAddStartDash, setIsAddStartDash] = useState(true);
 	const [centerCoordinate, setCenterCoordinate] = useState([0, 0]);
+	const [appearence, setAppearence] = useState<Appearance>({});
 	const [heading, setHeading] = useState(0);
 	const [firstIn, setFirstIn] = useState(true);
 	const routeRef = useRef<MapxusSdk.RouteView>(null);
 	const naviRef = useRef<MapxusSdk.NavigationView>(null);
 	const mapRef = useRef<MapxusSdk.MapxusMap>(null);
+
 
 	useEffect(function updateStartMarker() {
 		if (start) {
@@ -113,7 +115,7 @@ export default function Route() {
 	}
 
 	async function renderPath(result: RouteSearchResult) {
-		setIsAddStartDash(true);
+		setAppearence({isAddStartDash: true});
 		routeRef.current?.cleanRoute();
 
 		routeRef.current?.paintRouteUsingPath(
@@ -149,7 +151,7 @@ export default function Route() {
 			naviRef.current?.stop();
 		} else {
 			naviRef.current?.start();
-			setIsAddStartDash(false);
+			setAppearence({isAddStartDash: false});
 		}
 	}
 
@@ -268,7 +270,7 @@ export default function Route() {
 					}
 					<MapxusSdk.RouteView
 						ref={routeRef}
-						isAddStartDash={isAddStartDash}
+						routeAppearance={appearence}
 					/>
 					<MapxusSdk.NavigationView
 						distanceToDestination={3}

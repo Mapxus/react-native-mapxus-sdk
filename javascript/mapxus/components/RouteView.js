@@ -1,8 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { requireNativeComponent } from 'react-native';
+import { requireNativeComponent, processColor } from 'react-native';
 import NativeBridgeComponent from '../../components/NativeBridgeComponent';
 import { ViewPropTypes } from '../../utils';
+import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
+import { StyleTypes } from '../../utils/styleMap';
+
+
+const typeMap = {
+    isAddStartDash: StyleTypes.Constant,
+    isAddEndDash: StyleTypes.Constant,
+    hiddenTranslucentPaths: StyleTypes.Constant,
+    indoorLineColor: StyleTypes.Color,
+    outdoorLineColor: StyleTypes.Color,
+    dashLineColor: StyleTypes.Color,
+    arrowSymbolSpacing: StyleTypes.Constant,
+
+    arrowIcon: StyleTypes.Image,
+    startIcon: StyleTypes.Image,
+    endIcon: StyleTypes.Image,
+    elevatorUpIcon: StyleTypes.Image,
+    elevatorDownIcon: StyleTypes.Image,
+    escalatorUpIcon: StyleTypes.Image,
+    escalatorDownIcon: StyleTypes.Image,
+    rampUpIcon: StyleTypes.Image,
+    rampDownIcon: StyleTypes.Image,
+    stairsUpIcon: StyleTypes.Image,
+    stairsDownIcon: StyleTypes.Image,
+    buildingGateIcon: StyleTypes.Image,
+}
+
 
 const NATIVE_MODULE_NAME = 'MXRouteView'
 
@@ -13,39 +40,85 @@ class RouteView extends NativeBridgeComponent(React.Component) {
     static propTypes = {
         ...ViewPropTypes,
 
-        isAddStartDash: PropTypes.bool,
-        isAddEndDash: PropTypes.bool,
-        hiddenTranslucentPaths: PropTypes.bool,
-        indoorLineColor: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.number
-        ]),
-        outdoorLineColor: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.number
-        ]),
-        dashLineColor: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.number
-        ]),
-        arrowSymbolSpacing: PropTypes.number,
-        arrowIcon: PropTypes.string,
-        startIcon: PropTypes.string,
-        endIcon: PropTypes.string,
-        elevatorUpIcon: PropTypes.string,
-        elevatorDownIcon: PropTypes.string,
-        escalatorUpIcon: PropTypes.string,
-        escalatorDownIcon: PropTypes.string,
-        rampUpIcon: PropTypes.string,
-        rampDownIcon: PropTypes.string,
-        stairsUpIcon: PropTypes.string,
-        stairsDownIcon: PropTypes.string,
-        buildingGateIcon: PropTypes.string,
+        routeAppearance: PropTypes.shape({
+            isAddStartDash: PropTypes.bool,
+            isAddEndDash: PropTypes.bool,
+            hiddenTranslucentPaths: PropTypes.bool,
+            indoorLineColor: PropTypes.oneOfType([
+                PropTypes.string,
+                PropTypes.number
+            ]),
+            outdoorLineColor: PropTypes.oneOfType([
+                PropTypes.string,
+                PropTypes.number
+            ]),
+            dashLineColor: PropTypes.oneOfType([
+                PropTypes.string,
+                PropTypes.number
+            ]),
+            arrowSymbolSpacing: PropTypes.number,
+            arrowIcon: PropTypes.number,
+            startIcon: PropTypes.number,
+            endIcon: PropTypes.number,
+            elevatorUpIcon: PropTypes.number,
+            elevatorDownIcon: PropTypes.number,
+            escalatorUpIcon: PropTypes.number,
+            escalatorDownIcon: PropTypes.number,
+            rampUpIcon: PropTypes.number,
+            rampDownIcon: PropTypes.number,
+            stairsUpIcon: PropTypes.number,
+            stairsDownIcon: PropTypes.number,
+            buildingGateIcon: PropTypes.number,
+        }),
 
     };
 
+    get baseProps() {
+        return {
+            ...this.props,
+            reactRouteAppearance: this._getAppearance(),
+        };
+    }
+
     constructor(props) {
         super(props, NATIVE_MODULE_NAME);
+    }
+
+    _getAppearance() {
+        let appearance = this.props.routeAppearance;
+        if (!appearance) {
+            return;
+        }
+
+        const nativeAppearance = {};
+        const appearanceProps = Object.keys(appearance);
+        for (const appearanceProp of appearanceProps) {
+            const propType = this._getPropType(appearanceProp);
+            let rawAppearance = appearance[appearanceProp];
+
+            if (propType === StyleTypes.Image) {
+                rawAppearance = resolveAssetSource(rawAppearance) || {};
+            } else if (propType === StyleTypes.Color && typeof rawAppearance === 'string') {
+                rawAppearance = processColor(rawAppearance);
+            }
+
+            // const bridgeValue = new BridgeValue(rawAppearance);
+            nativeAppearance[appearanceProp] = rawAppearance;
+            // {
+            //     appearanceType: propType,
+            //     appearanceValue: bridgeValue.toJSON(),
+            // };
+        }
+
+        return nativeAppearance;
+    }
+
+    _getPropType(appearanceProp) {
+        if (typeMap[appearanceProp]) {
+            return typeMap[appearanceProp];
+        }
+
+        throw new Error(`${appearanceProp} is not a valid Mapxus route type`);
     }
 
     /**
@@ -111,10 +184,10 @@ class RouteView extends NativeBridgeComponent(React.Component) {
             ref: (nativeRef) => this._setNativeRef(nativeRef)
         };
 
-        return <Route {...this.props} {...callbacks}>{this.props.children}</Route>;
+        return <Route {...this.baseProps} {...callbacks}>{this.props.children}</Route>;
     }
 }
 
-const Route = requireNativeComponent(NATIVE_MODULE_NAME, RouteView);
+const Route = requireNativeComponent(NATIVE_MODULE_NAME, RouteView, { nativeOnly: { reactRouteAppearance: true } });
 
 export default RouteView;
