@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
@@ -27,12 +28,30 @@ import java.net.URL;
 public class BitmapUtils {
     public static final String LOG_TAG = "BitmapUtils";
 
-    private  static int CACHE_SIZE = 1024 * 1024;
+    private static int CACHE_SIZE = 1024 * 1024;
     private static LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(CACHE_SIZE) {
         protected int sizeOf(String key, Bitmap bitmap) {
             return bitmap.getByteCount();
         }
     };
+
+    public static Drawable loadImageFromNetwork(String imageUrl) {
+        Drawable drawable = null;
+        try {
+            // 可以在这里通过文件名来判断，是否本地有此图片
+            drawable = Drawable.createFromStream(
+                    new URL(imageUrl).openStream(), "image.jpg");
+        } catch (IOException e) {
+            Log.d("rn", e.getMessage());
+        }
+        if (drawable == null) {
+            Log.d("rn", "null drawable");
+        } else {
+            Log.d("rn", "not null drawable");
+        }
+
+        return drawable;
+    }
 
     public static Bitmap getBitmapFromURL(String url) {
         return BitmapUtils.getBitmapFromURL(url, null);
@@ -42,7 +61,7 @@ public class BitmapUtils {
         Bitmap bitmap = getImage(url);
 
         if (bitmap != null) {
-            return  bitmap;
+            return bitmap;
         }
 
         try {

@@ -153,22 +153,22 @@ class RCTMapxusRouteView(
                 changeDefaultLayerRes(WalkRouteResource().apply {
                     routeRes.isAddEndDash?.let { isAddEndDash = it }
                     routeRes.hiddenTranslucentPaths?.let { hiddenTranslucentPaths = it }
-                    routeRes.indoorLineColor?.let { indoorLineColor = it as Int }
-                    routeRes.outdoorLineColor?.let { outdoorLineColor = it as Int }
-                    routeRes.dashLineColor?.let { dashLineColor = it as Int }
-                    routeRes.arrowSymbolSpacing?.let { arrowSymbolSpacing = it.toFloat() }
-                    routeRes.arrowIcon?.let { arrowIcon = it.toInt() }
-                    routeRes.startIcon?.let { startIcon = it.toInt() }
-                    routeRes.endIcon?.let { endIcon = it.toInt() }
-                    routeRes.elevatorUpIcon?.let { elevatorUpIcon = it.toInt() }
-                    routeRes.elevatorDownIcon?.let { elevatorDownIcon = it.toInt() }
-                    routeRes.escalatorUpIcon?.let { escalatorUpIcon = it.toInt() }
-                    routeRes.escalatorDownIcon?.let { escalatorDownIcon = it.toInt() }
-                    routeRes.rampUpIcon?.let { rampUpIcon = it.toInt() }
-                    routeRes.rampDownIcon?.let { rampDownIcon = it.toInt() }
-                    routeRes.stairsUpIcon?.let { stairsUpIcon = it.toInt() }
-                    routeRes.stairsDownIcon?.let { stairsDownIcon = it.toInt() }
-                    routeRes.buildingGateIcon?.let { buildingGateIcon = it.toInt() }
+//                    routeRes.indoorLineColor?.let { indoorLineColor = it as Int }
+//                    routeRes.outdoorLineColor?.let { outdoorLineColor = it as Int }
+//                    routeRes.dashLineColor?.let { dashLineColor = it as Int }
+//                    routeRes.arrowSymbolSpacing?.let { arrowSymbolSpacing = it.toFloat() }
+//                    routeRes.arrowIcon?.let { arrowIcon = it }
+//                    routeRes.startIcon?.let { startIcon = it }
+//                    routeRes.endIcon?.let { endIcon = it }
+//                    routeRes.elevatorUpIcon?.let { elevatorUpIcon = it }
+//                    routeRes.elevatorDownIcon?.let { elevatorDownIcon = it }
+//                    routeRes.escalatorUpIcon?.let { escalatorUpIcon = it }
+//                    routeRes.escalatorDownIcon?.let { escalatorDownIcon = it }
+//                    routeRes.rampUpIcon?.let { rampUpIcon = it }
+//                    routeRes.rampDownIcon?.let { rampDownIcon = it }
+//                    routeRes.stairsUpIcon?.let { stairsUpIcon = it }
+//                    routeRes.stairsDownIcon?.let { stairsDownIcon = it }
+//                    routeRes.buildingGateIcon?.let { buildingGateIcon = it }
                 })
             }
 
@@ -191,7 +191,7 @@ class RCTMapxusRouteView(
 
     fun setRouteAppearance(args: ReadableMap?) {
         routeAppearance = RouteAppearance().apply {
-            initData(args)
+            initData(mContext,args)
         }
         walkRouteOverlay?.removeFromMap()
         routeAppearance?.let { routeRes ->
@@ -199,22 +199,22 @@ class RCTMapxusRouteView(
                 routeRes.isAddStartDash?.let { isAddStartDash = it }
                 routeRes.isAddEndDash?.let { isAddEndDash = it }
                 routeRes.hiddenTranslucentPaths?.let { hiddenTranslucentPaths = it }
-                routeRes.indoorLineColor?.let { indoorLineColor = it as Int }
-                routeRes.outdoorLineColor?.let { outdoorLineColor = it as Int }
-                routeRes.dashLineColor?.let { dashLineColor = it as Int }
-                routeRes.arrowSymbolSpacing?.let { arrowSymbolSpacing = it.toFloat() }
-                routeRes.arrowIcon?.let { arrowIcon = it.toInt() }
-                routeRes.startIcon?.let { startIcon = it.toInt() }
-                routeRes.endIcon?.let { endIcon = it.toInt() }
-                routeRes.elevatorUpIcon?.let { elevatorUpIcon = it.toInt() }
-                routeRes.elevatorDownIcon?.let { elevatorDownIcon = it.toInt() }
-                routeRes.escalatorUpIcon?.let { escalatorUpIcon = it.toInt() }
-                routeRes.escalatorDownIcon?.let { escalatorDownIcon = it.toInt() }
-                routeRes.rampUpIcon?.let { rampUpIcon = it.toInt() }
-                routeRes.rampDownIcon?.let { rampDownIcon = it.toInt() }
-                routeRes.stairsUpIcon?.let { stairsUpIcon = it.toInt() }
-                routeRes.stairsDownIcon?.let { stairsDownIcon = it.toInt() }
-                routeRes.buildingGateIcon?.let { buildingGateIcon = it.toInt() }
+//                routeRes.indoorLineColor?.let { indoorLineColor = it as Int }
+//                routeRes.outdoorLineColor?.let { outdoorLineColor = it as Int }
+//                routeRes.dashLineColor?.let { dashLineColor = it as Int }
+//                routeRes.arrowSymbolSpacing?.let { arrowSymbolSpacing = it.toFloat() }
+//                routeRes.arrowIcon?.let { arrowIcon = it }
+//                routeRes.startIcon?.let { startIcon = it }
+//                routeRes.endIcon?.let { endIcon = it }
+//                routeRes.elevatorUpIcon?.let { elevatorUpIcon = it }
+//                routeRes.elevatorDownIcon?.let { elevatorDownIcon = it }
+//                routeRes.escalatorUpIcon?.let { escalatorUpIcon = it }
+//                routeRes.escalatorDownIcon?.let { escalatorDownIcon = it }
+//                routeRes.rampUpIcon?.let { rampUpIcon = it }
+//                routeRes.rampDownIcon?.let { rampDownIcon = it }
+//                routeRes.stairsUpIcon?.let { stairsUpIcon = it }
+//                routeRes.stairsDownIcon?.let { stairsDownIcon = it }
+//                routeRes.buildingGateIcon?.let { buildingGateIcon = it }
             })
         }
         walkRouteOverlay?.addToMap()
