@@ -13,8 +13,7 @@ import MapxusSdk, {
 import ParamsScrollView from './ParamsScrollView';
 import { Button, InputItem, List } from '@ant-design/react-native';
 import language from './utils/language';
-import { any } from 'prop-types';
-import { floor } from 'lodash';
+
 
 interface PageLocation {
 	lat: number;
@@ -26,15 +25,17 @@ interface PageLocation {
 }
 
 export default function SurroundingIdentification() {
-	const [distance, setDistance] = useState('30');
-	const [markers, setMarkers] = useState<Array<any>>([]);
-	const [sort, setSort] = useState('Point');
-	const [location, setLocation] = useState<PageLocation | null>(null);
-	const [isIndoor, setIsIndoor] = useState(false);
 	const [ordinal, setOrdinal] = useState('0');
-	const [coordinate, setCoordinate] = useState('114.111375, 22.370787');
 	const [floor, setFloor] = useState('L1');
 	const [buildingId, setBuildingId] = useState('tsuenwanplaza_hk_369d01');
+	const [coordinate, setCoordinate] = useState('114.111375, 22.370787');
+
+	const [distance, setDistance] = useState('30');
+	const [sort, setSort] = useState('Point');
+
+	const [markers, setMarkers] = useState<Array<any>>([]);
+	const [location, setLocation] = useState<PageLocation | null>(null);
+
 	const [centerCoordinate, setCenterCoordinate] = useState([0, 0]);
 
 	const refSortButton = useRef(null);
@@ -90,59 +91,52 @@ export default function SurroundingIdentification() {
 		}
 	}
 
-	async function getPoisNearby(params: OrientationPoiSearchProps): Promise<Poi[]> {
+	async function getPoisNearby(params: OrientationPoiSearchProps): Promise<Poi[]> {		
 		const data: PoiSearchResult = await MapxusSdk.poiSearchManager.orientationPoiSearch(params);
 		return data?.pois || [];
 	}
 
 	async function getReverseGeoCode(params: ReverseGeoCodeSearchProps): Promise<GeocodeSearchResult> {
 		const data: GeocodeSearchResult = await MapxusSdk.geocodeSearchManager.reverseGeoCode(params);
-		// console.log(data);
-
 		return data || {};
 	}
 
 	async function handleSearch() {
+		if (location) {
+			var locationParams: PageLocation = {lat: 0.0, lon: 0.0};
 
-		if (isIndoor && location) {
 			if (Platform.OS == 'ios') {
 				const scenes: GeocodeSearchResult = await getReverseGeoCode({
 					location: { latitude: location.lat, longitude: location.lon },
 					ordinalFloor: location.ordinal!
 				});
-				// console.log(scenes);
-
-				if (scenes.floor != null) {
-					setLocation({
+				
+				if (scenes.floor != null) {					
+					locationParams = {
 						lat: location.lat,
 						lon: location.lon,
-						angle: location.angle,
-						ordinal: location.ordinal,
 						buildingId: scenes.building.buildingId,
-						floor: scenes.floor.code
-					})
-
-					// console.log(location);
-
+						floor: scenes.floor.code,
+						angle: location.angle,
+					};
 				}
 			}
 			if (Platform.OS == 'android') {
-				setLocation({
+				locationParams = {
 					lat: location.lat,
 					lon: location.lon,
 					floor: location.floor,
 					buildingId: location.buildingId,
 					angle: location.angle
-				})
-			}
-			// console.log(location);
+				};
+			}			
 
 			const pois: Array<Poi> = await getPoisNearby({
-				center: { latitude: location.lat!, longitude: location.lon! },
+				center: { latitude: locationParams.lat!, longitude: locationParams.lon! },
 				distance: Number(distance.trim()),
-				buildingId: location.buildingId!,
-				floor: location.floor!,
-				angle: location.angle!,
+				buildingId: locationParams.buildingId!,
+				floor: locationParams.floor!,
+				angle: locationParams.angle!,
 				distanceSearchType: sort
 			});
 
@@ -163,7 +157,7 @@ export default function SurroundingIdentification() {
 					_markers = _markers.concat(
 						{
 							coordinate: [Number(poi?.location?.longitude), Number(poi?.location?.latitude)],
-							name: poi[`name_${lang}`] || poi.name_default + sub,
+							name: poi[`name_${lang}`] + sub || poi.name_default + sub,
 							buildingId: poi.buildingId,
 							floor: poi.floor
 						}
@@ -177,7 +171,7 @@ export default function SurroundingIdentification() {
 	return (
 		<View style={{ flex: 1 }}>
 			<View style={{ flex: 2 }}>
-				<MapxusSdk.MapxusMap onIndoorStatusChange={object => setIsIndoor(object.flag)}>
+				<MapxusSdk.MapxusMap>
 					<MapxusSdk.MapView style={{ flex: 1 }} >
 						<MapxusSdk.Camera
 							centerCoordinate={centerCoordinate}
