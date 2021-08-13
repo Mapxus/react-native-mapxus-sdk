@@ -7,32 +7,66 @@ import { ViewPropTypes } from '../../utils';
 const NATIVE_MODULE_NAME = 'MXNavigationView'
 
 /**
- * This component makes it easy to draw and control routes.
+ * NavigationView provides navigation with adsorption and route reduction.
  */
 class NavigationView extends NativeBridgeComponent(React.Component) {
     static propTypes = {
         ...ViewPropTypes,
 
+        /**
+         * Enable adsorption.
+         */
         adsorbable: PropTypes.bool,
 
+        /**
+         * Enable route reduction.
+         */
         shortenable: PropTypes.bool,
 
+        /**
+         * Number of drifts allowed.
+         */
         numberOfAllowedDrifts: PropTypes.number,
 
+        /**
+         * Maximum permissible drift.
+         */
         maximumDrift: PropTypes.number,
 
+        /**
+         * Sets the distance to determine if the destination is reached.
+         */
         distanceToDestination: PropTypes.number,
 
+        /**
+         * Display indicator to show the direction of the user.
+         */
         showsUserHeadingIndicator: PropTypes.bool,
 
+        /**
+         * Triggered when the distance of route to the destination is less than distanceToDestination.
+         */
         onArrivalAtDestination: PropTypes.func,
 
+        /**
+         * Triggered when the number of drifts is greater than numberOfAllowedDrifts.
+         */
         onExcessiveDrift: PropTypes.func,
 
+        /**
+         * Triggered when the adsorbable point is calculated, or not triggered if adsorbable is false.
+         */
         onRefreshTheAdsorptionLocation: PropTypes.func,
 
+        /**
+         * Triggered when a new route is calculated, or not triggered if shortenable is false.
+         */
         onGetNewPath: PropTypes.func,
 
+        /**
+         * Callback when the position is updated, if start() has been executed and adsorbable is true, 
+         * then the corrected position will be returned, otherwise the original position will be returned.
+         */
         onUpdate: PropTypes.func,
     };
 
@@ -86,21 +120,27 @@ class NavigationView extends NativeBridgeComponent(React.Component) {
     }
 
     /**
-     * Draw the route with the route search result
+     * Importing route data with the route search result
      * @param {Path} path the route which you want to display.
      * @param {Array<IndoorPoint>} points the waypoint list.
      */
-     updatePath(path, points) {
+    updatePath(path, points) {
         this._runNativeCommand('updatePath', this._nativeRef, [
             path,
             points
         ]);
     }
 
+    /**
+     * Start to navigation.
+     */
     start() {
         this._runNativeCommand('start', this._nativeRef, []);
     }
 
+    /**
+     * Stop to navigation.
+     */
     stop() {
         this._runNativeCommand('stop', this._nativeRef, []);
     }

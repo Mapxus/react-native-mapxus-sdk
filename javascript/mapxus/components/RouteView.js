@@ -40,34 +40,113 @@ class RouteView extends NativeBridgeComponent(React.Component) {
     static propTypes = {
         ...ViewPropTypes,
 
+        /**
+         * Configuration route appearance.
+         */
         routeAppearance: PropTypes.shape({
+
+            /**
+             * Add a dashed line from the start point to the beginning of the route
+             */
             isAddStartDash: PropTypes.bool,
+
+            /**
+             * Add a dashed line from the end point to the end of the route
+             */
             isAddEndDash: PropTypes.bool,
+
+            /**
+             * Hide route segments that are not in the current scene.
+             */
             hiddenTranslucentPaths: PropTypes.bool,
+
+            /**
+             * Set the colour of the route drawn on indoor.
+             */
             indoorLineColor: PropTypes.oneOfType([
                 PropTypes.string,
                 PropTypes.number
             ]),
+
+            /**
+             * Set the colour of the route drawn on the outdoor.
+             */
             outdoorLineColor: PropTypes.oneOfType([
                 PropTypes.string,
                 PropTypes.number
             ]),
+
+            /**
+             * Set the colour of the dash.
+             */
             dashLineColor: PropTypes.oneOfType([
                 PropTypes.string,
                 PropTypes.number
             ]),
+
+            /**
+             * Set the distance of the directional markers on the route.
+             */
             arrowSymbolSpacing: PropTypes.number,
+
+            /**
+             * Set the icon indicating the direction on the route.
+             */
             arrowIcon: PropTypes.number,
+
+            /**
+             * Set the start point icon.
+             */
             startIcon: PropTypes.number,
+
+            /**
+             * Set the end point icon.
+             */
             endIcon: PropTypes.number,
+
+            /**
+             * Set the icon for going up in the lift.
+             */
             elevatorUpIcon: PropTypes.number,
+
+            /**
+             * Set the icon for going down in the lift.
+             */
             elevatorDownIcon: PropTypes.number,
+
+            /**
+             * Set the icon for going up on the escalator.
+             */
             escalatorUpIcon: PropTypes.number,
+
+            /**
+             * Set the icon for going down on the escalator.
+             */
             escalatorDownIcon: PropTypes.number,
+
+            /**
+             * Set the icon for warp ramp up.
+             */
             rampUpIcon: PropTypes.number,
+
+            /**
+             * Set the icon for warp ramp down.
+             */
             rampDownIcon: PropTypes.number,
+
+            /**
+             * Set the icon for going up via stairs.
+             */
             stairsUpIcon: PropTypes.number,
+
+            /**
+             * Set the icon for going down via stairs.
+             */
             stairsDownIcon: PropTypes.number,
+
+            /**
+             * Set the icon for passing through the door.
+             */
             buildingGateIcon: PropTypes.number,
         }),
 

@@ -13,8 +13,14 @@ class SimulateLocationManager extends NativeBridgeComponent(React.Component) {
     static propTypes = {
         ...ViewPropTypes,
 
+        /**
+         * Display indicator to show the direction of the user.
+         */
         showsUserHeadingIndicator: PropTypes.bool,
 
+        /**
+         * Callback when the position is updated.
+         */
         onUpdate: PropTypes.func,
 
     };
@@ -27,12 +33,16 @@ class SimulateLocationManager extends NativeBridgeComponent(React.Component) {
 
     _onUpdate(event) {
         if (!this.props.onUpdate) {
-          return;
+            return;
         }
         // process raw event...
         this.props.onUpdate(event.nativeEvent);
-      }
+    }
 
+    /**
+     * Set the simulate location you want.
+     * @param {InputLocation} location 
+     */
     setSimulateLocation(location) {
         this._runNativeCommand('setSimulateLocation', this._nativeRef, [
             location
