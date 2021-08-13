@@ -231,8 +231,8 @@ class RouteView extends NativeBridgeComponent(React.Component) {
 
     /**
      * Show the route of the specified scene, usually called when `MapxusMap.onIndoorSceneChange` is triggered.
-     * @param {String} buildingId id of the building to be selected
-     * @param {String} floor name of the floor to be selected
+     * @param {string} buildingId id of the building to be selected
+     * @param {string} floor name of the floor to be selected
      */
     changeOn(buildingId, floor) {
         this._runNativeCommand('changeOn', this._nativeRef, [
@@ -243,7 +243,7 @@ class RouteView extends NativeBridgeComponent(React.Component) {
 
     /**
      * Let the map zoom to the appropriate level to show the specified route section.
-     * @param {Array<String>} keys The route sections you want to show in full.
+     * @param {array<string>} keys The route sections you want to show in full.
      * @param {Insets} insets The margins when displayed.
      */
     focusOn(keys, insets) {

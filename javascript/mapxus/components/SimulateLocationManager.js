@@ -7,7 +7,7 @@ import { ViewPropTypes } from '../../utils';
 const NATIVE_MODULE_NAME = 'MXSimulateLocation'
 
 /**
- * This component makes it easy to draw and control routes.
+ * SimulateLocationManager allows the user to set up simulated positioning.
  */
 class SimulateLocationManager extends NativeBridgeComponent(React.Component) {
     static propTypes = {
@@ -41,7 +41,7 @@ class SimulateLocationManager extends NativeBridgeComponent(React.Component) {
 
     /**
      * Set the simulate location you want.
-     * @param {InputLocation} location 
+     * @param {InputLocation} location The location set to manager.
      */
     setSimulateLocation(location) {
         this._runNativeCommand('setSimulateLocation', this._nativeRef, [

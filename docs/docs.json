@@ -539,9 +539,156 @@
     "name": "MapxusPointAnnotationView"
   },
   "NavigationView": {
-    "description": "This component makes it easy to draw and control routes.",
+    "description": "NavigationView provides navigation with adsorption and route reduction.",
     "displayName": "NavigationView",
     "methods": [
+      {
+        "name": "updatePath",
+        "docblock": "Importing route data with the route search result\n@param {Path} path the route which you want to display.\n@param {Array<IndoorPoint>} points the waypoint list.",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "path",
+            "description": "the route which you want to display.",
+            "type": {
+              "name": "Path"
+            },
+            "optional": false
+          },
+          {
+            "name": "points",
+            "description": "the waypoint list.",
+            "type": {
+              "name": "Array",
+              "elements": [
+                {
+                  "name": "IndoorPoint"
+                }
+              ]
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Importing route data with the route search result",
+        "examples": []
+      },
+      {
+        "name": "start",
+        "docblock": "Start to navigation.",
+        "modifiers": [],
+        "params": [],
+        "returns": null,
+        "description": "Start to navigation.",
+        "examples": []
+      },
+      {
+        "name": "stop",
+        "docblock": "Stop to navigation.",
+        "modifiers": [],
+        "params": [],
+        "returns": null,
+        "description": "Stop to navigation.",
+        "examples": []
+      }
+    ],
+    "props": [
+      {
+        "name": "adsorbable",
+        "required": false,
+        "type": "bool",
+        "default": "none",
+        "description": "Enable adsorption."
+      },
+      {
+        "name": "shortenable",
+        "required": false,
+        "type": "bool",
+        "default": "none",
+        "description": "Enable route reduction."
+      },
+      {
+        "name": "numberOfAllowedDrifts",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Number of drifts allowed."
+      },
+      {
+        "name": "maximumDrift",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Maximum permissible drift."
+      },
+      {
+        "name": "distanceToDestination",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Sets the distance to determine if the destination is reached."
+      },
+      {
+        "name": "showsUserHeadingIndicator",
+        "required": false,
+        "type": "bool",
+        "default": "none",
+        "description": "Display indicator to show the direction of the user."
+      },
+      {
+        "name": "onArrivalAtDestination",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "Triggered when the distance of route to the destination is less than distanceToDestination."
+      },
+      {
+        "name": "onExcessiveDrift",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "Triggered when the number of drifts is greater than numberOfAllowedDrifts."
+      },
+      {
+        "name": "onRefreshTheAdsorptionLocation",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "Triggered when the adsorbable point is calculated, or not triggered if adsorbable is false."
+      },
+      {
+        "name": "onGetNewPath",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "Triggered when a new route is calculated, or not triggered if shortenable is false."
+      },
+      {
+        "name": "onUpdate",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "Callback when the position is updated, if start() has been executed and adsorbable is true, \nthen the corrected position will be returned, otherwise the original position will be returned."
+      }
+    ],
+    "composes": [
+      "../../utils"
+    ],
+    "name": "NavigationView"
+  },
+  "RouteView": {
+    "description": "This component makes it easy to draw and control routes.",
+    "displayName": "RouteView",
+    "methods": [
+      {
+        "name": "baseProps",
+        "docblock": null,
+        "modifiers": [
+          "get"
+        ],
+        "params": [],
+        "returns": null
+      },
       {
         "name": "getPainterPathDto",
         "docblock": "Get the data generated before drawing the route, such as 'keys' represent the identification value of the route section.\n@returns {Promise}",
@@ -600,14 +747,14 @@
       },
       {
         "name": "changeOn",
-        "docblock": "Show the route of the specified scene, usually called when `MapxusMap.onIndoorSceneChange` is triggered.\n@param {String} buildingId id of the building to be selected\n@param {String} floor name of the floor to be selected",
+        "docblock": "Show the route of the specified scene, usually called when `MapxusMap.onIndoorSceneChange` is triggered.\n@param {string} buildingId id of the building to be selected\n@param {string} floor name of the floor to be selected",
         "modifiers": [],
         "params": [
           {
             "name": "buildingId",
             "description": "id of the building to be selected",
             "type": {
-              "name": "String"
+              "name": "string"
             },
             "optional": false
           },
@@ -615,7 +762,7 @@
             "name": "floor",
             "description": "name of the floor to be selected",
             "type": {
-              "name": "String"
+              "name": "string"
             },
             "optional": false
           }
@@ -626,17 +773,17 @@
       },
       {
         "name": "focusOn",
-        "docblock": "Let the map zoom to the appropriate level to show the specified route section.\n@param {Array<String>} keys The route sections you want to show in full.\n@param {Insets} insets The margins when displayed.",
+        "docblock": "Let the map zoom to the appropriate level to show the specified route section.\n@param {array<string>} keys The route sections you want to show in full.\n@param {Insets} insets The margins when displayed.",
         "modifiers": [],
         "params": [
           {
             "name": "keys",
             "description": "The route sections you want to show in full.",
             "type": {
-              "name": "Array",
+              "name": "array",
               "elements": [
                 {
-                  "name": "String"
+                  "name": "string"
                 }
               ]
             },
@@ -658,17 +805,566 @@
     ],
     "props": [
       {
-        "name": "selected",
+        "name": "routeAppearance",
         "required": false,
-        "type": "bool",
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "isAddStartDash",
+              "required": false,
+              "type": "bool",
+              "default": "none",
+              "description": "Add a dashed line from the start point to the beginning of the route"
+            },
+            {
+              "name": "isAddEndDash",
+              "required": false,
+              "type": "bool",
+              "default": "none",
+              "description": "Add a dashed line from the end point to the end of the route"
+            },
+            {
+              "name": "hiddenTranslucentPaths",
+              "required": false,
+              "type": "bool",
+              "default": "none",
+              "description": "Hide route segments that are not in the current scene."
+            },
+            {
+              "name": "indoorLineColor",
+              "required": false,
+              "type": "union",
+              "default": "none",
+              "description": "Set the colour of the route drawn on indoor."
+            },
+            {
+              "name": "outdoorLineColor",
+              "required": false,
+              "type": "union",
+              "default": "none",
+              "description": "Set the colour of the route drawn on the outdoor."
+            },
+            {
+              "name": "dashLineColor",
+              "required": false,
+              "type": "union",
+              "default": "none",
+              "description": "Set the colour of the dash."
+            },
+            {
+              "name": "arrowSymbolSpacing",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Set the distance of the directional markers on the route."
+            },
+            {
+              "name": "arrowIcon",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Set the icon indicating the direction on the route."
+            },
+            {
+              "name": "startIcon",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Set the start point icon."
+            },
+            {
+              "name": "endIcon",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Set the end point icon."
+            },
+            {
+              "name": "elevatorUpIcon",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Set the icon for going up in the lift."
+            },
+            {
+              "name": "elevatorDownIcon",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Set the icon for going down in the lift."
+            },
+            {
+              "name": "escalatorUpIcon",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Set the icon for going up on the escalator."
+            },
+            {
+              "name": "escalatorDownIcon",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Set the icon for going down on the escalator."
+            },
+            {
+              "name": "rampUpIcon",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Set the icon for warp ramp up."
+            },
+            {
+              "name": "rampDownIcon",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Set the icon for warp ramp down."
+            },
+            {
+              "name": "stairsUpIcon",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Set the icon for going up via stairs."
+            },
+            {
+              "name": "stairsDownIcon",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Set the icon for going down via stairs."
+            },
+            {
+              "name": "buildingGateIcon",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Set the icon for passing through the door."
+            }
+          ]
+        },
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Configuration route appearance."
       }
     ],
     "composes": [
       "../../utils"
     ],
-    "name": "NavigationView"
+    "name": "RouteView"
+  },
+  "SimulateLocationManager": {
+    "description": "SimulateLocationManager allows the user to set up simulated positioning.",
+    "displayName": "SimulateLocationManager",
+    "methods": [
+      {
+        "name": "setSimulateLocation",
+        "docblock": "Set the simulate location you want.\n@param {InputLocation} location The location set to manager.",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "location",
+            "description": "The location set to manager.",
+            "type": {
+              "name": "InputLocation"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Set the simulate location you want.",
+        "examples": []
+      }
+    ],
+    "props": [
+      {
+        "name": "showsUserHeadingIndicator",
+        "required": false,
+        "type": "bool",
+        "default": "none",
+        "description": "Display indicator to show the direction of the user."
+      },
+      {
+        "name": "onUpdate",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "Callback when the position is updated."
+      }
+    ],
+    "composes": [
+      "../../utils"
+    ],
+    "name": "SimulateLocationManager"
+  },
+  "VisualNodeView": {
+    "description": "This component makes it easy to draw and control visual nodes on the map.",
+    "displayName": "VisualNodeView",
+    "methods": [
+      {
+        "name": "renderFlagUsingNodes",
+        "docblock": "Rendering of incoming data.\n@param {VisualNode[] | VisualNodeGroup[]} nodes The json objects which got from searching interface, for iOS uses VisualNode[] and Android uses VisualNodeGroup[]",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "nodes",
+            "description": "The json objects which got from searching interface, for iOS uses VisualNode[] and Android uses VisualNodeGroup[]",
+            "type": {
+              "name": "union",
+              "elements": [
+                {
+                  "name": "Array",
+                  "elements": [
+                    {
+                      "name": "VisualNode"
+                    }
+                  ]
+                },
+                {
+                  "name": "Array",
+                  "elements": [
+                    {
+                      "name": "VisualNodeGroup"
+                    }
+                  ]
+                }
+              ]
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Rendering of incoming data.",
+        "examples": []
+      },
+      {
+        "name": "cleanLayer",
+        "docblock": "Clean all flag which rendering on the map.",
+        "modifiers": [],
+        "params": [],
+        "returns": null,
+        "description": "Clean all flag which rendering on the map.",
+        "examples": []
+      },
+      {
+        "name": "changeOn",
+        "docblock": "Toggles the display of the visual annotation points corresponding to the floor of the building. \n@param {string} buildingId id of the building to be selected\n@param {String} floor name of the floor to be selected",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "buildingId",
+            "description": "id of the building to be selected",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          },
+          {
+            "name": "floor",
+            "description": "name of the floor to be selected",
+            "type": {
+              "name": "String"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Toggles the display of the visual annotation points corresponding to the floor of the building.",
+        "examples": []
+      }
+    ],
+    "props": [
+      {
+        "name": "onTappedFlag",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "Triggered by clicking on the flag."
+      }
+    ],
+    "composes": [
+      "../../utils"
+    ],
+    "name": "VisualNodeView"
+  },
+  "VisualView": {
+    "description": "Visual view showcases realistic interior.",
+    "displayName": "VisualView",
+    "methods": [
+      {
+        "name": "loadVisualViewWithFirstImg",
+        "docblock": "Load visual.\n@param {string} imageId The first image that visual view load with.",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "imageId",
+            "description": "The first image that visual view load with.",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Load visual.",
+        "examples": []
+      },
+      {
+        "name": "unloadVisualView",
+        "docblock": "Unload visual",
+        "modifiers": [],
+        "params": [],
+        "returns": null,
+        "description": "Unload visual",
+        "examples": []
+      },
+      {
+        "name": "moveToKey",
+        "docblock": "Navigate to a given photo key.\n@param {stirng} key A valid Visual photo key.",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "key",
+            "description": "A valid Visual photo key.",
+            "type": {
+              "name": "stirng"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Navigate to a given photo key.",
+        "examples": []
+      },
+      {
+        "name": "moveCloseTo",
+        "docblock": "Move close to given indoor latitude and longitude.\n@param {string} buildingId Image belong building id.\n@param {stirng} floor Image belong floor name.\n@param {number} latitude Latitude, in degrees.\n@param {number} longitude Longitude, in degrees.",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "buildingId",
+            "description": "Image belong building id.",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          },
+          {
+            "name": "floor",
+            "description": "Image belong floor name.",
+            "type": {
+              "name": "stirng"
+            },
+            "optional": false
+          },
+          {
+            "name": "latitude",
+            "description": "Latitude, in degrees.",
+            "type": {
+              "name": "number"
+            },
+            "optional": false
+          },
+          {
+            "name": "longitude",
+            "description": "Longitude, in degrees.",
+            "type": {
+              "name": "number"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Move close to given indoor latitude and longitude.",
+        "examples": []
+      },
+      {
+        "name": "resize",
+        "docblock": "Detect the viewer's new width and height and resize it. The components will also detect \nthe viewer's new size and resize their rendered elements if needed.",
+        "modifiers": [],
+        "params": [],
+        "returns": null,
+        "description": "Detect the viewer's new width and height and resize it. The components will also detect \nthe viewer's new size and resize their rendered elements if needed.",
+        "examples": []
+      },
+      {
+        "name": "getBearing",
+        "docblock": "Get the bearing of the current viewer camera.\n@returns {Promise<number>} The bearing depends on how the camera is currently rotated and does not \ncorrespond to the compass angle of the current node if the view has been panned. Bearing \nis measured in degrees clockwise with respect to north.",
+        "modifiers": [
+          "async"
+        ],
+        "params": [],
+        "returns": {
+          "description": "The bearing depends on how the camera is currently rotated and does not \ncorrespond to the compass angle of the current node if the view has been panned. Bearing \nis measured in degrees clockwise with respect to north.",
+          "type": {
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "number"
+              }
+            ]
+          }
+        },
+        "description": "Get the bearing of the current viewer camera.",
+        "examples": []
+      },
+      {
+        "name": "setBearing",
+        "docblock": "Set the photo's pan to bearing. Provide the angle (0 - 360), to pan rotation photo's bearing.\n@param {number} bearing The photo's pan to bearing.",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "bearing",
+            "description": "The photo's pan to bearing.",
+            "type": {
+              "name": "number"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Set the photo's pan to bearing. Provide the angle (0 - 360), to pan rotation photo's bearing.",
+        "examples": []
+      },
+      {
+        "name": "getVisualCenter",
+        "docblock": "Get the basic coordinates of the current photo that is at the center of the viewport. \nBasic coordinates are 2D coordinates on the [0, 1] interval and have the origin point, \n(0, 0), at the top left corner and the maximum value, (1, 1), at the bottom right corner \nof the original image.\n@returns {Promise<VisualCoordinate2D>} Center.",
+        "modifiers": [
+          "async"
+        ],
+        "params": [],
+        "returns": {
+          "description": "Center.",
+          "type": {
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "VisualCoordinate2D"
+              }
+            ]
+          }
+        },
+        "description": "Get the basic coordinates of the current photo that is at the center of the viewport. \nBasic coordinates are 2D coordinates on the [0, 1] interval and have the origin point, \n(0, 0), at the top left corner and the maximum value, (1, 1), at the bottom right corner \nof the original image.",
+        "examples": []
+      },
+      {
+        "name": "setVisualCenter",
+        "docblock": "Get the basic coordinates of the current photo that is at the center of the viewport. \nBasic coordinates are 2D coordinates on the [0, 1] interval and have the origin point, \n(0, 0), at the top left corner and the maximum value, (1, 1), at the bottom right corner \nof the original photo.\n@param {VisualCoordinate2D} center Promise to the basic coordinates of the current photo at the center for the viewport.",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "center",
+            "description": "Promise to the basic coordinates of the current photo at the center for the viewport.",
+            "type": {
+              "name": "VisualCoordinate2D"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Get the basic coordinates of the current photo that is at the center of the viewport. \nBasic coordinates are 2D coordinates on the [0, 1] interval and have the origin point, \n(0, 0), at the top left corner and the maximum value, (1, 1), at the bottom right corner \nof the original photo.",
+        "examples": []
+      },
+      {
+        "name": "getZoom",
+        "docblock": "Get the image's current zoom level.\n@returns {Promise<number>} Current zoom level.",
+        "modifiers": [
+          "async"
+        ],
+        "params": [],
+        "returns": {
+          "description": "Current zoom level.",
+          "type": {
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "number"
+              }
+            ]
+          }
+        },
+        "description": "Get the image's current zoom level.",
+        "examples": []
+      },
+      {
+        "name": "setZoom",
+        "docblock": "Set the photo's current zoom level. Possible zoom level values are on the [0, 3] interval. \nZero means zooming out to fit the photo to the view whereas three shows the highest level of detail.\n@param {number} zoom The level which you want to zoom.",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "zoom",
+            "description": "The level which you want to zoom.",
+            "type": {
+              "name": "number"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Set the photo's current zoom level. Possible zoom level values are on the [0, 3] interval. \nZero means zooming out to fit the photo to the view whereas three shows the highest level of detail.",
+        "examples": []
+      },
+      {
+        "name": "activateBearing",
+        "docblock": "Activate the compass",
+        "modifiers": [],
+        "params": [],
+        "returns": null,
+        "description": "Activate the compass",
+        "examples": []
+      },
+      {
+        "name": "deactivateBearing",
+        "docblock": "Deactivate the compass",
+        "modifiers": [],
+        "params": [],
+        "returns": null,
+        "description": "Deactivate the compass",
+        "examples": []
+      }
+    ],
+    "props": [
+      {
+        "name": "onLoadFail",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "Fired when the view load fail."
+      },
+      {
+        "name": "onRenderComplete",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "Fired when the view render complete."
+      },
+      {
+        "name": "onLoadingChanged",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "Fired when the view is loading more data."
+      },
+      {
+        "name": "onBearingChanged",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "Fired when the view direction of the camera changes."
+      },
+      {
+        "name": "onNodeChanged",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "Fired every time when the view navigates to a new node."
+      }
+    ],
+    "composes": [
+      "../../utils"
+    ],
+    "name": "VisualView"
   },
   "buildingSearchManager": {
     "name": "buildingSearchManager",
@@ -953,7 +1649,41 @@
           }
         ],
         "examples": [],
-        "returns": null
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "Promise"
+          }
+        }
+      }
+    ]
+  },
+  "visualSearchManager": {
+    "name": "visualSearchManager",
+    "description": "Visual data search service",
+    "props": [],
+    "styles": [],
+    "methods": [
+      {
+        "name": "searchVisualDataInBuilding",
+        "description": "Search visual data in building.",
+        "params": [
+          {
+            "name": "params",
+            "description": "parameters of visual data: buildingId: The buildingId which will search in; scope: The level of detail of the visual data.",
+            "type": {
+              "name": "VisualSearchProps"
+            },
+            "optional": false
+          }
+        ],
+        "examples": [],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "Promise"
+          }
+        }
       }
     ]
   }
