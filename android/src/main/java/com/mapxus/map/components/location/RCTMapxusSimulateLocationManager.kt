@@ -5,6 +5,7 @@ import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.ThemedReactContext
 import com.mapxus.map.components.AbstractEventEmitter
+import com.mapxus.map.events.constants.EventKeys
 
 /**
  * Created by Edison on 3/29/21.
@@ -22,6 +23,7 @@ class RCTMapxusSimulateLocationManager(reactApplicationContext: ReactApplication
     }
 
     override fun customEvents(): MutableMap<String, String> = MapBuilder.builder<String, String>()
+        .put(EventKeys.MAPXUS_USER_SIMULATE_LOCATION_UPDATE, "onUpdate")
         .build()
 
     override fun getCommandsMap(): MutableMap<String, Int> {

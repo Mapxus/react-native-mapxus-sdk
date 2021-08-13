@@ -1,12 +1,12 @@
-import React, {useRef, useState, useEffect} from 'react';
-import {View, TouchableOpacity, Image, StyleSheet, Button} from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { View, TouchableOpacity, Image, StyleSheet, TouchableWithoutFeedback, Platform } from 'react-native';
 import MapxusSdk, {
 	BearingChangeObject,
 	IndoorSceneChangeObject,
 	VisualNode, VisualNodeGroup,
 	VisualSearchProps
 } from '@mapxus/react-native-mapxus-sdk';
-import {assign as _assign} from 'lodash';
+import { assign as _assign } from 'lodash';
 
 async function getVisualNodes(params: VisualSearchProps) {
 	const data: Array<VisualNodeGroup> = await MapxusSdk.visualSearchManager.searchVisualDataInBuilding(params);
@@ -18,6 +18,7 @@ export default function VisualMap() {
 	const [floor, setFloor] = useState<string>('');
 	const [active, setActive] = useState(false);
 	const [nodes, setNodes] = useState<Array<VisualNode>>([]);
+	const [nodesAndroid, setNodesAndroid] = useState<Array<VisualNodeGroup>>([]);
 	const [lightMarker, setLightMarker] = useState<any>(null);
 	const [visualViewShown, setVisualViewShown] = useState(false);
 	const [isSwitched, setIsSwitched] = useState(false);
@@ -25,14 +26,19 @@ export default function VisualMap() {
 
 	const nodeViewRef = useRef<MapxusSdk.VisualNodeView>(null);
 	const visualViewRef = useRef<MapxusSdk.VisualView>(null);
+	const cameraRef = useRef<MapxusSdk.Camera>(null);
 
 	useEffect(() => {
-		initVisualData({buildingId, scope: 1});
+		initVisualData({ buildingId, scope: 1 });
 	}, []);
 
 	useEffect(() => {
 		if (active && nodes.length) {
-			renderVisualNodes(nodes);
+			if (Platform.OS === 'ios') {
+				renderVisualNodes(nodes);
+			} else {
+				renderVisualNodesAndroid(nodesAndroid);
+			}
 			filterVisualNodes(buildingId, floor);
 		} else {
 			nodeViewRef.current?.cleanLayer();
@@ -53,7 +59,7 @@ export default function VisualMap() {
 
 	useEffect(() => {
 		if (buildingId.length && active) {
-			initVisualData({buildingId, scope: 1});
+			initVisualData({ buildingId, scope: 1 });
 		} else {
 			nodeViewRef.current?.cleanLayer();
 		}
@@ -66,10 +72,17 @@ export default function VisualMap() {
 			: [];
 
 		setNodes(_nodes);
+		setNodesAndroid(data)
 	}
 
+	//in ios
 	function renderVisualNodes(nodes: Array<VisualNode>) {
 		nodeViewRef.current?.renderFlagUsingNodes(nodes);
+	}
+
+	//in Android
+	function renderVisualNodesAndroid(nodes: Array<VisualNodeGroup>) {
+		nodeViewRef.current?.renderFlagUsingNodes(nodesAndroid);
 	}
 
 	function filterVisualNodes(buildingId: string, floor: string) {
@@ -83,6 +96,7 @@ export default function VisualMap() {
 
 	function clickNode(feature: VisualNode) {
 		setLightMarker(feature);
+		cameraRef.current?.moveTo([feature.longitude, feature.latitude]);
 
 		const imgId: string = feature?.key;
 		if (imgId) {
@@ -97,7 +111,7 @@ export default function VisualMap() {
 
 	function bearingChange(feature: BearingChangeObject) {
 		setLightMarker(
-			_assign({}, lightMarker, {bearing: feature.bearing})
+			_assign({}, lightMarker, { bearing: feature.bearing })
 		);
 	}
 
@@ -114,67 +128,78 @@ export default function VisualMap() {
 	}
 
 	return (
-		<View style={{flex: 1}}>
-			<TouchableOpacity
-				{...isSwitched && {onPress: () => clickWindow('map')}}
-				style={isSwitched ? styles.container_small : styles.container_full}
-			>
-				<MapxusSdk.MapxusMap
-					mapOption={{buildingId}}
-					indoorControllerAlwaysHidden={floorControllerHidden}
-					onIndoorSceneChange={indoorSceneChange}
-				>
-					<MapxusSdk.MapView style={{flex: 1}}>
-						{
-							lightMarker && (
-								<MapxusSdk.PointAnnotation
-									key={lightMarker.key}
-									id={lightMarker.key}
-									coordinate={[lightMarker.longitude, lightMarker.latitude]}
-								>
-									<Image
-										source={require('./assets/light.png')}
-										style={{
-											width: 50,
-											height: 50,
-											transform: [{rotate: `${lightMarker.bearing}deg`}]
-										}}
-									/>
-								</MapxusSdk.PointAnnotation>
-							)
-						}
-					</MapxusSdk.MapView>
-					<MapxusSdk.VisualNodeView
-						ref={nodeViewRef}
-						onTappedFlag={clickNode}
-					/>
-				</MapxusSdk.MapxusMap>
-			</TouchableOpacity>
-			<TouchableOpacity {...!isSwitched && {onPress: () => clickWindow('visual')}}>
+		<View style={{ flex: 1 }}>
+			<TouchableWithoutFeedback {...isSwitched && { onPress: () => clickWindow('map') }}>
+				<View style={isSwitched ? styles.container_small : styles.container_full}>
+					<MapxusSdk.MapxusMap
+						mapOption={{ buildingId }}
+						indoorControllerAlwaysHidden={floorControllerHidden}
+						onIndoorSceneChange={indoorSceneChange}
+					>
+						<MapxusSdk.MapView style={{ flex: 1 }}>
+							<MapxusSdk.Camera ref={cameraRef} />
+							{
+								lightMarker && (
+									Platform.OS == 'ios' ?
+										<MapxusSdk.PointAnnotation
+											key={lightMarker.key}
+											id={lightMarker.key}
+											coordinate={[lightMarker.longitude, lightMarker.latitude]}
+										>
+											<Image
+												source={require('./assets/light.png')}
+												style={{
+													width: 50,
+													height: 50,
+													transform: [{ rotate: `${lightMarker.bearing}deg` }]
+												}}
+											/>
+										</MapxusSdk.PointAnnotation> : null
+								)
+							}
+						</MapxusSdk.MapView>
+						<MapxusSdk.VisualNodeView
+							ref={nodeViewRef}
+							onTappedFlag={clickNode}
+						/>
+					</MapxusSdk.MapxusMap>
+				</View>
+			</TouchableWithoutFeedback>
+			<TouchableWithoutFeedback {...!isSwitched && { onPress: () => clickWindow('visual') }}>
 				<View style={[
 					isSwitched ? styles.container_full : styles.container_small,
-					{display: visualViewShown ? 'flex' : 'none'}
+					{ display: visualViewShown ? 'flex' : 'none', opacity: visualViewShown ? 1 : 0 }
 				]}>
 					<MapxusSdk.VisualView
 						ref={visualViewRef}
-						style={[styles.visualView, {borderRadius: isSwitched ? 0 : 5}]}
+						style={[styles.visualView, { borderRadius: isSwitched ? 0 : 5 }]}
 						onBearingChanged={bearingChange}
 					/>
 				</View>
-			</TouchableOpacity>
+			</TouchableWithoutFeedback>
+			{
+				Platform.OS == 'android' ?
+					<TouchableWithoutFeedback onPress={() => clickWindow(!isSwitched ? 'visual' : "map")}>
+						<View style={[
+							styles.container_small,
+							{ opacity: 0 }
+						]}>
+						</View>
+					</TouchableWithoutFeedback> : null
+			}
 			<TouchableOpacity
-				style={[styles.iconArea, {display: isSwitched ? 'none' : 'flex'}]}
+				style={[styles.iconArea, { display: isSwitched ? 'none' : 'flex' }]}
 				onPress={() => setActive(!active)}
 			>
 				{
 					active
 						? <Image
 							source={require('./assets/onIcon360.png')}
-							style={{width: '100%', height: '100%'}}
+							style={{ width: '100%', height: '100%', opacity: isSwitched ? 0 : 1 }}
 						/>
 						: <Image
 							source={require('./assets/offIcon360.png')}
-							style={{width: '100%', height: '100%'}}
+							style={{ width: '100%', height: '100%', opacity: isSwitched ? 0 : 1 }}
 						/>
 				}
 			</TouchableOpacity>
@@ -207,6 +232,7 @@ const styles = StyleSheet.create({
 		padding: 8,
 		borderRadius: 5,
 		backgroundColor: 'white',
-		zIndex: 1
+		zIndex: 1,
+		elevation: 1
 	}
 });

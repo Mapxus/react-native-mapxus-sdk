@@ -44,7 +44,7 @@ export default function SearchPOINearby() {
 			const _markers: Array<any> = pois.map((poi: Poi | any) => (
 				{
 					coordinate: [Number(poi?.location?.longitude), Number(poi?.location?.latitude)],
-					name: poi[`name_${lang}`],
+					name: poi[`name_${lang}`] || poi.name_default,
 					buildingId: poi.buildingId,
 					floor: poi.floor
 				}

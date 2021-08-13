@@ -27,6 +27,7 @@ import com.mapxus.map.components.location.RCTMapxusLocation
 import com.mapxus.map.components.location.RCTMapxusSimulateLocation
 import com.mapxus.map.components.mapview.helpers.RCTMapxusMapHelper
 import com.mapxus.map.components.mapview.helpers.RCTMapxusMapOptions
+import com.mapxus.map.components.visual.RCTMapxusVisualNodeView
 import com.mapxus.map.events.MapxusMapBuildingChangeEvent
 import com.mapxus.map.events.MapxusMapClickEvent
 import com.mapxus.map.events.MapxusMapFloorChangeEvent
@@ -69,6 +70,7 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
     private var mNavigationView: RCTMapxusNavigationView? = null
     private var mRouteView: RCTMapxusRouteView? = null
     private var mPointAnnotation: RCTMapxusPointAnnotation? = null
+    private var mVisualNodeView: RCTMapxusVisualNodeView? = null
 
     //settings
     var rctMapxusMapOptions: RCTMapxusMapOptions? = null
@@ -145,6 +147,10 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
             }
             is RCTMapxusRouteView -> {
                 mRouteView = childView
+                feature = childView
+            }
+            is RCTMapxusVisualNodeView -> {
+                mVisualNodeView = childView
                 feature = childView
             }
             is RCTMapxusPointAnnotation -> {
@@ -233,6 +239,45 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
             it.addOnMapLongClickListener(this)
             it.addOnMapClickListener(this)
             it.addOnIndoorPoiClickListener(this)
+            rctMapxusMapOptions?.let { mapOptions ->
+                if (mapxusMap.currentIndoorBuilding == null) {
+                    BuildingSearch.newInstance().apply {
+                        setBuildingSearchResultListener(object :
+                            BuildingSearch.BuildingSearchResultListenerAdapter() {
+                            override fun onGetBuildingDetailResult(buildingDetailResult: BuildingDetailResult) {
+                                if (buildingDetailResult.status != 0) {
+                                    Toast.makeText(
+                                        reactContext,
+                                        buildingDetailResult.error.toString(),
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    return
+                                }
+                                if (buildingDetailResult.indoorBuildingList.isNullOrEmpty()) {
+                                    Toast.makeText(
+                                        reactContext,
+                                        "Building not found",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    return
+                                }
+
+                                mMapview?.mapboxMap?.moveCamera(
+                                    CameraUpdateFactory.newLatLngBounds(
+                                        LatLngBounds.from(
+                                            buildingDetailResult.indoorBuildingInfo.bbox.maxLat,
+                                            buildingDetailResult.indoorBuildingInfo.bbox.maxLon,
+                                            buildingDetailResult.indoorBuildingInfo.bbox.minLat,
+                                            buildingDetailResult.indoorBuildingInfo.bbox.minLon
+                                        ), 0
+                                    )
+                                )
+                            }
+                        })
+                        searchBuildingDetail(DetailSearchOption().ids(mutableListOf(mapOptions.buildingId)))
+                    }
+                }
+            }
         }
     }
 
@@ -488,16 +533,8 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
         val right = insets?.getDouble("right") ?: 0.0
         when (zoomMode) {
             "DISABLE" -> {
-                mMapview?.mapboxMap?.easeCamera(
-                    CameraUpdateFactory.newLatLngPadding(
-                        latLng,
-                        left,
-                        top,
-                        right,
-                        bottom
-                    )
-                )
-                mMapview?.mapboxMap?.cancelTransitions()
+                mMapxusMap?.switchBuilding(switchBuildingIdSelectIndoorScene)
+                mMapxusMap?.switchFloor(floor)
             }
             "ANIMATED" -> {
                 val cameraPosition1 = CameraPosition.Builder()
@@ -588,6 +625,7 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
     private fun createSymbolManager(style: Style?) {
         symbolManager = SymbolManager(mMapview!!, mMapview?.mapboxMap!!, style!!)
         symbolManager?.iconAllowOverlap = true
+        symbolManager?.iconIgnorePlacement = true
         symbolManager?.addClickListener(OnSymbolClickListener { symbol: Symbol ->
             onMarkerClick(symbol)
             false

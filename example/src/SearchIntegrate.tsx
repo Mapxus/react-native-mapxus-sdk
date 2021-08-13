@@ -38,7 +38,7 @@ export default function SearchIntegrate() {
 		setBuildingId(feature?.building?.identifier);
 
 		const building: GeoBuilding | any = feature?.building;
-		setBuildingName(building ? building[`name_${lang}`] : '');
+		setBuildingName(building ? building[`name_${lang}`] || building.name : '');
 	}
 
 	async function handleExplore() {
@@ -70,7 +70,7 @@ export default function SearchIntegrate() {
 		setMarker({
 			buildingId,
 			floor,
-			name: poi[`name_${lang}`],
+			name: poi[`name_${lang}`] || poi.name_default,
 			coordinate
 		});
 
@@ -192,7 +192,7 @@ function renderPOIsByCategory(
 					<View style={styles.list_item}>
 						{poiType[categoryType || 'unspecified'] || poiType['unspecified']}
 						<View>
-							<Text style={styles.category_name}>{d[`name_${lang}`]}</Text>
+							<Text style={styles.category_name}>{d[`name_${lang}`] || d.name_default}</Text>
 							<Text
 								style={styles.sub_name}>{`${categoryName} . ${d.floor}`}</Text>
 						</View>

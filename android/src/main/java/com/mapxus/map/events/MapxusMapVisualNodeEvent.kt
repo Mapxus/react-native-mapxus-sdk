@@ -3,16 +3,13 @@ package com.mapxus.map.events
 import android.view.View
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.WritableMap
-import com.facebook.react.bridge.WritableNativeArray
 import com.facebook.react.bridge.WritableNativeMap
-import com.mapbox.mapboxsdk.geometry.LatLng
-import com.mapxus.map.mapxusmap.api.map.model.IndoorBuilding
 
 /**
  * Created by Edison on 3/31/21.
  * Describe:
  */
-class MapxusMapNaiviEvent(
+class MapxusMapVisualNodeEvent(
     view: View?,
     private val eventType: String,
     private val data: WritableNativeMap = WritableNativeMap(),

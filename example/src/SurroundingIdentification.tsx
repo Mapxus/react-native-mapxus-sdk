@@ -6,11 +6,15 @@ import MapxusSdk, {
 	PoiSearchResult,
 	ReverseGeoCodeSearchProps,
 	GeocodeSearchResult,
-	InputLocation
+	InputLocation,
+	AndroidSimulateLocation,
+	AndroidInputLocation
 } from '@mapxus/react-native-mapxus-sdk';
 import ParamsScrollView from './ParamsScrollView';
 import { Button, InputItem, List } from '@ant-design/react-native';
 import language from './utils/language';
+import { any } from 'prop-types';
+import { floor } from 'lodash';
 
 interface PageLocation {
 	lat: number;
@@ -29,6 +33,8 @@ export default function SurroundingIdentification() {
 	const [isIndoor, setIsIndoor] = useState(false);
 	const [ordinal, setOrdinal] = useState('0');
 	const [coordinate, setCoordinate] = useState('114.111375, 22.370787');
+	const [floor, setFloor] = useState('L1');
+	const [buildingId, setBuildingId] = useState('tsuenwanplaza_hk_369d01');
 	const [centerCoordinate, setCenterCoordinate] = useState([0, 0]);
 
 	const refSortButton = useRef(null);
@@ -48,18 +54,40 @@ export default function SurroundingIdentification() {
 				latitude: num_coordinate[1],
 				longitude: num_coordinate[0]
 			}
-			locationRef.current?.setSimulateLocation(simulate);
+			var simulateAndroid: AndroidInputLocation = {
+				floor: floor,
+				buildingId: buildingId,
+				latitude: num_coordinate[1],
+				longitude: num_coordinate[0]
+			}
+			if (Platform.OS == 'android') {
+				locationRef.current?.setSimulateLocation(simulateAndroid);
+			} else {
+				locationRef.current?.setSimulateLocation(simulate);
+			}
 			setCenterCoordinate(num_coordinate);
 		}
 	}
 
-	function handleUpdate(feature: MapxusSdk.Location) {
-		setLocation({
-			lat: feature.coords.latitude,
-			lon: feature.coords.longitude,
-			ordinal: feature.coords.ordinal,
-			angle: feature.coords.heading,
-		})
+	function handleUpdate(feature: any) {
+		if ('buildingId' in feature) {
+			const location: AndroidSimulateLocation = feature
+			setLocation({
+				lat: location.latitude,
+				lon: location.longitude,
+				angle: location.orientation,
+				buildingId: location.buildingId,
+				floor: location.floor
+			})
+		} else {
+			const location: MapxusSdk.Location = feature
+			setLocation({
+				lat: location.coords.latitude,
+				lon: location.coords.longitude,
+				ordinal: location.coords.ordinal,
+				angle: location.coords.heading,
+			})
+		}
 	}
 
 	async function getPoisNearby(params: OrientationPoiSearchProps): Promise<Poi[]> {
@@ -70,7 +98,7 @@ export default function SurroundingIdentification() {
 	async function getReverseGeoCode(params: ReverseGeoCodeSearchProps): Promise<GeocodeSearchResult> {
 		const data: GeocodeSearchResult = await MapxusSdk.geocodeSearchManager.reverseGeoCode(params);
 		// console.log(data);
-		
+
 		return data || {};
 	}
 
@@ -93,9 +121,9 @@ export default function SurroundingIdentification() {
 						buildingId: scenes.building.buildingId,
 						floor: scenes.floor.code
 					})
-					
+
 					// console.log(location);
-					
+
 				}
 			}
 			if (Platform.OS == 'android') {
@@ -108,7 +136,7 @@ export default function SurroundingIdentification() {
 				})
 			}
 			// console.log(location);
-			
+
 			const pois: Array<Poi> = await getPoisNearby({
 				center: { latitude: location.lat!, longitude: location.lon! },
 				distance: Number(distance.trim()),
@@ -135,7 +163,7 @@ export default function SurroundingIdentification() {
 					_markers = _markers.concat(
 						{
 							coordinate: [Number(poi?.location?.longitude), Number(poi?.location?.latitude)],
-							name: poi[`name_${lang}`] + sub,
+							name: poi[`name_${lang}`] || poi.name_default + sub,
 							buildingId: poi.buildingId,
 							floor: poi.floor
 						}
@@ -151,11 +179,11 @@ export default function SurroundingIdentification() {
 			<View style={{ flex: 2 }}>
 				<MapxusSdk.MapxusMap onIndoorStatusChange={object => setIsIndoor(object.flag)}>
 					<MapxusSdk.MapView style={{ flex: 1 }} >
-					<MapxusSdk.Camera
+						<MapxusSdk.Camera
 							centerCoordinate={centerCoordinate}
 							zoomLevel={19}
 						/>
-						</MapxusSdk.MapView>
+					</MapxusSdk.MapView>
 					<MapxusSdk.SimulateLocationManager
 						showsUserHeadingIndicator={true}
 						ref={locationRef}
@@ -180,14 +208,38 @@ export default function SurroundingIdentification() {
 			</View>
 			<ParamsScrollView>
 				<List style={{ marginTop: 10 }}>
-					<InputItem
-						labelNumber={5}
-						style={styles.input}
-						value={ordinal}
-						onChange={setOrdinal}
-					>
-						ordinal:
-					</InputItem>
+					{
+						Platform.OS == 'ios'
+							?
+							<InputItem
+								labelNumber={5}
+								style={styles.input}
+								value={ordinal}
+								onChange={setOrdinal}
+							>
+								ordinal:
+							</InputItem>
+							:
+							<View>
+								<InputItem
+									labelNumber={5}
+									style={styles.input}
+									value={buildingId}
+									onChange={setBuildingId}
+								>
+									buildingId:
+								</InputItem>
+								<InputItem
+									labelNumber={5}
+									style={styles.input}
+									value={floor}
+									onChange={setFloor}
+								>
+									floor:
+								</InputItem>
+							</View>
+					}
+
 					<InputItem
 						labelNumber={5}
 						style={styles.input}

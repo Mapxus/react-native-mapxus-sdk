@@ -28,7 +28,7 @@ class RCTMapxusRouteViewManager(reactApplicationContext: ReactApplicationContext
         return RCTMapxusRouteView(reactContext, this)
     }
 
-    @ReactProp(name = "routeAppearance")
+    @ReactProp(name = "reactRouteAppearance")
     fun setRouteAppearance(rctMapxusRouteView: RCTMapxusRouteView, routeAppearance: ReadableMap) {
         rctMapxusRouteView.setRouteAppearance(routeAppearance)
     }

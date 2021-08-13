@@ -120,6 +120,10 @@ def jscFlavor = 'org.webkit:android-jsc:+'
  */
 def enableHermes = project.ext.react.get('enableHermes', false)
 
+def secretPropertiesFile = rootProject.file("./secret.properties")
+def secretProperties = new Properties()
+secretProperties.load(new FileInputStream(secretPropertiesFile))
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
@@ -132,8 +136,9 @@ android {
         applicationId 'com.example'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName '1.0'
+        versionCode 2
+        versionName '2.0'
+        manifestPlaceholders = ["appid": secretProperties['appid'], "secret": secretProperties['secret']]
     }
     splits {
         abi {

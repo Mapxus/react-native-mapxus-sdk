@@ -245,7 +245,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         }
 
         if (feature != null) {
-            if (mQueuedFeatures == null) {
+            if (mQueuedFeatures == null || (childView instanceof RCTMGLPointAnnotation && mQueuedFeatures.isEmpty())) {
                 feature.addToMap(this);
                 mFeatures.add(childPosition, feature);
             } else {
@@ -536,6 +536,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     public void createSymbolManager(Style style) {
         symbolManager = new SymbolManager(this, mMap, style);
         symbolManager.setIconAllowOverlap(true);
+        symbolManager.setIconIgnorePlacement(true);
         symbolManager.addClickListener(symbol -> {
             onMarkerClick(symbol);
             return false;

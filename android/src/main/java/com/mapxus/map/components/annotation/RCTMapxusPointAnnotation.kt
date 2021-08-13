@@ -182,11 +182,13 @@ class RCTMapxusPointAnnotation(
     }
 
     fun onSelect(shouldSendEvent: Boolean) {
-        if (calloutView != null) {
-            makeCallout()
-        }
-        if (shouldSendEvent) {
-            mManager.handleEvent(makeEvent(true))
+        if (mMapxus?.mMapxusMap?.currentFloor == mFloor) {
+            if (calloutView != null) {
+                makeCallout()
+            }
+            if (shouldSendEvent) {
+                mManager.handleEvent(makeEvent(true))
+            }
         }
     }
 
@@ -371,7 +373,7 @@ class RCTMapxusPointAnnotation(
         if (marker != null && !mBuildingId.isNullOrEmpty()) {
 
             marker!!.iconOpacity =
-                if (mBuildingId == indoorBuilding.buildingId && mFloor == floorName) 1f else 0f
+                if (mBuildingId != indoorBuilding.buildingId || mFloor == floorName) 1f else 0f
             mMapxus?.symbolManager?.update(marker)
         }
         if (mCalloutSymbol != null) {
@@ -383,11 +385,12 @@ class RCTMapxusPointAnnotation(
 
     override fun onBuildingChange(indoorBuilding: IndoorBuilding?) {
         if (marker != null && !mBuildingId.isNullOrEmpty()) {
-            marker!!.iconOpacity = if (indoorBuilding != null) 0f else 1f
+            marker!!.iconOpacity =
+                if (mBuildingId != indoorBuilding?.buildingId || mFloor == mMapxus?.mMapxusMap?.currentFloor) 1f else 0f
             mMapxus!!.symbolManager?.update(marker)
         }
         if (mCalloutSymbol != null) {
-            mCalloutSymbol!!.iconOpacity = if (indoorBuilding != null) 0f else 1f
+            mCalloutSymbol!!.iconOpacity = 0f
             mMapxus!!.symbolManager?.update(mCalloutSymbol)
         }
     }

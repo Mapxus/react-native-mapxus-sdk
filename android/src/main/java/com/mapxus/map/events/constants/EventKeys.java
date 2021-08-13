@@ -35,6 +35,7 @@ public class EventKeys {
     public static final String NAVI_ON_EXCESSIVE_DRIFT = ns("navi.excessive.drift");
     public static final String NAVI_ON_REFRESH_THE_ADSORPTION_LOCATION = ns("navi.refresh.the.adsorption.location");
     public static final String NAVI_ON_GET_NEWPATH = ns("navi.get.newpath");
+    public static final String NAVI_ON_UPDATE = ns("navi.update");
 
     // source events
     public static final String SHAPE_SOURCE_LAYER_CLICK = ns("shapesource.layer.pressed");
@@ -47,6 +48,17 @@ public class EventKeys {
     // location events
     public static final String USER_LOCATION_UPDATE = ns("user.location.update");
     public static final String MAPXUS_USER_LOCATION_UPDATE = ns("map.location.update");
+    public static final String MAPXUS_USER_SIMULATE_LOCATION_UPDATE = ns("map.simulate.location.update");
+
+    // visual node events
+    public static final String VISUAL_ON_TAPPED_FLAG = ns("visual.node.on.tapped.flag");
+
+    // visual events
+    public static final String VISUAL_ON_LOAD_FAIL = ns("visual.on.load.fail");
+    public static final String VISUAL_ON_RENDER_COMPLETE = ns("visual.on.render.complete");
+    public static final String VISUAL_ON_LOADING_CHANGED = ns("visual.on.loading.changed");
+    public static final String VISUAL_ON_BEARING_CHANGED = ns("visual.on.bearing.changed");
+    public static final String VISUAL_ON_NODE_CHANGED = ns("visual.on.node.changed");
 
     private static String ns(String name) {
         return String.format("%s.%s", NAMESPACE, name);

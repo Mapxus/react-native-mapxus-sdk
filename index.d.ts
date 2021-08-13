@@ -203,7 +203,8 @@ declare namespace MapxusSdk {
   class MapxusMapLocation extends Component<MapxusMapLocationProps> { }
 
   class VisualNodeView extends Component<VisualNodeViewProps> {
-    renderFlagUsingNodes(nodes: VisualNode[]): void;
+    //use VisualNode in ios , use VisualNodeGroup in Android 
+    renderFlagUsingNodes(nodes: VisualNode[] | VisualNodeGroup[]): void;
     cleanLayer(): void;
     changeOn(buildingId: string, floor: string): void;
   }
@@ -212,7 +213,7 @@ declare namespace MapxusSdk {
     loadVisualViewWithFirstImg(imageId: string): void;
     unloadVisualView(): void;
     moveToKey(key: string): void;
-    moveCloseTo(buildingId: string, floor: string): void;
+    moveCloseTo(buildingId: string, floor: string, latitude: number, longitude: number): void;
     resize(): void;
     getBearing(): Promise<number>;
     setBearing(bearing: number): void;
@@ -239,7 +240,7 @@ declare namespace MapxusSdk {
   }
 
   class SimulateLocationManager extends Component<SimulateLocationManagerProps> {
-    setSimulateLocation(location: InputLocation): void;
+    setSimulateLocation(location: InputLocation | AndroidInputLocation): void;
   }
 
   class MapView extends Component<MapViewProps> {
@@ -552,6 +553,13 @@ export interface InputLocation {
   timestamp?: number;
 }
 
+export interface AndroidInputLocation {
+  latitude?: number;
+  longitude?: number;
+  buildingId?: string;
+  floor?: string;
+}
+
 export interface Configuration {
   outdoorHidden?: boolean;
   defaultStyle?: MapxusSdk.MapxusMapStyle;
@@ -622,6 +630,14 @@ export interface AndroidLocation {
   floor?: string;
 }
 
+export interface AndroidSimulateLocation {
+  longitude: number;
+  latitude: number;
+  buildingId?: string;
+  floor?: string;
+  orientation: number;
+}
+
 export interface AndroidCompass {
   orientation: number;
   sensorAccuracy: number;
@@ -662,14 +678,14 @@ export interface NavigationViewProps extends ViewProps {
   showsUserHeadingIndicator?: boolean,
   onArrivalAtDestination?: () => void,
   onExcessiveDrift?: () => void,
-  onRefreshTheAdsorptionLocation?: (feature: AdsorptionLocationObject) => void,
+  onRefreshTheAdsorptionLocation?: (feature: AdsorptionLocationObject | AdsorptionAndroidLocationObject) => void,
   onGetNewPath?: (feature: NavigationNewPathObject) => void,
-  onUpdate?: (feature: MapxusSdk.Location) => void;
+  onUpdate?: (feature: MapxusSdk.Location | AndroidLocation) => void;
 }
 
 export interface SimulateLocationManagerProps extends ViewProps {
   showsUserHeadingIndicator?: boolean;
-  onUpdate?: (feature: MapxusSdk.Location) => void;
+  onUpdate?: (feature: MapxusSdk.Location | AndroidSimulateLocation) => void;
 }
 
 export interface MapViewProps extends ViewProps {
@@ -992,6 +1008,11 @@ export interface AdsorptionLocationObject {
   actualLocation: MapxusSdk.Location;
   buildingId?: string;
   floor?: string;
+}
+
+export interface AdsorptionAndroidLocationObject {
+  adsorptionLocation: AndroidLocation;
+  actualLocation: AndroidLocation;
 }
 
 export interface NavigationNewPathObject {
@@ -1448,7 +1469,13 @@ export interface RouteSearchResult {
 
 export interface VisualNodeGroup {
   floor: string;
-  nodes: VisualNode[];
+  nodes: VisualNode[] | VisualSequenceImage[];
+}
+
+//only in Android
+export interface VisualSequenceImage {
+  sequenceId: string;
+  nodes: VisualNode[]
 }
 
 export interface VisualNode {

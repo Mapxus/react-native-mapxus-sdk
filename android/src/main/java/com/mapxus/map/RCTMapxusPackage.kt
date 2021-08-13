@@ -20,6 +20,8 @@ import com.mapxus.map.components.styles.sources.RCTMGLImageSourceManager
 import com.mapxus.map.components.styles.sources.RCTMGLRasterSourceManager
 import com.mapxus.map.components.styles.sources.RCTMGLShapeSourceManager
 import com.mapxus.map.components.styles.sources.RCTMGLVectorSourceManager
+import com.mapxus.map.components.visual.RCTMapxusVisualNodeViewManager
+import com.mapxus.map.components.visual.RCTMapxusVisualViewManager
 import com.mapxus.map.modules.*
 
 /**
@@ -37,6 +39,7 @@ class RCTMapxusPackage : ReactPackage {
             RCTMapxusPoiSearchModule(reactApplicationContext),
             RCTMapxusPoiCategorySearchModule(reactApplicationContext),
             RCTMapxusRouteSearchModule(reactApplicationContext),
+            RCTMapxusVisualSearchModule(reactApplicationContext),
         )
     }
 
@@ -54,6 +57,8 @@ class RCTMapxusPackage : ReactPackage {
             RCTMapxusPointAnnotationManager(reactApplicationContext),
             RCTMapxusSimulateLocationManager(reactApplicationContext),
             RCTMapxusRouteViewManager(reactApplicationContext),
+            RCTMapxusVisualViewManager(reactApplicationContext),
+            RCTMapxusVisualNodeViewManager(reactApplicationContext),
             // components
             RCTMGLCameraManager(reactApplicationContext),
             RCTMGLMapViewManager(reactApplicationContext),

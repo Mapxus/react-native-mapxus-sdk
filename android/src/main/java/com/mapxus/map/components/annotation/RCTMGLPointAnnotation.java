@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.view.View;
 import androidx.annotation.NonNull;
 
+import com.facebook.react.bridge.ReactContext;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.Style;
@@ -20,6 +21,9 @@ import com.mapxus.map.events.PointAnnotationDragEvent;
 import com.mapxus.map.events.constants.EventTypes;
 import com.mapxus.map.utils.GeoJSONUtils;
 import com.mapxus.map.utils.BitmapUtils;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.OnLayoutChangeListener {
     private Context mContext;
@@ -68,6 +72,12 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
         if (mMapView != null) {
             mMapView.offscreenAnnotationViewContainer().addView(childView);
         }
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                ((ReactContext)mContext).runOnUiQueueThread(() -> refresh());
+            }
+        } , 500);
     }
 
     @Override

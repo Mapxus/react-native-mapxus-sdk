@@ -5,11 +5,16 @@ import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.ReadableArray
+import com.facebook.react.bridge.WritableNativeMap
 import com.facebook.react.views.view.ReactViewGroup
 import com.mapxus.map.components.MapxusMapFeature
 import com.mapxus.map.components.mapview.RCTMapxusMap
+import com.mapxus.map.events.MapxusMapCommonEvent
+import com.mapxus.map.events.constants.EventKeys
 import com.mapxus.map.mapxusmap.api.map.FollowUserMode
+import com.mapxus.map.mapxusmap.positioning.ErrorInfo
 import com.mapxus.map.mapxusmap.positioning.IndoorLocation
+import com.mapxus.map.mapxusmap.positioning.IndoorLocationProviderListener
 
 /**
  * Created by Edison on 3/29/21.
@@ -22,6 +27,7 @@ class RCTMapxusSimulateLocation(
     private var mMapView: RCTMapxusMap? = null
     private var mFollowUserMode: Int = FollowUserMode.FOLLOW_USER
     private var locationProvider: FakePositioningProvider? = null
+    private var indoorLocation: IndoorLocation? = null
 
     override fun addToMap(mapView: RCTMapxusMap?) {
         mMapView = mapView
@@ -38,14 +44,46 @@ class RCTMapxusSimulateLocation(
         locationProvider = FakePositioningProvider(
             mContext.currentActivity as LifecycleOwner,
             mContext
-        )
+        ).apply {
+            addListener(object : IndoorLocationProviderListener {
+                override fun onProviderStarted() {
+                }
+
+                override fun onProviderStopped() {
+                }
+
+                override fun onProviderError(errorInfo: ErrorInfo?) {
+                }
+
+                override fun onIndoorLocationChange(indoorLocation: IndoorLocation?) {
+                    this@RCTMapxusSimulateLocation.indoorLocation = indoorLocation
+                }
+
+                override fun onCompassChanged(angle: Float, sensorAccuracy: Int) {
+                    mManager.handleEvent(
+                        MapxusMapCommonEvent(
+                            this@RCTMapxusSimulateLocation,
+                            EventKeys.MAPXUS_USER_SIMULATE_LOCATION_UPDATE,
+                            WritableNativeMap().apply {
+                                putDouble("longitude", indoorLocation?.longitude ?: 0.0)
+                                putDouble("latitude", indoorLocation?.latitude ?: 0.0)
+                                putString("floor", indoorLocation?.floor)
+                                putString("buildingId", indoorLocation?.building)
+                                putDouble("orientation", angle.toDouble())
+                            }
+                        )
+                    )
+                }
+
+            })
+        }
     }
 
     fun setSimulateLocation(args: ReadableArray?) {
         val fakeLocation = args?.getMap(1)
         val lat = fakeLocation?.getDouble("latitude")
         val lon = fakeLocation?.getDouble("longitude")
-        val floor = fakeLocation?.getString("altitude")
+        val floor = fakeLocation?.getString("floor")
         val buildingId = fakeLocation?.getString("buildingId")
         locationProvider?.setIndoorLocation(
             IndoorLocation(

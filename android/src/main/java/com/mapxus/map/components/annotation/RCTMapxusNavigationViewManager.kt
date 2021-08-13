@@ -54,6 +54,7 @@ class RCTMapxusNavigationViewManager (reactApplicationContext: ReactApplicationC
         .put(EventKeys.NAVI_ON_EXCESSIVE_DRIFT, "onExcessiveDrift")
         .put(EventKeys.NAVI_ON_REFRESH_THE_ADSORPTION_LOCATION, "onRefreshTheAdsorptionLocation")
         .put(EventKeys.NAVI_ON_GET_NEWPATH, "onGetNewPath")
+        .put(EventKeys.NAVI_ON_UPDATE, "onUpdate")
         .build()
 
     override fun getCommandsMap(): MutableMap<String, Int> {

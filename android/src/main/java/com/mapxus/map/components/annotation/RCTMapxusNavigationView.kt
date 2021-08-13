@@ -11,15 +11,13 @@ import com.facebook.react.views.view.ReactViewGroup
 import com.mapxus.map.components.MapxusMapFeature
 import com.mapxus.map.components.location.MapxusNavigationPositioningProvider
 import com.mapxus.map.components.mapview.RCTMapxusMap
-import com.mapxus.map.events.MapxusMapNaiviEvent
+import com.mapxus.map.events.MapxusMapCommonEvent
 import com.mapxus.map.events.constants.EventKeys
 import com.mapxus.map.mapxusmap.api.map.FollowUserMode
 import com.mapxus.map.mapxusmap.api.services.model.IndoorLatLng
 import com.mapxus.map.mapxusmap.api.services.model.planning.InstructionDto
 import com.mapxus.map.mapxusmap.api.services.model.planning.LineString
 import com.mapxus.map.mapxusmap.api.services.model.planning.PathDto
-import com.mapxus.map.mapxusmap.overlay.navi.Navigation
-import com.mapxus.map.mapxusmap.overlay.navi.RouteShortener
 import com.mapxus.map.mapxusmap.positioning.ErrorInfo
 import com.mapxus.map.mapxusmap.positioning.IndoorLocation
 import com.mapxus.map.mapxusmap.positioning.IndoorLocationProviderListener
@@ -47,8 +45,10 @@ class RCTMapxusNavigationView(
         mMapView = mapView
         mapxusPositioningProvider = MapxusNavigationPositioningProvider(
             mContext.currentActivity as LifecycleOwner,
-            mContext
+            mContext,
+            mManager, this
         )
+        mMapView?.mMapxusMap?.setLocationProvider(mapxusPositioningProvider)
     }
 
     override fun removeFromMap(mapView: RCTMapxusMap?) {
@@ -61,97 +61,79 @@ class RCTMapxusNavigationView(
 
     fun updatePath(args: ReadableArray?) {
         mapxusPositioningProvider?.setOnReachListener {
-            MapxusMapNaiviEvent(
-                this@RCTMapxusNavigationView,
-                EventKeys.NAVI_ON_ARRIVAL_AT_DESTINATION,
+            mManager.handleEvent(
+                MapxusMapCommonEvent(
+                    this@RCTMapxusNavigationView,
+                    EventKeys.NAVI_ON_ARRIVAL_AT_DESTINATION,
+                )
             )
         }
         mapxusPositioningProvider?.navigation?.setOnDriftsNumberExceededListener {
-            MapxusMapNaiviEvent(
-                this@RCTMapxusNavigationView,
-                EventKeys.NAVI_ON_EXCESSIVE_DRIFT,
+            mManager.handleEvent(
+                MapxusMapCommonEvent(
+                    this@RCTMapxusNavigationView,
+                    EventKeys.NAVI_ON_EXCESSIVE_DRIFT,
+                )
             )
         }
         mapxusPositioningProvider?.routeShortener?.setOnPathChangeListener { pathDto ->
-            MapxusMapNaiviEvent(
-                this@RCTMapxusNavigationView,
-                EventKeys.NAVI_ON_GET_NEWPATH,
+            mManager.handleEvent(
+                MapxusMapCommonEvent(
+                    this@RCTMapxusNavigationView,
+                    EventKeys.NAVI_ON_GET_NEWPATH,
 
-                WritableNativeMap().apply {
-                    putDouble("distance", pathDto?.distance ?: 0.0)
-                    putDouble("weight", pathDto?.weight ?: 0.0)
-                    putDouble("time", pathDto?.time?.toDouble() ?: 0.0)
-                    putMap("bbox", WritableNativeMap().apply {
-                        putDouble("min_latitude", pathDto?.bbox!![1])
-                        putDouble("min_longitude", pathDto.bbox[0])
-                        putDouble("max_latitude", pathDto.bbox[3])
-                        putDouble("max_longitude", pathDto.bbox[2])
-                    })
-                    putMap("points", WritableNativeMap().apply {
-                        putString("type", pathDto?.points?.type)
-                        putArray("coordinates", WritableNativeArray().apply {
-                            pathDto?.points?.coordinates?.forEach {
+                    WritableNativeMap().apply {
+                        putDouble("distance", pathDto?.distance ?: 0.0)
+                        putDouble("weight", pathDto?.weight ?: 0.0)
+                        putDouble("time", pathDto?.time?.toDouble() ?: 0.0)
+                        putMap("bbox", WritableNativeMap().apply {
+                            putDouble("min_latitude", pathDto?.bbox!![1])
+                            putDouble("min_longitude", pathDto.bbox[0])
+                            putDouble("max_latitude", pathDto.bbox[3])
+                            putDouble("max_longitude", pathDto.bbox[2])
+                        })
+                        putMap("points", WritableNativeMap().apply {
+                            putString("type", pathDto?.points?.type)
+                            putArray("coordinates", WritableNativeArray().apply {
+                                pathDto?.points?.coordinates?.forEach {
+                                    pushMap(WritableNativeMap().apply {
+                                        putDouble("latitude", it[1])
+                                        putDouble("longitude", it[0])
+                                        putDouble("elevation", 0.0)
+                                    })
+                                }
+                            })
+                        })
+                        putArray("instructions", WritableNativeArray().apply {
+                            pathDto?.instructions?.forEach {
                                 pushMap(WritableNativeMap().apply {
-                                    putDouble("latitude", it[1])
-                                    putDouble("longitude", it[0])
-                                    putDouble("elevation", 0.0)
+                                    putString("floor", it.floor)
+                                    putString("buildingId", it.buildingId)
+                                    putString("streetName", it.streetName)
+                                    putDouble("distance", it.distance)
+                                    putDouble("heading", it.heading)
+                                    putInt("sign", it.sign)
+                                    putArray("interval", WritableNativeArray().apply {
+                                        it.interval.forEach {
+                                            pushInt(it)
+                                        }
+                                    })
+                                    putString("text", it.text)
+                                    putDouble("time", it.time.toDouble())
+                                    putString("type", it.type)
+
                                 })
                             }
                         })
-                    })
-                    putArray("instructions", WritableNativeArray().apply {
-                        pathDto?.instructions?.forEach {
-                            pushMap(WritableNativeMap().apply {
-                                putString("floor", it.floor)
-                                putString("buildingId", it.buildingId)
-                                putString("streetName", it.streetName)
-                                putDouble("distance", it.distance)
-                                putDouble("heading", it.heading)
-                                putInt("sign", it.sign)
-                                putArray("interval", WritableNativeArray().apply {
-                                    it.interval.forEach {
-                                        pushInt(it)
-                                    }
-                                })
-                                putString("text", it.text)
-                                putDouble("time", it.time.toDouble())
-                                putString("type", it.type)
-
-                            })
-                        }
-                    })
-                }
-            )
+                    }
+                ))
         }
-
-        mapxusPositioningProvider?.addListener(object :IndoorLocationProviderListener{
-            override fun onProviderStarted() {
-            }
-
-            override fun onProviderStopped() {
-            }
-
-            override fun onProviderError(errorInfo: ErrorInfo?) {
-            }
-
-            override fun onIndoorLocationChange(indoorLocation: IndoorLocation?) {
-                MapxusMapNaiviEvent(
-                    this@RCTMapxusNavigationView,
-                    EventKeys.NAVI_ON_REFRESH_THE_ADSORPTION_LOCATION,
-                )
-            }
-
-            override fun onCompassChanged(angle: Float, sensorAccuracy: Int) {
-            }
-
-        })
 
         mAdsorbable?.let { mapxusPositioningProvider?.mAdsorbable = it }
         mShortenable?.let { mapxusPositioningProvider?.mShortenable = it }
         mNumberOfAllowedDrifts?.let { mapxusPositioningProvider?.mNumberOfAllowedDrifts = it }
         mMaximumDrift?.let { mapxusPositioningProvider?.mMaximumDrift = it }
         mDistanceToDestination?.let { mapxusPositioningProvider?.mDistanceToDestination = it }
-        isNavigation?.let { mapxusPositioningProvider?.isNavigation = it }
         val routedata = args?.getMap(1)
         mPathDto = PathDto().apply {
             distance = routedata?.getDouble("distance")
@@ -237,12 +219,13 @@ class RCTMapxusNavigationView(
 
     fun start() {
         isNavigation = true
-        mMapView?.mMapxusMap?.setLocationProvider(mapxusPositioningProvider)
+        mapxusPositioningProvider?.isNavigation = true
         mMapView?.mMapxusMap?.followUserMode = FollowUserMode.FOLLOW_USER_AND_HEADING
     }
 
     fun stop() {
         isNavigation = false
+        mapxusPositioningProvider?.isNavigation = false
         mMapView?.mMapxusMap?.followUserMode = FollowUserMode.NONE
     }
 

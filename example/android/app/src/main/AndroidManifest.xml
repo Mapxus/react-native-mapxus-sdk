@@ -21,6 +21,11 @@
         </intent-filter>
       </activity>
         <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-
+        <meta-data
+            android:name="com.mapxus.api.v1.appid"
+            android:value="${appid}" />
+        <meta-data
+            android:name="com.mapxus.api.v1.secret"
+            android:value="${secret}" />
     </application>
 </manifest>

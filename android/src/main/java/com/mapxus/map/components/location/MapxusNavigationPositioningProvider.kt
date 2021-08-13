@@ -5,7 +5,12 @@ import android.content.Context
 import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LifecycleOwner
+import com.facebook.react.bridge.WritableNativeMap
 import com.mapbox.mapboxsdk.maps.MapboxMap
+import com.mapxus.map.components.annotation.RCTMapxusNavigationView
+import com.mapxus.map.components.annotation.RCTMapxusNavigationViewManager
+import com.mapxus.map.events.MapxusMapCommonEvent
+import com.mapxus.map.events.constants.EventKeys
 import com.mapxus.map.mapxusmap.api.services.model.planning.PathDto
 import com.mapxus.map.mapxusmap.overlay.navi.Navigation
 import com.mapxus.map.mapxusmap.overlay.navi.Navigation.OnReachListener
@@ -27,7 +32,9 @@ import com.mapxus.positioning.positioning.api.PositioningState
 @SuppressLint("LongLogTag")
 class MapxusNavigationPositioningProvider(
     var lifecycleOwner: LifecycleOwner,
-    private val context: Context
+    private val context: Context,
+    private val mManager: RCTMapxusNavigationViewManager,
+    private val mView: RCTMapxusNavigationView,
 ) :
     IndoorLocationProvider() {
     private var positioningClient: MapxusPositioningClient? = null
@@ -114,6 +121,25 @@ class MapxusNavigationPositioningProvider(
                 val building = mapxusLocation.buildingId
                 val indoorLocation = IndoorLocation(location, building, floor)
                 indoorLocation.accuracy = mapxusLocation.accuracy
+
+                mManager.handleEvent(
+                    MapxusMapCommonEvent(
+                        mView,
+                        EventKeys.NAVI_ON_UPDATE,
+                        WritableNativeMap().apply {
+                            putDouble("longitude", indoorLocation?.longitude ?: 0.0)
+                            putDouble("latitude", indoorLocation?.latitude ?: 0.0)
+                            putString("floor", indoorLocation?.floor)
+                            putString("buildingId", indoorLocation?.building)
+                            putDouble(
+                                "accuracy",
+                                indoorLocation?.accuracy?.toDouble() ?: 0.0
+                            )
+                            putDouble("timestamp", indoorLocation?.time?.toDouble() ?: 0.0)
+                        })
+                )
+                val actualLocation = indoorLocation
+
                 if (null != navigation && isNavigation) {
                     var indoorLatLon = indoorLocation
 
@@ -131,18 +157,48 @@ class MapxusNavigationPositioningProvider(
                     indoorLocation.longitude = indoorLatLon.longitude
                 }
                 dispatchIndoorLocationChange(indoorLocation)
+                mManager.handleEvent(
+                    MapxusMapCommonEvent(
+                        mView,
+                        EventKeys.NAVI_ON_REFRESH_THE_ADSORPTION_LOCATION,
+                        WritableNativeMap().apply {
+                            putMap("adsorptionLocation", WritableNativeMap().apply {
+                                putDouble("longitude", indoorLocation?.longitude ?: 0.0)
+                                putDouble("latitude", indoorLocation?.latitude ?: 0.0)
+                                putString("floor", indoorLocation?.floor)
+                                putString("buildingId", indoorLocation?.building)
+                                putDouble(
+                                    "accuracy",
+                                    indoorLocation?.accuracy?.toDouble() ?: 0.0
+                                )
+                                putDouble("timestamp", indoorLocation?.time?.toDouble() ?: 0.0)
+                            })
+                            putMap("actualLocation", WritableNativeMap().apply {
+                                putDouble("longitude", actualLocation?.longitude ?: 0.0)
+                                putDouble("latitude", actualLocation?.latitude ?: 0.0)
+                                putString("floor", actualLocation?.floor)
+                                putString("buildingId", actualLocation?.building)
+                                putDouble(
+                                    "accuracy",
+                                    actualLocation?.accuracy?.toDouble() ?: 0.0
+                                )
+                                putDouble("timestamp", actualLocation?.time?.toDouble() ?: 0.0)
+                            })
+                        }
+                    )
+                )
             }
         }
 
     fun updatePath(pathDto: PathDto, mapboxMap: MapboxMap?) {
         this.mapboxMap = mapboxMap
         val navigationPathDto = NavigationPathDto(pathDto)
-        navigation = Navigation(navigationPathDto,mMaximumDrift,mNumberOfAllowedDrifts)
+        navigation = Navigation(navigationPathDto, mMaximumDrift, mNumberOfAllowedDrifts)
         routeShortener = RouteShortener(navigationPathDto, pathDto, pathDto.indoorPoints)
     }
 
     fun setOnReachListener(onReachListener: OnReachListener?) {
-        navigation?.setOnReachListener(onReachListener,mDistanceToDestination)
+        navigation?.setOnReachListener(onReachListener, mDistanceToDestination)
     }
 
     companion object {
