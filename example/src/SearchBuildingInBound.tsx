@@ -40,6 +40,7 @@ export default function SearchBuildingInBound() {
 			const buildings: Building[] = data?.buildings;
 
 			if (buildings?.length) {
+				setMarkers([])
 				const lang: string = (language === 'zh-Hans' && 'cn') || (language === 'zh-Hant' && 'zh') || language;
 				const _markers: Array<any> = buildings.map((b: Building | any) => (
 					{

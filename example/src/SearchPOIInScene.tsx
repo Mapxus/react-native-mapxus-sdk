@@ -27,6 +27,7 @@ export default function SearchPOIInScene() {
 			page: Number(page.trim())
 		});
 		if (pois.length) {
+			setMarkers([])
 			const lang: string = (language === 'zh-Hans' && 'cn') || (language === 'zh-Hant' && 'zh') || language;
 			const _markers: Array<any> = pois.map((poi: Poi | any) => (
 				{
