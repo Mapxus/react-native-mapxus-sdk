@@ -11,7 +11,6 @@ import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.views.view.ReactViewGroup
-import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.geometry.LatLngBounds
 import com.mapbox.mapboxsdk.maps.Style
@@ -43,6 +42,7 @@ import com.mapxus.map.mapxusmap.api.map.model.SelectorPosition
 import com.mapxus.map.mapxusmap.api.services.BuildingSearch
 import com.mapxus.map.mapxusmap.api.services.model.DetailSearchOption
 import com.mapxus.map.mapxusmap.api.services.model.building.BuildingDetailResult
+import com.mapxus.map.mapxusmap.api.services.model.building.IndoorBuildingInfo
 import com.mapxus.map.mapxusmap.impl.MapboxMapViewProvider
 import com.mapxus.map.utils.ConvertUtils
 
@@ -509,10 +509,7 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
                     switchingIndoorScenes(
                         mode ?: "ZoomDisable",
                         floor ?: buildingDetailResult.indoorBuildingInfo.groundFloor, insets,
-                        com.mapbox.mapboxsdk.geometry.LatLng(
-                            buildingDetailResult.indoorBuildingInfo.labelCenter.lat,
-                            buildingDetailResult.indoorBuildingInfo.labelCenter.lon
-                        )
+                        buildingDetailResult.indoorBuildingInfo
                     )
 
                 }
@@ -525,7 +522,7 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
         zoomMode: String,
         floor: String,
         insets: ReadableMap?,
-        latLng: com.mapbox.mapboxsdk.geometry.LatLng
+        indoorBuildingInfo: IndoorBuildingInfo
     ) {
         val top = insets?.getDouble("top") ?: 0.0
         val left = insets?.getDouble("left") ?: 0.0
@@ -537,24 +534,27 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
                 mMapxusMap?.switchFloor(floor)
             }
             "ANIMATED" -> {
-                val cameraPosition1 = CameraPosition.Builder()
-                    .target(latLng)
-                    .tilt(20.0)
-                    .padding(
-                        left,
-                        top,
-                        right,
-                        bottom
-                    )
-                    .build()
                 mMapview?.mapboxMap?.animateCamera(
-                    CameraUpdateFactory.newCameraPosition(cameraPosition1),
-                    7500
+                    CameraUpdateFactory.newLatLngBounds(
+                        LatLngBounds.from(
+                            indoorBuildingInfo.bbox.maxLat,
+                            indoorBuildingInfo.bbox.maxLon,
+                            indoorBuildingInfo.bbox.minLat,
+                            indoorBuildingInfo.bbox.minLon
+                        ),
+                        left.toInt(),
+                        top.toInt(),
+                        right.toInt(),
+                        bottom.toInt()
+                    )
                 )
             }
             "DIRECT" -> mMapview?.mapboxMap?.moveCamera(
                 CameraUpdateFactory.newLatLngPadding(
-                    latLng,
+                    com.mapbox.mapboxsdk.geometry.LatLng(
+                        indoorBuildingInfo.labelCenter.lat,
+                        indoorBuildingInfo.labelCenter.lon
+                    ),
                     left,
                     top,
                     right,

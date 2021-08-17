@@ -72,12 +72,6 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
         if (mMapView != null) {
             mMapView.offscreenAnnotationViewContainer().addView(childView);
         }
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                ((ReactContext)mContext).runOnUiQueueThread(() -> refresh());
-            }
-        } , 500);
     }
 
     @Override
@@ -114,7 +108,7 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
             updateOptions();
         }
         if (mCalloutView != null) {
-            if (!mCalloutView.isAttachedToWindow()) {
+            if (!mCalloutView.isAttachedToWindow() && mCalloutSymbol !=null) {
                 mMapView.offscreenAnnotationViewContainer().addView(mCalloutView);
             }
             addBitmapToStyle(mCalloutBitmap, mCalloutBitmapId);
@@ -130,12 +124,16 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
 
         if (mAnnotation != null) {
             map.getSymbolManager().delete(mAnnotation);
+            mAnnotation = null;
         }
         if (mChildView != null) {
             map.offscreenAnnotationViewContainer().removeView(mChildView);
+            mChildView = null;
         }
         if (mCalloutView != null) {
             map.offscreenAnnotationViewContainer().removeView(mCalloutView);
+            mCalloutView = null;
+            onDeselect();
         }
     }
 
@@ -237,6 +235,7 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
         mManager.handleEvent(makeEvent(false));
         if (mCalloutSymbol != null) {
             mMapView.getSymbolManager().delete(mCalloutSymbol);
+            mCalloutSymbol = null;
         }
     }
 
