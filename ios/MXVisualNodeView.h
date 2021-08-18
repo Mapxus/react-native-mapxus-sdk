@@ -6,12 +6,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <Mapbox/Mapbox.h>
 #import <React/RCTComponent.h>
+#import "RCTMXPainterProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MXVisualNodeView : UIView
+@interface MXVisualNodeView : UIView <RCTMXPainterProtocol>
 
 @property (nonatomic, weak) MGLMapView *mapRendererView;
 

@@ -6,15 +6,15 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MapxusMapSDK/MapxusMapSDK.h>
 #import <React/RCTBridge.h>
+#import "RCTMXPainterProtocol.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MXRouteView : UIView
+@interface MXRouteView : UIView <RCTMXPainterProtocol>
 
-@property (nonatomic, weak, nullable) RCTBridge* bridge;
+@property (nonatomic, weak, nullable) RCTBridge *bridge;
 
 @property (nonatomic, weak) MGLMapView *mapRendererView;
 
