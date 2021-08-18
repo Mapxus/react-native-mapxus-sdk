@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StatusBar, Platform, StyleSheet } from 'react-native';
-import { Button } from '@ant-design/react-native';
-import MapxusSdk, { AndroidLocation, MapboxGLEvent } from '@mapxus/react-native-mapxus-sdk';
+import React, {useEffect, useState} from 'react';
+import {View, Text, StatusBar, Platform, StyleSheet} from 'react-native';
+import {Button} from '@ant-design/react-native';
+import MapxusSdk, {AndroidLocation, MapboxGLEvent} from '@mapxus/react-native-mapxus-sdk';
 import getStatusBarHeight from './utils/getStatusBarHeight';
 
 export default function DisplayLocation() {
@@ -68,13 +68,11 @@ export default function DisplayLocation() {
 		setFloor(location.floor ? location.floor : "0");
 	}
 
-	function handleUserTrackingModeChange(e: MapboxGLEvent<
-		'usertrackingmodechange',
+	function handleUserTrackingModeChange(e: MapboxGLEvent<'usertrackingmodechange',
 		{
 			followUserLocation: boolean;
 			followUserMode: 'normal' | 'compass' | 'course' | null;
-		}
-	>) {
+		}>) {
 		var mIsFollow = e.nativeEvent.payload.followUserLocation;
 		var mFollowModel = e.nativeEvent.payload.followUserMode;
 		if (mIsFollow) {
@@ -93,19 +91,19 @@ export default function DisplayLocation() {
 	}
 
 	return (
-		<View style={{ flex: 1 }}>
+		<View style={{flex: 1}}>
 			<View style={styles.container}>
 				<Text style={styles.text}>lat: {lat}</Text>
 				<Text style={styles.text}>lon: {lon}</Text>
 				<Text style={styles.text}>floor: {floor}</Text>
 				<Text style={styles.text}>accuracy: {accuracy}</Text>
 			</View>
-			<View style={{ flex: 1 }}>
+			<View style={{flex: 1}}>
 				<MapxusSdk.MapxusMap mapOption={{
 					buildingId: 'tsuenwanplaza_hk_369d01',
-					zoomInsets: { left: -100, right: -100 }
+					zoomInsets: {left: -100, right: -100}
 				}}>
-					<MapxusSdk.MapView style={{ flex: 1 }}>
+					<MapxusSdk.MapView style={{flex: 1}}>
 						{
 							Platform.OS == 'ios'
 								? <View>
@@ -149,7 +147,7 @@ export default function DisplayLocation() {
 			</View>
 			<Button
 				type={'primary'}
-				style={[styles.button, { bottom: 10 + statusBarHeight }]}
+				style={[styles.button, {bottom: 10 + statusBarHeight}]}
 				onPress={handleButtonOnPress}
 			>
 				{buttonTitle}
