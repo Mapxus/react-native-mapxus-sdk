@@ -64,7 +64,8 @@ export default function ClickEventListening() {
 					</MapxusSdk.MapxusMap>
 				</View>
 				<ParamsScrollView>
-					<Text style={{fontSize: 18, marginTop: 15, paddingHorizontal: 8}}>Please long press or click on the map.</Text>
+					<Text style={{fontSize: 18, marginTop: 15, paddingHorizontal: 8}}>Please long press or click on the
+						map.</Text>
 				</ParamsScrollView>
 			</View>
 		</Provider>

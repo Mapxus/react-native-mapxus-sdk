@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import MapxusSdk, {
 	Appearance,
 	GeoPoint,
@@ -13,11 +13,10 @@ import MapxusSdk, {
 	AndroidLocation,
 	AdsorptionAndroidLocationObject,
 } from '@mapxus/react-native-mapxus-sdk';
-import { Switch, SegmentedControl, WhiteSpace, Button } from '@ant-design/react-native';
+import {Switch, SegmentedControl, WhiteSpace, Button} from '@ant-design/react-native';
 import ParamsScrollView from './ParamsScrollView';
-import { map as _map, assign as _assign, find as _find } from 'lodash';
+import {map as _map, assign as _assign, find as _find} from 'lodash';
 import language from './utils/language';
-import { any } from 'prop-types';
 
 export default function Route() {
 	const [startEndClicked, setStartEndClicked] = useState('');
@@ -34,7 +33,7 @@ export default function Route() {
 	const [currentFloor, setCurrentFloor] = useState('');
 	const [isNavigation, setIsNavigation] = useState(false);
 	const [centerCoordinate, setCenterCoordinate] = useState([0, 0]);
-	const [appearence, setAppearence] = useState<Appearance>({});
+	const [appearance, setAppearance] = useState<Appearance>({});
 	const [heading, setHeading] = useState(0);
 	const [firstIn, setFirstIn] = useState(true);
 	const routeRef = useRef<MapxusSdk.RouteView>(null);
@@ -106,7 +105,7 @@ export default function Route() {
 		} else {
 			arr = _map(markers, m => {
 				return m.id === type
-					? _assign(m, { coordinate: [point?.longitude, point?.latitude] })
+					? _assign(m, {coordinate: [point?.longitude, point?.latitude]})
 					: m;
 			});
 		}
@@ -115,7 +114,7 @@ export default function Route() {
 	}
 
 	async function renderPath(result: RouteSearchResult) {
-		setAppearence({isAddStartDash: true});
+		setAppearance({isAddStartDash: true});
 		routeRef.current?.cleanRoute();
 
 		routeRef.current?.paintRouteUsingPath(
@@ -125,15 +124,20 @@ export default function Route() {
 		naviRef.current?.updatePath(
 			result?.paths[0],
 			result?.wayPointList
-		)
+		);
 
 		var dto = await routeRef.current?.getPainterPathDto();
 		for (const key in dto?.paragraphs) {
 			if (dto?.paragraphs.hasOwnProperty(key) && !key.includes('outdoor')) {
 				var paragraph = dto.paragraphs[key];
-				mapRef.current?.selectIndoorScene(MapxusSdk.MapxusZoomMode.DISABLE, { top: 0, left: 0, bottom: 0, right: 0 }, paragraph.buildingId, paragraph.floor);
+				mapRef.current?.selectIndoorScene(MapxusSdk.MapxusZoomMode.DISABLE, {
+					top: 0,
+					left: 0,
+					bottom: 0,
+					right: 0
+				}, paragraph.buildingId, paragraph.floor);
 				routeRef.current?.changeOn(currentBuilding, currentFloor);
-				routeRef.current?.focusOn([key], { top: 130, left: 30, bottom: 110, right: 80 })
+				routeRef.current?.focusOn([key], {top: 130, left: 30, bottom: 110, right: 80})
 				break;
 			}
 		}
@@ -146,17 +150,17 @@ export default function Route() {
 	}
 
 	function handleGo() {
-		setIsNavigation(!isNavigation)
+		setIsNavigation(!isNavigation);
 		if (isNavigation) {
 			naviRef.current?.stop();
 		} else {
 			naviRef.current?.start();
-			setAppearence({isAddStartDash: false});
+			setAppearance({isAddStartDash: false});
 		}
 	}
 
 	function onRedrawPath(feature: NavigationNewPathObject) {
-		routeRef.current?.cleanRoute;
+		routeRef.current?.cleanRoute();
 		routeRef.current?.paintRouteUsingPath(
 			feature.newPath,
 			feature.originalWayPoints
@@ -171,16 +175,26 @@ export default function Route() {
 	}
 
 	function onRefreshAdsorptionLocation(feature: any) {
-		if ("buildingId" in feature) {
-			const location: AdsorptionLocationObject = feature
+		if ('buildingId' in feature) {
+			const location: AdsorptionLocationObject = feature;
 			if (location.adsorptionLocation.coords.heading != undefined) {
 				setHeading(location.adsorptionLocation.coords.heading);
 			}
-			mapRef.current?.selectIndoorScene(MapxusSdk.MapxusZoomMode.DISABLE, { top: 0, left: 0, bottom: 0, right: 0 }, location.buildingId, location.floor);
+			mapRef.current?.selectIndoorScene(MapxusSdk.MapxusZoomMode.DISABLE, {
+				top: 0,
+				left: 0,
+				bottom: 0,
+				right: 0
+			}, location.buildingId, location.floor);
 			setCenterCoordinate([location.adsorptionLocation.coords.longitude, location.adsorptionLocation.coords.latitude]);
 		} else {
-			const location: AdsorptionAndroidLocationObject = feature
-			mapRef.current?.selectIndoorScene(MapxusSdk.MapxusZoomMode.DISABLE, { top: 0, left: 0, bottom: 0, right: 0 }, location.adsorptionLocation.buildingId, location.adsorptionLocation.floor);
+			const location: AdsorptionAndroidLocationObject = feature;
+			mapRef.current?.selectIndoorScene(MapxusSdk.MapxusZoomMode.DISABLE, {
+				top: 0,
+				left: 0,
+				bottom: 0,
+				right: 0
+			}, location.adsorptionLocation.buildingId, location.adsorptionLocation.floor);
 			setCenterCoordinate([location.adsorptionLocation.longitude, location.adsorptionLocation.latitude]);
 		}
 
@@ -189,31 +203,31 @@ export default function Route() {
 	function onUpdate(feature: any) {
 		if (!isNavigation && firstIn) {
 			setFirstIn(false);
-			if ("coords" in feature) {
-				const location: MapxusSdk.Location = feature
+			if ('coords' in feature) {
+				const location: MapxusSdk.Location = feature;
 				setCenterCoordinate([location.coords.longitude, location.coords.latitude]);
 			} else {
-				const location: AndroidLocation = feature
+				const location: AndroidLocation = feature;
 				setCenterCoordinate([location.longitude, location.latitude]);
 			}
 		}
 	}
 
 	return (
-		<View style={{ flex: 1 }}>
+		<View style={{flex: 1}}>
 			<View style={styles.container}>
 				<View>
 					<Button
 						style={[styles.button, styles.button_white]}
-						{...startEndClicked === 'start' ? { type: 'primary' } : {}}
+						{...startEndClicked === 'start' ? {type: 'primary'} : {}}
 						onPress={() => setStartEndClicked(startEndClicked === 'start' ? '' : 'start')}
 					>
 						{startEndClicked === 'start' ? 'Tap screen for Start' : 'Start'}
 					</Button>
-					<WhiteSpace />
+					<WhiteSpace/>
 					<Button
 						style={[styles.button, styles.button_white]}
-						{...startEndClicked === 'end' ? { type: 'primary' } : {}}
+						{...startEndClicked === 'end' ? {type: 'primary'} : {}}
 						onPress={() => setStartEndClicked(startEndClicked === 'end' ? '' : 'end')}
 					>
 						{startEndClicked === 'end' ? 'Tap screen for End' : 'End'}
@@ -222,28 +236,28 @@ export default function Route() {
 				<View style={styles.button_blue_wrapper}>
 					<Button
 						type={'primary'}
-						style={[styles.button, { marginRight: 15 }]}
+						style={[styles.button, {marginRight: 15}]}
 						onPress={handleSearch}
 					>
 						Search
 					</Button>
 					<Button
 						type={'primary'}
-						style={[styles.button, { marginRight: 15 }]}
+						style={[styles.button, {marginRight: 15}]}
 						onPress={handleGo}
 					>
 						{isNavigation ? 'Stop' : 'Go'}
 					</Button>
 				</View>
 			</View>
-			<View style={{ flex: 5 }}>
+			<View style={{flex: 5}}>
 				<MapxusSdk.MapxusMap
 					ref={mapRef}
 					onTappedOnBlank={selectPoint}
 					onTappedOnPoi={selectPoint}
 					onIndoorSceneChange={handelIndoorSceneChange}
 				>
-					<MapxusSdk.MapView style={{ flex: 1 }} >
+					<MapxusSdk.MapView style={{flex: 1}}>
 						<MapxusSdk.Camera
 							centerCoordinate={centerCoordinate}
 							zoomLevel={19}
@@ -262,7 +276,7 @@ export default function Route() {
 								<TouchableOpacity style={styles.marker}>
 									<Image
 										source={require('./assets/startPoint.png')}
-										style={{ width: '100%', height: '100%' }}
+										style={{width: '100%', height: '100%'}}
 									/>
 								</TouchableOpacity>
 							</MapxusSdk.MapxusPointAnnotationView>
@@ -270,7 +284,7 @@ export default function Route() {
 					}
 					<MapxusSdk.RouteView
 						ref={routeRef}
-						routeAppearance={appearence}
+						routeAppearance={appearance}
 					/>
 					<MapxusSdk.NavigationView
 						distanceToDestination={3}
@@ -291,10 +305,10 @@ export default function Route() {
 						values={['foot', 'wheelchair']}
 						onValueChange={setVehicle}
 					/>
-					<WhiteSpace />
+					<WhiteSpace/>
 					<View style={styles.inner}>
 						<Text style={styles.fontStyle}>toDoor</Text>
-						<Switch checked={isToDoor} onChange={setIsToDoor} />
+						<Switch checked={isToDoor} onChange={setIsToDoor}/>
 					</View>
 				</View>
 			</ParamsScrollView>

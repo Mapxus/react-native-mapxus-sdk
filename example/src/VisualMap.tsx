@@ -1,5 +1,5 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { View, TouchableOpacity, Image, StyleSheet, TouchableWithoutFeedback, Platform } from 'react-native';
+import React, {useRef, useState, useEffect} from 'react';
+import {View, TouchableOpacity, Image, StyleSheet, TouchableWithoutFeedback, Platform} from 'react-native';
 import MapxusSdk, {
 	BearingChangeObject,
 	IndoorSceneChangeObject,
@@ -7,7 +7,7 @@ import MapxusSdk, {
 	VisualNode, VisualNodeGroup,
 	VisualSearchProps
 } from '@mapxus/react-native-mapxus-sdk';
-import { assign as _assign } from 'lodash';
+import {assign as _assign} from 'lodash';
 
 async function getVisualNodes(params: VisualSearchProps) {
 	const data: Array<VisualNodeGroup> = await MapxusSdk.visualSearchManager.searchVisualDataInBuilding(params);
@@ -31,7 +31,7 @@ export default function VisualMap() {
 	const cameraRef = useRef<MapxusSdk.Camera>(null);
 
 	useEffect(() => {
-		initVisualData({ buildingId, scope: 1 });
+		initVisualData({buildingId, scope: 1});
 	}, []);
 
 	useEffect(() => {
@@ -61,7 +61,7 @@ export default function VisualMap() {
 
 	useEffect(() => {
 		if (buildingId.length && active) {
-			initVisualData({ buildingId, scope: 1 });
+			initVisualData({buildingId, scope: 1});
 		} else {
 			nodeViewRef.current?.cleanLayer();
 		}
@@ -118,7 +118,7 @@ export default function VisualMap() {
 
 	function bearingChange(feature: BearingChangeObject) {
 		setLightMarker(
-			_assign({}, lightMarker, { bearing: feature.bearing })
+			_assign({}, lightMarker, {bearing: feature.bearing})
 		);
 	}
 
@@ -140,23 +140,23 @@ export default function VisualMap() {
 	}
 
 	return (
-		<View style={{ flex: 1 }}>
-			<TouchableWithoutFeedback {...isSwitched && { onPress: () => clickWindow('map') }}>
+		<View style={{flex: 1}}>
+			<TouchableWithoutFeedback {...isSwitched && {onPress: () => clickWindow('map')}}>
 				<View style={isSwitched ? styles.container_small : styles.container_full}>
 					<MapxusSdk.MapxusMap
 						mapOption={{
 							buildingId: 'tsuenwanplaza_hk_369d01',
 							floor: 'L3',
-							zoomInsets: { top: 0, left: 0, bottom: 0, right: 0 }
+							zoomInsets: {top: 0, left: 0, bottom: 0, right: 0}
 						}}
 						indoorControllerAlwaysHidden={floorControllerHidden}
 						onIndoorSceneChange={indoorSceneChange}
 					>
 						<MapxusSdk.MapView
-							style={{ flex: 1 }}
+							style={{flex: 1}}
 							compassEnabled={!isSwitched}
 						>
-							<MapxusSdk.Camera ref={cameraRef} />
+							<MapxusSdk.Camera ref={cameraRef}/>
 							{
 								lightMarker && (
 									Platform.OS == 'ios' ?
@@ -170,7 +170,7 @@ export default function VisualMap() {
 												style={{
 													width: 50,
 													height: 50,
-													transform: [{ rotate: `${lightMarker.bearing}deg` }]
+													transform: [{rotate: `${lightMarker.bearing}deg`}]
 												}}
 											/>
 										</MapxusSdk.PointAnnotation> : null
@@ -184,14 +184,14 @@ export default function VisualMap() {
 					</MapxusSdk.MapxusMap>
 				</View>
 			</TouchableWithoutFeedback>
-			<TouchableWithoutFeedback {...!isSwitched && { onPress: () => clickWindow('visual') }}>
+			<TouchableWithoutFeedback {...!isSwitched && {onPress: () => clickWindow('visual')}}>
 				<View style={[
 					isSwitched ? styles.container_full : styles.container_small,
-					{ display: visualViewShown ? 'flex' : 'none', opacity: visualViewShown ? 1 : 0 }
+					{display: visualViewShown ? 'flex' : 'none', opacity: visualViewShown ? 1 : 0}
 				]}>
 					<MapxusSdk.VisualView
 						ref={visualViewRef}
-						style={[styles.visualView, { borderRadius: isSwitched ? 0 : 5 }]}
+						style={[styles.visualView, {borderRadius: isSwitched ? 0 : 5}]}
 						onBearingChanged={bearingChange}
 						onNodeChanged={nodeChanged}
 					/>
@@ -202,24 +202,24 @@ export default function VisualMap() {
 					<TouchableWithoutFeedback onPress={() => clickWindow(!isSwitched ? 'visual' : "map")}>
 						<View style={[
 							styles.container_small,
-							{ opacity: 0 }
+							{opacity: 0}
 						]}>
 						</View>
 					</TouchableWithoutFeedback> : null
 			}
 			<TouchableOpacity
-				style={[styles.iconArea, { display: isSwitched ? 'none' : 'flex' }]}
+				style={[styles.iconArea, {display: isSwitched ? 'none' : 'flex'}]}
 				onPress={() => setActive(!active)}
 			>
 				{
 					active
 						? <Image
 							source={require('./assets/onIcon360.png')}
-							style={{ width: '100%', height: '100%', opacity: isSwitched ? 0 : 1 }}
+							style={{width: '100%', height: '100%', opacity: isSwitched ? 0 : 1}}
 						/>
 						: <Image
 							source={require('./assets/offIcon360.png')}
-							style={{ width: '100%', height: '100%', opacity: isSwitched ? 0 : 1 }}
+							style={{width: '100%', height: '100%', opacity: isSwitched ? 0 : 1}}
 						/>
 				}
 			</TouchableOpacity>

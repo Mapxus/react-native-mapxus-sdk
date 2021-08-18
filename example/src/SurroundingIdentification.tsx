@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import React, {useRef, useState} from 'react';
+import {View, Text, StyleSheet, Platform} from 'react-native';
 import MapxusSdk, {
 	OrientationPoiSearchProps,
 	Poi,
@@ -11,9 +11,8 @@ import MapxusSdk, {
 	AndroidInputLocation
 } from '@mapxus/react-native-mapxus-sdk';
 import ParamsScrollView from './ParamsScrollView';
-import { Button, InputItem, List } from '@ant-design/react-native';
+import {Button, InputItem, List} from '@ant-design/react-native';
 import language from './utils/language';
-
 
 interface PageLocation {
 	lat: number;
@@ -50,17 +49,17 @@ export default function SurroundingIdentification() {
 
 		if (coor.length === 2) {
 			const num_coordinate: Array<number> = coor.map(c => Number(c.trim()));
-			var simulate: InputLocation = {
+			const simulate: InputLocation = {
 				ordinal: Number(ordinal),
 				latitude: num_coordinate[1],
 				longitude: num_coordinate[0]
-			}
-			var simulateAndroid: AndroidInputLocation = {
+			};
+			const simulateAndroid: AndroidInputLocation = {
 				floor: floor,
 				buildingId: buildingId,
 				latitude: num_coordinate[1],
 				longitude: num_coordinate[0]
-			}
+			};
 			if (Platform.OS == 'android') {
 				locationRef.current?.setSimulateLocation(simulateAndroid);
 			} else {
@@ -72,26 +71,26 @@ export default function SurroundingIdentification() {
 
 	function handleUpdate(feature: any) {
 		if ('buildingId' in feature) {
-			const location: AndroidSimulateLocation = feature
+			const location: AndroidSimulateLocation = feature;
 			setLocation({
 				lat: location.latitude,
 				lon: location.longitude,
 				angle: location.orientation,
 				buildingId: location.buildingId,
 				floor: location.floor
-			})
+			});
 		} else {
-			const location: MapxusSdk.Location = feature
+			const location: MapxusSdk.Location = feature;
 			setLocation({
 				lat: location.coords.latitude,
 				lon: location.coords.longitude,
 				ordinal: location.coords.ordinal,
 				angle: location.coords.heading,
-			})
+			});
 		}
 	}
 
-	async function getPoisNearby(params: OrientationPoiSearchProps): Promise<Poi[]> {		
+	async function getPoisNearby(params: OrientationPoiSearchProps): Promise<Poi[]> {
 		const data: PoiSearchResult = await MapxusSdk.poiSearchManager.orientationPoiSearch(params);
 		return data?.pois || [];
 	}
@@ -103,15 +102,15 @@ export default function SurroundingIdentification() {
 
 	async function handleSearch() {
 		if (location) {
-			var locationParams: PageLocation = {lat: 0.0, lon: 0.0};
+			let locationParams: PageLocation = {lat: 0.0, lon: 0.0};
 
 			if (Platform.OS == 'ios') {
 				const scenes: GeocodeSearchResult = await getReverseGeoCode({
-					location: { latitude: location.lat, longitude: location.lon },
+					location: {latitude: location.lat, longitude: location.lon},
 					ordinalFloor: location.ordinal!
 				});
-				
-				if (scenes.floor != null) {					
+
+				if (scenes.floor != null) {
 					locationParams = {
 						lat: location.lat,
 						lon: location.lon,
@@ -129,10 +128,10 @@ export default function SurroundingIdentification() {
 					buildingId: location.buildingId,
 					angle: location.angle
 				};
-			}			
+			}
 
 			const pois: Array<Poi> = await getPoisNearby({
-				center: { latitude: locationParams.lat!, longitude: locationParams.lon! },
+				center: {latitude: locationParams.lat!, longitude: locationParams.lon!},
 				distance: Number(distance.trim()),
 				buildingId: locationParams.buildingId!,
 				floor: locationParams.floor!,
@@ -142,7 +141,7 @@ export default function SurroundingIdentification() {
 
 			let _markers: Array<any> = [];
 			if (pois.length) {
-				setMarkers([])
+				setMarkers([]);
 				const lang: string = (language === 'zh-Hans' && 'cn') || (language === 'zh-Hant' && 'zh') || language;
 				pois.forEach((poi: Poi | any) => {
 					let sub: string = '';
@@ -170,10 +169,10 @@ export default function SurroundingIdentification() {
 	}
 
 	return (
-		<View style={{ flex: 1 }}>
-			<View style={{ flex: 2 }}>
+		<View style={{flex: 1}}>
+			<View style={{flex: 2}}>
 				<MapxusSdk.MapxusMap>
-					<MapxusSdk.MapView style={{ flex: 1 }} >
+					<MapxusSdk.MapView style={{flex: 1}}>
 						<MapxusSdk.Camera
 							centerCoordinate={centerCoordinate}
 							zoomLevel={19}
@@ -195,14 +194,14 @@ export default function SurroundingIdentification() {
 									floor={marker.floor}
 									title={marker.name}
 								>
-									<MapxusSdk.Callout title={marker.name} />
+									<MapxusSdk.Callout title={marker.name}/>
 								</MapxusSdk.MapxusPointAnnotationView>
 							)) : null
 					}
 				</MapxusSdk.MapxusMap>
 			</View>
 			<ParamsScrollView>
-				<List style={{ marginTop: 10 }}>
+				<List style={{marginTop: 10}}>
 					{
 						Platform.OS == 'ios'
 							?
@@ -246,7 +245,7 @@ export default function SurroundingIdentification() {
 					</InputItem>
 					<Button
 						type={'primary'}
-						style={[styles.button, { marginBottom: 10 }]}
+						style={[styles.button, {marginBottom: 10}]}
 						onPress={handleShow}
 					>
 						Show Simulate Location
@@ -265,7 +264,7 @@ export default function SurroundingIdentification() {
 					<Button
 						ref={refSortButton}
 						type={'primary'}
-						style={[styles.button, { flex: 1 }]}
+						style={[styles.button, {flex: 1}]}
 						onPress={() => handleSort(refSortButton.current)}
 					>
 						{sort}
@@ -273,7 +272,7 @@ export default function SurroundingIdentification() {
 				</View>
 				<Button
 					type={'primary'}
-					style={[styles.button, { marginBottom: 10 }]}
+					style={[styles.button, {marginBottom: 10}]}
 					onPress={handleSearch}
 				>
 					Search
