@@ -1,7 +1,7 @@
 {
   "name": "@mapxus/react-native-mapxus-sdk",
   "title": "React Native Mapxus Sdk",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "The React Native components for Mapxus SDK",
   "main": "javascript/index.js",
   "files": [
