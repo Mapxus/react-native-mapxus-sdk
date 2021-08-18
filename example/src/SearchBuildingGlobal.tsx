@@ -23,6 +23,7 @@ export default function SearchBuildingGlobal() {
 		const buildings: Array<Building> = data?.buildings;
 
 		if (buildings?.length) {
+			setMarkers([])
 			let _coordinates: Array<number[]> = [];
 			let _coordinate: Array<number> = [];
 			let _markers: Array<any> = [];

@@ -357,9 +357,12 @@ class RCTMapxusPointAnnotation(
         }
         if (mChildView != null) {
             map.offscreenAnnotationViewContainer()?.removeView(mChildView)
+            mChildView = null
         }
         if (calloutView != null) {
             map.offscreenAnnotationViewContainer()?.removeView(calloutView)
+            calloutView = null
+            onDeselect()
         }
     }
 

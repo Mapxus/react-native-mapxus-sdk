@@ -14,6 +14,7 @@ export default function SearchBuildingByID() {
 
 	async function handleClick() {
 		if (buildingIds.trim().length) {
+			setMarkers([])
 			const ids: Array<string> = buildingIds
 				.split(buildingIds.includes(',') ? ',' : '，')
 				.map(id => id.trim());

@@ -142,6 +142,7 @@ export default function SurroundingIdentification() {
 
 			let _markers: Array<any> = [];
 			if (pois.length) {
+				setMarkers([])
 				const lang: string = (language === 'zh-Hans' && 'cn') || (language === 'zh-Hant' && 'zh') || language;
 				pois.forEach((poi: Poi | any) => {
 					let sub: string = '';

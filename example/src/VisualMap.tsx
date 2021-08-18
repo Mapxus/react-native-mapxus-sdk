@@ -3,6 +3,7 @@ import { View, TouchableOpacity, Image, StyleSheet, TouchableWithoutFeedback, Pl
 import MapxusSdk, {
 	BearingChangeObject,
 	IndoorSceneChangeObject,
+	NodeChangeObject,
 	VisualNode, VisualNodeGroup,
 	VisualSearchProps
 } from '@mapxus/react-native-mapxus-sdk';
@@ -23,6 +24,7 @@ export default function VisualMap() {
 	const [visualViewShown, setVisualViewShown] = useState(false);
 	const [isSwitched, setIsSwitched] = useState(false);
 	const [floorControllerHidden, setFloorControllerHidden] = useState(false);
+	const [isFirst, setIsFirst] = useState(true);
 
 	const nodeViewRef = useRef<MapxusSdk.VisualNodeView>(null);
 	const visualViewRef = useRef<MapxusSdk.VisualView>(null);
@@ -82,7 +84,7 @@ export default function VisualMap() {
 
 	//in Android
 	function renderVisualNodesAndroid(nodes: Array<VisualNodeGroup>) {
-		nodeViewRef.current?.renderFlagUsingNodes(nodesAndroid);
+		nodeViewRef.current?.renderFlagUsingNodes(nodes);
 	}
 
 	function filterVisualNodes(buildingId: string, floor: string) {
@@ -106,13 +108,23 @@ export default function VisualMap() {
 	}
 
 	function renderVisualView(imageId: string) {
-		visualViewRef.current?.loadVisualViewWithFirstImg(imageId);
+		if (isFirst) {
+			setIsFirst(false);
+			visualViewRef.current?.loadVisualViewWithFirstImg(imageId);
+		} else {
+			visualViewRef.current?.moveToKey(imageId);
+		}
 	}
 
 	function bearingChange(feature: BearingChangeObject) {
 		setLightMarker(
 			_assign({}, lightMarker, { bearing: feature.bearing })
 		);
+	}
+
+	function nodeChanged(feature: NodeChangeObject) {
+		setLightMarker(feature.node);
+		cameraRef.current?.moveTo([feature.node.longitude, feature.node.latitude]);
 	}
 
 	function clickWindow(type: string) {
@@ -132,11 +144,18 @@ export default function VisualMap() {
 			<TouchableWithoutFeedback {...isSwitched && { onPress: () => clickWindow('map') }}>
 				<View style={isSwitched ? styles.container_small : styles.container_full}>
 					<MapxusSdk.MapxusMap
-						mapOption={{ buildingId }}
+						mapOption={{
+							buildingId: 'tsuenwanplaza_hk_369d01',
+							floor: 'L3',
+							zoomInsets: { top: 0, left: 0, bottom: 0, right: 0 }
+						}}
 						indoorControllerAlwaysHidden={floorControllerHidden}
 						onIndoorSceneChange={indoorSceneChange}
 					>
-						<MapxusSdk.MapView style={{ flex: 1 }}>
+						<MapxusSdk.MapView
+							style={{ flex: 1 }}
+							compassEnabled={!isSwitched}
+						>
 							<MapxusSdk.Camera ref={cameraRef} />
 							{
 								lightMarker && (
@@ -174,6 +193,7 @@ export default function VisualMap() {
 						ref={visualViewRef}
 						style={[styles.visualView, { borderRadius: isSwitched ? 0 : 5 }]}
 						onBearingChanged={bearingChange}
+						onNodeChanged={nodeChanged}
 					/>
 				</View>
 			</TouchableWithoutFeedback>

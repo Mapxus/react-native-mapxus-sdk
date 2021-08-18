@@ -33,6 +33,7 @@ export default function SearchBuildingNearby() {
 			});
 
 			if (buildings?.length) {
+				setMarkers([])
 				let _coordinates: Array<number[]> = [];
 				let _coordinate: Array<number> = [];
 				let _markers: Array<any> = [];

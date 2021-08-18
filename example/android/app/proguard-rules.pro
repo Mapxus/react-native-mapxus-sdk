@@ -24,3 +24,11 @@
     public static **[] values();
     public static ** valueOf(java.lang.String);
 }
+
+#----------------------蒲公英----------------------
+-dontwarn com.pgyersdk.**
+-keep class com.pgyersdk.** { *; }
+-keep class com.pgyersdk.**$* { *; }
+
+#visual map
+-keep class io.github.wax911.library.model.** { *; }
