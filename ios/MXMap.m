@@ -10,10 +10,8 @@
 #import <React/UIView+React.h>
 #import <YYModel/YYModel.h>
 #import "MXPointAnnotationView.h"
-#import "MXRouteView.h"
+#import "RCTMXPainterProtocol.h"
 #import "RCTMXUserLocationProtocol.h"
-#import "MXNavigationView.h"
-#import "MXVisualNodeView.h"
 
 
 @interface MXMap () <MapxusMapDelegate>
@@ -66,15 +64,12 @@
         MXPointAnnotationView *pointAnnotation = (MXPointAnnotationView *)subview;
         pointAnnotation.map = self.mapRendererView;
         pointAnnotation.mapxusMap = self;
-    } else if ([subview isKindOfClass:[MXRouteView class]]) {
-        MXRouteView *routeView = (MXRouteView *)subview;
-        routeView.mapRendererView = self.mapRendererView;
+    } else if ([subview conformsToProtocol:@protocol(RCTMXPainterProtocol)]) {
+        id<RCTMXPainterProtocol> pView = (id<RCTMXPainterProtocol>)subview;
+        pView.mapRendererView = self.mapRendererView;
     } else if ([subview conformsToProtocol:@protocol(RCTMXUserLocationProtocol)]) {
         id<RCTMXUserLocationProtocol> locationView = (id<RCTMXUserLocationProtocol>)subview;
         locationView.mapRendererView = self.mapRendererView;
-    } else if ([subview isKindOfClass:[MXVisualNodeView class]]) {
-        MXVisualNodeView *nodeView = (MXVisualNodeView *)subview;
-        nodeView.mapRendererView = self.mapRendererView;
     } else {
         NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
 
@@ -92,15 +87,12 @@
         MXPointAnnotationView *pointAnnotation = (MXPointAnnotationView *)subview;
         pointAnnotation.map = nil;
         pointAnnotation.mapxusMap = nil;
-    } else if ([subview isKindOfClass:[MXRouteView class]]) {
-        MXRouteView *routeView = (MXRouteView *)subview;
-        routeView.mapRendererView = nil;
+    } else if ([subview conformsToProtocol:@protocol(RCTMXPainterProtocol)]) {
+        id<RCTMXPainterProtocol> pView = (id<RCTMXPainterProtocol>)subview;
+        pView.mapRendererView = nil;
     } else if ([subview conformsToProtocol:@protocol(RCTMXUserLocationProtocol)]) {
         id<RCTMXUserLocationProtocol> locationView = (id<RCTMXUserLocationProtocol>)subview;
         locationView.mapRendererView = nil;
-    } else if ([subview isKindOfClass:[MXVisualNodeView class]]) {
-        MXVisualNodeView *nodeView = (MXVisualNodeView *)subview;
-        nodeView.mapRendererView = nil;
     } else {
         NSArray<id<RCTComponent>> *childSubViews = [subview reactSubviews];
         
