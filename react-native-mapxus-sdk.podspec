@@ -4,7 +4,7 @@ require "json"
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
-TargetsToChangeToDynamic = ['MapboxMobileEvents', 'YYModel', 'AFNetworking']
+TargetsToChangeToDynamic = ['YYModel', 'AFNetworking']
 
 $RNMapxus = Object.new
 

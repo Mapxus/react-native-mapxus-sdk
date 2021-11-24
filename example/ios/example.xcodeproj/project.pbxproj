@@ -535,7 +535,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.mapxus.reactnative.mapsample;
 				PRODUCT_NAME = example;
-				PROVISIONING_PROFILE_SPECIFIER = RNMapSampleDev;
+				PROVISIONING_PROFILE_SPECIFIER = "match Development com.mapxus.reactnative.mapsample";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -567,7 +567,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.mapxus.reactnative.mapsample;
 				PRODUCT_NAME = example;
-				PROVISIONING_PROFILE_SPECIFIER = RNMapSampleAoc;
+				PROVISIONING_PROFILE_SPECIFIER = "match AdHoc com.mapxus.reactnative.mapsample";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";

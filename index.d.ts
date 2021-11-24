@@ -1086,9 +1086,7 @@ export interface IndoorStatusChangeObject {
 export interface GeoPoi {
   identifier: string;
   buildingId: string;
-  floor: string;
-  floorId: string;
-  ordinal: number;
+  floor: Floor;
   coordinate: GeoPoint;
   name: string;
   name_en: string;
@@ -1116,7 +1114,7 @@ export interface GeoBuilding {
   name_ja: string;
   name_ko: string;
   floors: Floor[];
-  ground_floor: string;
+  groundFloor: string;
   type: string;
 }
 
@@ -1245,7 +1243,7 @@ export interface Building {
   /**
    * All floors of the building
    */
-  floors: Floor[];
+  floors: FloorInfo[];
 
   /**
    * Building ground floor
@@ -1291,10 +1289,18 @@ export interface GeoPoint {
   elevation?: number;
 }
 
+export interface Ordinal {
+  level: number;
+}
+
 export interface Floor {
   code: string;
   floorId: string;
-  ordinal: number;
+  ordinal?: Ordinal;
+}
+
+export interface FloorInfo {
+  floor: Floor;
   hasVisualMap: boolean;
 }
 
@@ -1326,7 +1332,7 @@ export interface Poi {
   /**
    * ID of the POI
    */
-  id: string;
+   poiId: string;
 
   /**
    * ID of the building
@@ -1341,12 +1347,7 @@ export interface Poi {
   /**
    * Floor where the POI is located
    */
-  floor?: string;
-
-  /**
-   * Floor id of the floor where the POI is located
-   */
-  floorId?: string;
+  floor?: Floor;
 
   /**
    * Longitude and latitude of the POI

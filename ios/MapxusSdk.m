@@ -22,16 +22,15 @@ RCT_EXPORT_MODULE()
     return YES;
 }
 
-- (NSDictionary<NSString *, id> *)constantsToExport
+- (NSDictionary<NSString *, id> *)mapboxConstantsToExport
 {
     // style urls
     NSMutableDictionary *styleURLS = [[NSMutableDictionary alloc] init];
-    [styleURLS setObject:[MGLStyle.streetsStyleURL absoluteString] forKey:@"Street"];
-    [styleURLS setObject:[MGLStyle.darkStyleURL absoluteString] forKey:@"Dark"];
-    [styleURLS setObject:[MGLStyle.lightStyleURL absoluteString] forKey:@"Light"];
-    [styleURLS setObject:[MGLStyle.outdoorsStyleURL absoluteString] forKey:@"Outdoors"];
-    [styleURLS setObject:[MGLStyle.satelliteStyleURL absoluteString] forKey:@"Satellite"];
-    [styleURLS setObject:[MGLStyle.satelliteStreetsStyleURL absoluteString] forKey:@"SatelliteStreet"];
+
+    for (MGLDefaultStyle* style in [MGLStyle predefinedStyles]) {
+      [styleURLS setObject:[style.url absoluteString] forKey:style.name];
+    }
+    [styleURLS setObject:[[MGLStyle defaultStyleURL] absoluteString] forKey:@"Default"];
 
     // event types
     NSMutableDictionary *eventTypes = [[NSMutableDictionary alloc] init];
@@ -72,6 +71,7 @@ RCT_EXPORT_MODULE()
     NSMutableDictionary *cameraModes = [[NSMutableDictionary alloc] init];
     [cameraModes setObject:[NSNumber numberWithInt:RCT_MAPBOX_CAMERA_MODE_FLIGHT] forKey:@"Flight"];
     [cameraModes setObject:[NSNumber numberWithInt:RCT_MAPBOX_CAMERA_MODE_EASE] forKey:@"Ease"];
+    [cameraModes setObject:[NSNumber numberWithInt:RCT_MAPBOX_CAMERA_MODE_LINEAR] forKey:@"Linear"];
     [cameraModes setObject:[NSNumber numberWithInt:RCT_MAPBOX_CAMERA_MODE_NONE] forKey:@"None"];
 
     // style sources
@@ -201,31 +201,6 @@ RCT_EXPORT_MODULE()
     [offlinePackDownloadState setObject:@(MGLOfflinePackStateInactive) forKey:@"Inactive"];
     [offlinePackDownloadState setObject:@(MGLOfflinePackStateActive) forKey:@"Active"];
     [offlinePackDownloadState setObject:@(MGLOfflinePackStateComplete) forKey:@"Complete"];
-    
-    NSMutableDictionary *mapxusStyle = [NSMutableDictionary dictionary];
-    [mapxusStyle setObject:@(MXMStyleMAPXUS_V2) forKey:@"MAPXUS_V2"];
-    [mapxusStyle setObject:@(MXMStyleMAPXUS) forKey:@"MAPXUS"];
-    [mapxusStyle setObject:@(MXMStyleCOMMON) forKey:@"COMMON"];
-    [mapxusStyle setObject:@(MXMStyleCHRISTMAS) forKey:@"CHRISTMAS"];
-    [mapxusStyle setObject:@(MXMStyleHALLOWMAS) forKey:@"HALLOWMAS"];
-    [mapxusStyle setObject:@(MXMStyleMAPPYBEE) forKey:@"MAPPYBEE"];
-    
-    NSMutableDictionary *mapxusSelectorPosition = [NSMutableDictionary dictionary];
-    [mapxusSelectorPosition setObject:@(MXMSelectorPositionCenterLeft) forKey:@"CENTER_LEFT"];
-    [mapxusSelectorPosition setObject:@(MXMSelectorPositionCenterRight) forKey:@"CENTER_RIGHT"];
-    [mapxusSelectorPosition setObject:@(MXMSelectorPositionBottomLeft) forKey:@"BOTTOM_LEFT"];
-    [mapxusSelectorPosition setObject:@(MXMSelectorPositionBottomRight) forKey:@"BOTTOM_RIGHT"];
-    [mapxusSelectorPosition setObject:@(MXMSelectorPositionTopLeft) forKey:@"TOP_LEFT"];
-    [mapxusSelectorPosition setObject:@(MXMSelectorPositionTopRight) forKey:@"TOP_RIGHT"];
-
-    NSMutableDictionary *mapxusZoomMode = [NSMutableDictionary dictionary];
-    [mapxusZoomMode setObject:@(MXMZoomDisable) forKey:@"DISABLE"];
-    [mapxusZoomMode setObject:@(MXMZoomAnimated) forKey:@"ANIMATED"];
-    [mapxusZoomMode setObject:@(MXMZoomDirect) forKey:@"DIRECT"];
-
-    NSMutableDictionary *visualSearchScopeType = [NSMutableDictionary dictionary];
-    [visualSearchScopeType setObject:@(MXMVisualSearchScopeSimple) forKey:@"SIMPLE"];
-    [visualSearchScopeType setObject:@(MXMVisualSearchScopeDetail) forKey:@"DETAIL"];
 
     return @{
          @"StyleURL": styleURLS,
@@ -257,12 +232,47 @@ RCT_EXPORT_MODULE()
          @"LightAnchor": lightAnchor,
          @"OfflineCallbackName": offlineModuleCallbackNames,
          @"OfflinePackDownloadState": offlinePackDownloadState,
-         @"LocationCallbackName": locationModuleEvents,
-         @"MapxusMapStyle": mapxusStyle,
-         @"MapxusSelectorPosition": mapxusSelectorPosition,
-         @"MapxusZoomMode": mapxusZoomMode,
-         @"MapxusVisualSearchScopeType": visualSearchScopeType,
+         @"LocationCallbackName": locationModuleEvents
     };
+}
+
+- (NSDictionary<NSString *, id> *)constantsToExport
+{
+    
+    NSMutableDictionary *mapxusStyle = [NSMutableDictionary dictionary];
+    [mapxusStyle setObject:@(MXMStyleMAPXUS) forKey:@"MAPXUS"];
+    [mapxusStyle setObject:@(MXMStyleCOMMON) forKey:@"COMMON"];
+    [mapxusStyle setObject:@(MXMStyleCHRISTMAS) forKey:@"CHRISTMAS"];
+    [mapxusStyle setObject:@(MXMStyleHALLOWMAS) forKey:@"HALLOWMAS"];
+    [mapxusStyle setObject:@(MXMStyleMAPPYBEE) forKey:@"MAPPYBEE"];
+    
+    NSMutableDictionary *mapxusSelectorPosition = [NSMutableDictionary dictionary];
+    [mapxusSelectorPosition setObject:@(MXMSelectorPositionCenterLeft) forKey:@"CENTER_LEFT"];
+    [mapxusSelectorPosition setObject:@(MXMSelectorPositionCenterRight) forKey:@"CENTER_RIGHT"];
+    [mapxusSelectorPosition setObject:@(MXMSelectorPositionBottomLeft) forKey:@"BOTTOM_LEFT"];
+    [mapxusSelectorPosition setObject:@(MXMSelectorPositionBottomRight) forKey:@"BOTTOM_RIGHT"];
+    [mapxusSelectorPosition setObject:@(MXMSelectorPositionTopLeft) forKey:@"TOP_LEFT"];
+    [mapxusSelectorPosition setObject:@(MXMSelectorPositionTopRight) forKey:@"TOP_RIGHT"];
+
+    NSMutableDictionary *mapxusZoomMode = [NSMutableDictionary dictionary];
+    [mapxusZoomMode setObject:@(MXMZoomDisable) forKey:@"DISABLE"];
+    [mapxusZoomMode setObject:@(MXMZoomAnimated) forKey:@"ANIMATED"];
+    [mapxusZoomMode setObject:@(MXMZoomDirect) forKey:@"DIRECT"];
+
+    NSMutableDictionary *visualSearchScopeType = [NSMutableDictionary dictionary];
+    [visualSearchScopeType setObject:@(MXMVisualSearchScopeSimple) forKey:@"SIMPLE"];
+    [visualSearchScopeType setObject:@(MXMVisualSearchScopeDetail) forKey:@"DETAIL"];
+
+    NSMutableDictionary *muContants = [NSMutableDictionary dictionaryWithDictionary:@{
+        @"MapxusMapStyle": mapxusStyle,
+        @"MapxusSelectorPosition": mapxusSelectorPosition,
+        @"MapxusZoomMode": mapxusZoomMode,
+        @"MapxusVisualSearchScopeType": visualSearchScopeType,
+    }];
+    
+    [muContants addEntriesFromDictionary:[self mapboxConstantsToExport]];
+    
+    return [muContants copy];
 }
 
  
