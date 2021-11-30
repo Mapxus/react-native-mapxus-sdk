@@ -159,7 +159,7 @@ export default function SurroundingIdentification() {
 							coordinate: [Number(poi?.location?.longitude), Number(poi?.location?.latitude)],
 							name: poi[`name_${lang}`] + sub || poi.name_default + sub,
 							buildingId: poi.buildingId,
-							floor: poi.floor
+							floor: poi.floor.code
 						}
 					);
 				});

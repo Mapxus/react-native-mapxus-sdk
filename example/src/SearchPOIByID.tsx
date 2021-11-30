@@ -27,7 +27,7 @@ export default function SearchPOIByID() {
 						coordinate: [Number(poi?.location?.longitude), Number(poi?.location?.latitude)],
 						name: poi[`name_${lang}`] || poi.name_default,
 						buildingId: poi.buildingId,
-						floor: poi.floor
+						floor: poi.floor.code
 					}
 				));
 				setMarkers(_markers);

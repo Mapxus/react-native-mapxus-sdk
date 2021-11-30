@@ -8,8 +8,7 @@
     "android",
     "ios",
     "javascript",
-    "react-native-mapxus-sdk.podspec",
-    "index.d.ts"
+    "react-native-mapxus-sdk.podspec"
   ],
   "scripts": {
     "docgenerate": "node ./scripts/autogenerate"

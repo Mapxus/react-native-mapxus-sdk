@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { requireNativeComponent } from 'react-native';
-import NativeBridgeComponent from '../../components/NativeBridgeComponent';
-import { ViewPropTypes } from '../../utils';
+import NativeBridgeComponent from '../../maprenderer/components/NativeBridgeComponent';
+import { ViewPropTypes } from '../../maprenderer/utils';
 
 const NATIVE_MODULE_NAME = 'MXVisualView'
 

@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { requireNativeComponent, processColor } from 'react-native';
-import NativeBridgeComponent from '../../components/NativeBridgeComponent';
-import { ViewPropTypes } from '../../utils';
+import NativeBridgeComponent from '../../maprenderer/components/NativeBridgeComponent';
+import { ViewPropTypes } from '../../maprenderer/utils';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
-import { StyleTypes } from '../../utils/styleMap';
+import { StyleTypes } from '../../maprenderer/utils/styleMap';
 
 
 const typeMap = {

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import headingIcon from '../assets/heading.png';
+import headingIcon from '../../assets/heading.png';
 
 import SymbolLayer from './SymbolLayer';
 

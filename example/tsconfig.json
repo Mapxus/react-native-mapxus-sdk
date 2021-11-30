@@ -39,7 +39,7 @@
     "moduleResolution": "node",               /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
     "baseUrl": "./",                       /* Base directory to resolve non-absolute module names. */
     "paths": {
-      "@mapxus/react-native-mapxus-sdk": ["../index.d.ts"],
+      "@mapxus/react-native-mapxus-sdk": ["../javascript/index.d.ts"],
       "react": ["./node_modules/@types/react"],
       "react-native": ["./node_modules/@types/react-native"],
       "@turf/helpers": ["./node_modules/@turf/helpers"],

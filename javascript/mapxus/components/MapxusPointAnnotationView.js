@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {requireNativeComponent, StyleSheet, Platform} from 'react-native';
 
-import {toJSONString, isFunction, viewPropTypes} from '../../utils';
-import {makePoint} from '../../utils/geoUtils';
+import {toJSONString, isFunction, viewPropTypes} from '../../maprenderer/utils';
+import {makePoint} from '../../maprenderer/utils/geoUtils';
 
-import NativeBridgeComponent from '../../components/NativeBridgeComponent';
+import NativeBridgeComponent from '../../maprenderer/components/NativeBridgeComponent';
 
 export const NATIVE_MODULE_NAME = 'MXPointAnnotationView';
 

@@ -27,10 +27,6 @@ const mapStyles: Array<any> = [
 	{
 		name: 'MAPXUS样式',
 		style: MapxusSdk.MapxusMapStyle.MAPXUS
-	},
-	{
-		name: 'MAPXUS_V2',
-		style: MapxusSdk.MapxusMapStyle.MAPXUS_V2
 	}
 ];
 const languages = [

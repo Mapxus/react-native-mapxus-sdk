@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { requireNativeComponent, NativeModules } from 'react-native';
-import { viewPropTypes, isFunction } from '../../utils';
-import NativeBridgeComponent from '../../components/NativeBridgeComponent';
+import { viewPropTypes, isFunction } from '../../maprenderer/utils';
+import NativeBridgeComponent from '../../maprenderer/components/NativeBridgeComponent';
 
 export const NATIVE_MODULE_NAME = 'RCTMapxusLocation';
 const RCTMapxusModule = NativeModules.MapxusSdk;

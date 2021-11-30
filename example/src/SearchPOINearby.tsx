@@ -47,7 +47,7 @@ export default function SearchPOINearby() {
 					coordinate: [Number(poi?.location?.longitude), Number(poi?.location?.latitude)],
 					name: poi[`name_${lang}`] || poi.name_default,
 					buildingId: poi.buildingId,
-					floor: poi.floor
+					floor: poi.floor.code
 				}
 			));
 

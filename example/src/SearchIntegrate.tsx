@@ -64,7 +64,7 @@ export default function SearchIntegrate() {
 
 	function clickPOI(poi: Poi | any) {
 		const buildingId = poi.buildingId;
-		const floor = poi.floor;
+		const floor = poi.floor.code;
 		const coordinate = [poi.location.longitude, poi.location.latitude];
 
 		setMarker({
@@ -194,7 +194,7 @@ function renderPOIsByCategory(
 						<View>
 							<Text style={styles.category_name}>{d[`name_${lang}`] || d.name_default}</Text>
 							<Text
-								style={styles.sub_name}>{`${categoryName} . ${d.floor}`}</Text>
+								style={styles.sub_name}>{`${categoryName} . ${d.floor.code}`}</Text>
 						</View>
 					</View>
 				</TouchableOpacity>
