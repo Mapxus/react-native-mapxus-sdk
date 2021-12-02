@@ -10,7 +10,7 @@ export default function CreateMapByBuilding() {
 				floor: 'L3',
 				zoomInsets: {top: 0, left: 0, bottom: 0, right: 0}
 			}}>
-				<MapxusSdk.MapView style={{flex: 1}}/>
+				<MapxusSdk.mapRender.MapView style={{flex: 1}}/>
 			</MapxusSdk.MapxusMap>
 		</View>
 	);

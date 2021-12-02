@@ -8,7 +8,8 @@ import MapxusSdk, {
 	GeocodeSearchResult,
 	InputLocation,
 	AndroidSimulateLocation,
-	AndroidInputLocation
+	AndroidInputLocation,
+	mapRender
 } from '@mapxus/react-native-mapxus-sdk';
 import ParamsScrollView from './ParamsScrollView';
 import {Button, InputItem, List} from '@ant-design/react-native';
@@ -80,7 +81,7 @@ export default function SurroundingIdentification() {
 				floor: location.floor
 			});
 		} else {
-			const location: MapxusSdk.Location = feature;
+			const location: MapxusSdk.mapRender.Location = feature;
 			setLocation({
 				lat: location.coords.latitude,
 				lon: location.coords.longitude,
