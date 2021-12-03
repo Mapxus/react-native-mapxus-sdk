@@ -1,4 +1,4 @@
-declare module 'react-native-mapbox-gl__maps';
+// declare module 'react-native-mapbox-gl__maps';
 
 import {
   Component,
@@ -106,7 +106,7 @@ export type OnPressEvent = {
   }
 };
 
-declare namespace MapboxGL {
+export declare namespace MapboxGL {
   function removeCustomHeader(headerName: string): void;
   function addCustomHeader(headerName: string, headerValue: string): void;
   function setAccessToken(accessToken: string | null): void;
@@ -261,6 +261,12 @@ declare namespace MapboxGL {
      * The altitude, measured in meters.
      */
     altitude?: number;
+
+    /**
+     * This is a logical representation that will vary on definition from building-to-building.
+     * Floor 0 will always represent the floor designated as "ground".
+     */
+    ordinal?: number;
   }
 
   class Light extends Component<LightProps> { }
@@ -950,4 +956,4 @@ export class Logger {
   public static setLogLevel: (level: LogLevel) => void;
 }
 
-export default MapboxGL;
+// export default MapboxGL;

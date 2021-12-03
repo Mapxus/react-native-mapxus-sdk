@@ -1,6 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
-import MapxusSdk, {MapxusPointAnnotationViewProps} from '@mapxus/react-native-mapxus-sdk';
+import MapxusSdk, {MapRenderer, MapxusPointAnnotationViewProps} from '@mapxus/react-native-mapxus-sdk';
 
 const pois: Array<MapxusPointAnnotationViewProps> = [
 	{
@@ -40,7 +40,7 @@ export default function IndoorMarker() {
 				buildingId: 'tsuenwanplaza_hk_369d01',
 				zoomInsets: {left: -100, right: -100}
 			}}>
-				<MapxusSdk.MapView style={{flex: 1}}/>
+				<MapRenderer.MapboxGL.MapView style={{flex: 1}}/>
 				{
 					pois.map((poi: MapxusPointAnnotationViewProps) => (
 						<MapxusSdk.MapxusPointAnnotationView
@@ -51,7 +51,7 @@ export default function IndoorMarker() {
 							floor={poi.floor}
 							title={poi.title}
 						>
-							<MapxusSdk.Callout title={poi.title}/>
+							<MapRenderer.MapboxGL.Callout title={poi.title}/>
 						</MapxusSdk.MapxusPointAnnotationView>
 					))
 				}

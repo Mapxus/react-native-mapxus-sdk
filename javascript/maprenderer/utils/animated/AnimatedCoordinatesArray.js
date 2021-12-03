@@ -1,4 +1,4 @@
-import { Animated } from 'react-native';
+import {Animated} from 'react-native';
 
 /* eslint-disable guard-for-in */
 
@@ -31,7 +31,7 @@ class AnimatedCoordinatesArray extends AnimatedWithChildren {
    * @returns {object} - the state object
    */
   onInitialState(coordinatesArray) {
-    return { coords: coordinatesArray.map(coord => [coord[0], coord[1]]) };
+    return {coords: coordinatesArray.map(coord => [coord[0], coord[1]])};
   }
 
   /**
@@ -53,7 +53,7 @@ class AnimatedCoordinatesArray extends AnimatedWithChildren {
    * @returns {object} next state
    */
   onCalculate(state, progress) {
-    const { coords, targetCoords } = state;
+    const {coords, targetCoords} = state;
     const newF = progress;
     const origF = 1.0 - newF;
 
@@ -76,7 +76,7 @@ class AnimatedCoordinatesArray extends AnimatedWithChildren {
           addingOrig[0] * origF + newCoord[0] * newF,
           addingOrig[1] * origF + newCoord[1] * newF,
         ]);
-      return { coords: [...common, ...adding], targetCoords };
+      return {coords: [...common, ...adding], targetCoords};
     }
 
     if (coords.length > targetCoords.length) {
@@ -91,10 +91,10 @@ class AnimatedCoordinatesArray extends AnimatedWithChildren {
           origCoord[0] * origF + dissapearingNew[0] * newF,
           origCoord[1] * origF + dissapearingNew[1] * newF,
         ]);
-      return { coords: [...common, ...dissapearing], targetCoords };
+      return {coords: [...common, ...dissapearing], targetCoords};
     }
 
-    return { coords: common, targetCoords };
+    return {coords: common, targetCoords};
   }
 
   /**
@@ -113,7 +113,7 @@ class AnimatedCoordinatesArray extends AnimatedWithChildren {
   }
 
   animate(progressValue, progressAnimation, config) {
-    const { toValue } = config;
+    const {toValue} = config;
 
     const onAnimationStart = animation => {
       if (this.animation) {

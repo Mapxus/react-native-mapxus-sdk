@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import MapxusSdk from '@mapxus/react-native-mapxus-sdk';
+import MapxusSdk, { MapRenderer } from '@mapxus/react-native-mapxus-sdk';
 import {Switch, Button} from '@ant-design/react-native';
 import ParamsScrollView from './ParamsScrollView';
 
@@ -26,7 +26,7 @@ export default function IndoorControls() {
 					selectorPosition={position}
 					mapOption={{buildingId: 'tsuenwanplaza_hk_369d01'}}
 				>
-					<MapxusSdk.MapView style={{flex: 1}}/>
+					<MapRenderer.MapboxGL.MapView style={{flex: 1}}/>
 				</MapxusSdk.MapxusMap>
 			</View>
 			<ParamsScrollView>

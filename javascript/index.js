@@ -4,8 +4,8 @@ import {
 	NativeModules,
 } from 'react-native';
 
-// import * as Mapbox from './maprenderer';
 import { isAndroid } from './maprenderer/utils';
+import MapboxGL from './maprenderer';
 
 import MapxusMap from './mapxus/components/MapxusMap';
 import MapxusMapLocationAndroid from './mapxus/components/MapxusMapLocation.android';
@@ -25,13 +25,17 @@ import visualSearchManager from './mapxus/modules/visualSearchManager';
 const { MapxusSdk } = NativeModules;
 const MapxusMapLocation = isAndroid() && MapxusMapLocationAndroid;
 
-// MapxusSdk.mapRenderer = Mapbox;
 // components
+const MapRenderer = {
+	MapboxGL: {
+		...MapboxGL
+	}
+};
 MapxusSdk.MapxusMap = MapxusMap;
 MapxusSdk.MapxusPointAnnotationView = MapxusPointAnnotationView;
-MapxusSdk.RouteView = RouteView;
 MapxusSdk.VisualNodeView = VisualNodeView;
 MapxusSdk.VisualView = VisualView;
+MapxusSdk.RouteView = RouteView;
 MapxusSdk.NavigationView = NavigationView;
 MapxusSdk.SimulateLocationManager = SimulateLocationManager;
 if (MapxusMapLocation) {
@@ -40,28 +44,28 @@ if (MapxusMapLocation) {
 
 // modules
 MapxusSdk.buildingSearchManager = buildingSearchManager;
-MapxusSdk.geocodeSearchManager = geocodeSearchManager;
-MapxusSdk.poiCategorySearchManager = poiCategorySearchManager;
 MapxusSdk.poiSearchManager = poiSearchManager;
+MapxusSdk.poiCategorySearchManager = poiCategorySearchManager;
 MapxusSdk.routeSearchManager = routeSearchManager;
 MapxusSdk.visualSearchManager = visualSearchManager;
+MapxusSdk.geocodeSearchManager = geocodeSearchManager;
 
 export {
-	// Mapbox,
+	MapRenderer,
 	MapxusMap,
 	MapxusPointAnnotationView,
-	RouteView,
 	VisualNodeView,
 	VisualView,
+	RouteView,
 	NavigationView,
 	SimulateLocationManager,
 	MapxusMapLocation,
 	buildingSearchManager,
-	geocodeSearchManager,
-	poiCategorySearchManager,
 	poiSearchManager,
+	poiCategorySearchManager,
 	routeSearchManager,
-	visualSearchManager
+	visualSearchManager,
+	geocodeSearchManager,
 };
 
 export default MapxusSdk;

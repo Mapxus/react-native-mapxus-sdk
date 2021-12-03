@@ -3,6 +3,7 @@ import {View, TouchableOpacity, Image, StyleSheet, TouchableWithoutFeedback, Pla
 import MapxusSdk, {
 	BearingChangeObject,
 	IndoorSceneChangeObject,
+	MapRenderer,
 	NodeChangeObject,
 	VisualNode, VisualNodeGroup,
 	VisualSearchProps
@@ -28,7 +29,7 @@ export default function VisualMap() {
 
 	const nodeViewRef = useRef<MapxusSdk.VisualNodeView>(null);
 	const visualViewRef = useRef<MapxusSdk.VisualView>(null);
-	const cameraRef = useRef<MapxusSdk.Camera>(null);
+	const cameraRef = useRef<MapRenderer.MapboxGL.Camera>(null);
 
 	useEffect(() => {
 		initVisualData({buildingId, scope: 1});
@@ -152,15 +153,15 @@ export default function VisualMap() {
 						indoorControllerAlwaysHidden={floorControllerHidden}
 						onIndoorSceneChange={indoorSceneChange}
 					>
-						<MapxusSdk.MapView
+						<MapRenderer.MapboxGL.MapView
 							style={{flex: 1}}
 							compassEnabled={!isSwitched}
 						>
-							<MapxusSdk.Camera ref={cameraRef}/>
+							<MapRenderer.MapboxGL.Camera ref={cameraRef}/>
 							{
 								lightMarker && (
 									Platform.OS == 'ios' ?
-										<MapxusSdk.PointAnnotation
+										<MapRenderer.MapboxGL.PointAnnotation
 											key={lightMarker.key}
 											id={lightMarker.key}
 											coordinate={[lightMarker.longitude, lightMarker.latitude]}
@@ -173,10 +174,10 @@ export default function VisualMap() {
 													transform: [{rotate: `${lightMarker.bearing}deg`}]
 												}}
 											/>
-										</MapxusSdk.PointAnnotation> : null
+										</MapRenderer.MapboxGL.PointAnnotation> : null
 								)
 							}
-						</MapxusSdk.MapView>
+						</MapRenderer.MapboxGL.MapView>
 						<MapxusSdk.VisualNodeView
 							ref={nodeViewRef}
 							onTappedFlag={clickNode}

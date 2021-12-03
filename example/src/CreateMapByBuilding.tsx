@@ -1,6 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
-import MapxusSdk from '@mapxus/react-native-mapxus-sdk';
+import MapxusSdk, { MapRenderer } from '@mapxus/react-native-mapxus-sdk';
 
 export default function CreateMapByBuilding() {
 	return (
@@ -10,7 +10,7 @@ export default function CreateMapByBuilding() {
 				floor: 'L3',
 				zoomInsets: {top: 0, left: 0, bottom: 0, right: 0}
 			}}>
-				<MapxusSdk.mapRender.MapView style={{flex: 1}}/>
+				<MapRenderer.MapboxGL.MapView style={{flex: 1}}/>
 			</MapxusSdk.MapxusMap>
 		</View>
 	);

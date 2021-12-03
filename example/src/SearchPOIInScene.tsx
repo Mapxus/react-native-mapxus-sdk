@@ -1,6 +1,6 @@
 import React, {useRef, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import MapxusSdk, {Poi, PoiSearchInIndoorSceneProps} from '@mapxus/react-native-mapxus-sdk';
+import MapxusSdk, {MapRenderer, Poi, PoiSearchInIndoorSceneProps} from '@mapxus/react-native-mapxus-sdk';
 import {ActivityIndicator, Button, InputItem, List} from '@ant-design/react-native';
 import ParamsScrollView from './ParamsScrollView';
 import language from './utils/language';
@@ -59,7 +59,7 @@ export default function SearchPOIInScene() {
 					ref={mapRef}
 					mapOption={{buildingId: 'tsuenwanplaza_hk_369d01'}}
 				>
-					<MapxusSdk.MapView style={{flex: 1}}/>
+					<MapRenderer.MapboxGL.MapView style={{flex: 1}}/>
 					{
 						markers.length
 							? markers.map(marker => (
@@ -71,7 +71,7 @@ export default function SearchPOIInScene() {
 									floor={marker.floor}
 									title={marker.name}
 								>
-									<MapxusSdk.Callout title={marker.name}/>
+									<MapRenderer.MapboxGL.Callout title={marker.name}/>
 								</MapxusSdk.MapxusPointAnnotationView>
 							)) : null
 					}

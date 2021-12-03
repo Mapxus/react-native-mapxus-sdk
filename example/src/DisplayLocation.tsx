@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StatusBar, Platform, StyleSheet} from 'react-native';
 import {Button} from '@ant-design/react-native';
-import MapxusSdk, {AndroidLocation, MapboxGLEvent} from '@mapxus/react-native-mapxus-sdk';
+import MapxusSdk, {AndroidLocation, MapRenderer} from '@mapxus/react-native-mapxus-sdk';
 import getStatusBarHeight from './utils/getStatusBarHeight';
 
 export default function DisplayLocation() {
@@ -53,7 +53,7 @@ export default function DisplayLocation() {
 	}, [followModelNumber])
 
 	// For iOS
-	function handleUpdate(location: MapxusSdk.Location) {
+	function handleUpdate(location: MapRenderer.MapboxGL.Location) {
 		setLat(location.coords.latitude);
 		setLon(location.coords.longitude);
 		setAccuracy(location.coords.accuracy ? location.coords.accuracy : 0);
@@ -68,7 +68,7 @@ export default function DisplayLocation() {
 		setFloor(location.floor ? location.floor : "0");
 	}
 
-	function handleUserTrackingModeChange(e: MapboxGLEvent<'usertrackingmodechange',
+	function handleUserTrackingModeChange(e: MapRenderer.MapboxGLEvent<'usertrackingmodechange',
 		{
 			followUserLocation: boolean;
 			followUserMode: 'normal' | 'compass' | 'course' | null;
@@ -103,16 +103,16 @@ export default function DisplayLocation() {
 					buildingId: 'tsuenwanplaza_hk_369d01',
 					zoomInsets: {left: -100, right: -100}
 				}}>
-					<MapxusSdk.MapView style={{flex: 1}}>
+					<MapRenderer.MapboxGL.MapView style={{flex: 1}}>
 						{
 							Platform.OS == 'ios'
 								? <View>
-									<MapxusSdk.Camera
+									<MapRenderer.MapboxGL.Camera
 										followUserMode={followModel}
 										followUserLocation={isFollow}
 										onUserTrackingModeChange={handleUserTrackingModeChange}
 									/>
-									<MapxusSdk.UserLocation
+									<MapRenderer.MapboxGL.UserLocation
 										renderMode={'native'}
 										visible={true}
 										showsUserHeadingIndicator={true}
@@ -122,7 +122,7 @@ export default function DisplayLocation() {
 								: null
 						}
 
-					</MapxusSdk.MapView>
+					</MapRenderer.MapboxGL.MapView>
 					{
 						Platform.OS == 'android'
 							? <MapxusSdk.MapxusMapLocation

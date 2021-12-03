@@ -1,5 +1,5 @@
 import React from 'react';
-import { Easing } from 'react-native';
+import {Easing} from 'react-native';
 import PropTypes from 'prop-types';
 
 import SymbolLayer from '../SymbolLayer';
@@ -43,7 +43,7 @@ class Annotation extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (!Array.isArray(this.props.coordinates)) {
-      this.setState({ shape: null });
+      this.setState({shape: null});
       return;
     }
 
@@ -84,7 +84,7 @@ class Annotation extends React.Component {
   _getShapeFromProps(props = {}) {
     const lng = props.coordinates[0] || 0;
     const lat = props.coordinates[1] || 0;
-    return { type: 'Point', coordinates: [lng, lat] };
+    return {type: 'Point', coordinates: [lng, lat]};
   }
 
   get symbolStyle() {

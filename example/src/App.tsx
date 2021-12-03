@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {View, StatusBar, Platform} from 'react-native';
 import config from './utils/config';
-import MapxusSdk from '@mapxus/react-native-mapxus-sdk';
+import MapxusSdk, { MapRenderer } from '@mapxus/react-native-mapxus-sdk';
 import Menu from './Menu';
 import SampleMap from './SampleMap';
 import getStatusBarHeight from './utils/getStatusBarHeight';
@@ -26,7 +26,7 @@ export default function App() {
 
 		if (Platform.OS == "android") {
 			async function requestAndroidLocationPermissions() {
-				await MapxusSdk.requestAndroidLocationPermissions();
+				await MapRenderer.MapboxGL.requestAndroidLocationPermissions();
 			}
 			requestAndroidLocationPermissions();
 		}

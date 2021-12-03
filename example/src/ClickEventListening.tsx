@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text} from 'react-native';
-import MapxusSdk, {LongPressedObject, TappedOnBlankObject, TappedOnPoiObject} from '@mapxus/react-native-mapxus-sdk';
+import MapxusSdk, {LongPressedObject, MapRenderer, TappedOnBlankObject, TappedOnPoiObject} from '@mapxus/react-native-mapxus-sdk';
 import {Provider, Modal} from '@ant-design/react-native';
 import ParamsScrollView from './ParamsScrollView';
 
@@ -60,7 +60,7 @@ export default function ClickEventListening() {
 						onTappedOnPoi={handleClick}
 						onTappedOnBlank={handleClickBlank}
 					>
-						<MapxusSdk.MapView style={{flex: 1}}/>
+						<MapRenderer.MapboxGL.MapView style={{flex: 1}}/>
 					</MapxusSdk.MapxusMap>
 				</View>
 				<ParamsScrollView>

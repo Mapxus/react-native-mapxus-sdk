@@ -1,6 +1,6 @@
 import React, {useRef, useState} from 'react';
 import {View, Text} from 'react-native';
-import MapxusSdk, {IndoorStatusChangeObject} from '@mapxus/react-native-mapxus-sdk';
+import MapxusSdk, {IndoorStatusChangeObject, MapRenderer} from '@mapxus/react-native-mapxus-sdk';
 
 export default function IndoorSceneInAndOutListening() {
 	const [isIndoor, setIsIndoor] = useState(true);
@@ -26,7 +26,7 @@ export default function IndoorSceneInAndOutListening() {
 					mapOption={{buildingId: 'tsuenwanplaza_hk_369d01'}}
 					onIndoorStatusChange={handleClick}
 				>
-					<MapxusSdk.MapView style={{flex: 1}}/>
+					<MapRenderer.MapboxGL.MapView style={{flex: 1}}/>
 				</MapxusSdk.MapxusMap>
 			</View>
 		</View>

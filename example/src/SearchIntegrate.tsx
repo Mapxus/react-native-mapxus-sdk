@@ -4,6 +4,7 @@ import MapxusSdk, {
 	Category,
 	GeoBuilding,
 	IndoorSceneChangeObject,
+	MapRenderer,
 	Poi,
 	POICategorySearchProps
 } from '@mapxus/react-native-mapxus-sdk';
@@ -26,7 +27,7 @@ export default function SearchIntegrate() {
 	const [marker, setMarker] = useState<any>(null);
 
 	const mapRef = useRef<MapxusSdk.MapxusMap>(null);
-	const cameraRef = useRef<MapxusSdk.Camera>(null);
+	const cameraRef = useRef<MapRenderer.MapboxGL.Camera>(null);
 
 	useEffect(() => {
 		if (controllerStatus === 1 && marker) {
@@ -93,9 +94,9 @@ export default function SearchIntegrate() {
 					mapOption={{buildingId: 'harbourcity_hk_8b580b'}}
 					onIndoorSceneChange={indoorSceneChange}
 				>
-					<MapxusSdk.MapView style={{flex: 1}}>
-						<MapxusSdk.Camera ref={cameraRef}/>
-					</MapxusSdk.MapView>
+					<MapRenderer.MapboxGL.MapView style={{flex: 1}}>
+						<MapRenderer.MapboxGL.Camera ref={cameraRef}/>
+					</MapRenderer.MapboxGL.MapView>
 					{
 						marker
 							? <MapxusSdk.MapxusPointAnnotationView
@@ -106,7 +107,7 @@ export default function SearchIntegrate() {
 								floor={marker.floor}
 								title={marker.name}
 							>
-								<MapxusSdk.Callout title={marker.name}/>
+								<MapRenderer.MapboxGL.Callout title={marker.name}/>
 							</MapxusSdk.MapxusPointAnnotationView>
 							: null
 					}

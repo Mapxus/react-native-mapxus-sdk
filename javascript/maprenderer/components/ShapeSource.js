@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import {NativeModules, requireNativeComponent} from 'react-native';
 
-import { getFilter } from '../utils/filterUtils';
+import {getFilter} from '../utils/filterUtils';
 import {
   toJSONString,
   cloneReactChildrenWithProps,
@@ -10,12 +10,12 @@ import {
   isFunction,
   isAndroid,
 } from '../utils';
-import { copyPropertiesAsDeprecated } from '../utils/deprecation';
+import {copyPropertiesAsDeprecated} from '../utils/deprecation';
 
 import AbstractSource from './AbstractSource';
 import NativeBridgeComponent from './NativeBridgeComponent';
 
-const MapboxGL = NativeModules.MapxusSdk;
+const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLShapeSource';
 
@@ -287,7 +287,7 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
   onPress(event) {
     const {
       nativeEvent: {
-        payload: { features, coordinates, point },
+        payload: {features, coordinates, point},
       },
     } = event;
     let newEvent = {

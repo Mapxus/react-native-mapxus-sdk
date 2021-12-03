@@ -1,6 +1,6 @@
 import React, {useRef, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import MapxusSdk, {Building, BuildingSearchResult} from '@mapxus/react-native-mapxus-sdk';
+import MapxusSdk, {Building, BuildingSearchResult, MapRenderer} from '@mapxus/react-native-mapxus-sdk';
 import {Button, List, InputItem} from '@ant-design/react-native';
 import turfBbox from '@turf/bbox';
 import {lineString as turfLineString} from '@turf/helpers';
@@ -12,7 +12,7 @@ export default function SearchBuildingGlobal() {
 	const [offset, setOffset] = useState('10');
 	const [page, setPage] = useState('1');
 	const [markers, setMarkers] = useState<Array<any>>([]);
-	const cameraRef = useRef<MapxusSdk.Camera>(null);
+	const cameraRef = useRef<MapRenderer.MapboxGL.Camera>(null);
 
 	async function handleClick() {
 		const data: BuildingSearchResult = await MapxusSdk.buildingSearchManager.buildingSearchGlobal({
@@ -51,22 +51,22 @@ export default function SearchBuildingGlobal() {
 		<View style={{flex: 1}}>
 			<View style={{flex: 2}}>
 				<MapxusSdk.MapxusMap mapOption={{buildingId: 'tsuenwanplaza_hk_369d01'}}>
-					<MapxusSdk.MapView style={{flex: 1}}>
-						<MapxusSdk.Camera ref={cameraRef}/>
+					<MapRenderer.MapboxGL.MapView style={{flex: 1}}>
+						<MapRenderer.MapboxGL.Camera ref={cameraRef}/>
 						{
 							markers.length
 								? markers.map((marker, idx) => (
-									<MapxusSdk.PointAnnotation
+									<MapRenderer.MapboxGL.PointAnnotation
 										key={idx}
 										id={`${idx}`}
 										coordinate={marker.coordinate}
 										title={marker.name}
 									>
-										<MapxusSdk.Callout title={marker.name}/>
-									</MapxusSdk.PointAnnotation>
+										<MapRenderer.MapboxGL.Callout title={marker.name}/>
+									</MapRenderer.MapboxGL.PointAnnotation>
 								)) : null
 						}
-					</MapxusSdk.MapView>
+					</MapRenderer.MapboxGL.MapView>
 				</MapxusSdk.MapxusMap>
 			</View>
 			<ParamsScrollView>

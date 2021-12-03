@@ -1,6 +1,6 @@
 import React, {useRef, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import MapxusSdk, {Poi, PoiSearchResult} from '@mapxus/react-native-mapxus-sdk';
+import MapxusSdk, {MapRenderer, Poi, PoiSearchResult} from '@mapxus/react-native-mapxus-sdk';
 import {Button, InputItem, List} from '@ant-design/react-native';
 import ParamsScrollView from './ParamsScrollView';
 import turfBboxPolygon from '@turf/bbox-polygon';
@@ -17,7 +17,7 @@ export default function SearchPOIInBound() {
 	const [page, setPage] = useState('1');
 	const [markers, setMarkers] = useState<Array<any>>([]);
 	const [boundPolygon, setBoundPolygon] = useState<GeoJSON.Feature | null>(null);
-	const cameraRef = useRef<MapxusSdk.Camera>(null);
+	const cameraRef = useRef<MapRenderer.MapboxGL.Camera>(null);
 
 	async function handleClick() {
 		const sw: Array<string> = southWest.split(southWest.includes(',') ? ',' : '，');
@@ -73,22 +73,22 @@ export default function SearchPOIInBound() {
 		<View style={{flex: 1}}>
 			<View style={{flex: 2}}>
 				<MapxusSdk.MapxusMap mapOption={{buildingId: 'tsuenwanplaza_hk_369d01'}}>
-					<MapxusSdk.MapView style={{flex: 1}}>
-						<MapxusSdk.Camera ref={cameraRef}/>
+					<MapRenderer.MapboxGL.MapView style={{flex: 1}}>
+						<MapRenderer.MapboxGL.Camera ref={cameraRef}/>
 						{
 							boundPolygon
-								? <MapxusSdk.ShapeSource
+								? <MapRenderer.MapboxGL.ShapeSource
 									id={'customSourceSample'}
 									shape={boundPolygon}
 								>
-									<MapxusSdk.FillLayer
+									<MapRenderer.MapboxGL.FillLayer
 										id={'customLayerSample'}
 										style={{fillOpacity: 0.3}}
 									/>
-								</MapxusSdk.ShapeSource>
+								</MapRenderer.MapboxGL.ShapeSource>
 								: null
 						}
-					</MapxusSdk.MapView>
+					</MapRenderer.MapboxGL.MapView>
 					{
 						markers.length
 							? markers.map(marker => (
@@ -100,7 +100,7 @@ export default function SearchPOIInBound() {
 									floor={marker.floor}
 									title={marker.name}
 								>
-									<MapxusSdk.Callout title={marker.name}/>
+									<MapRenderer.MapboxGL.Callout title={marker.name}/>
 								</MapxusSdk.MapxusPointAnnotationView>
 							)) : null
 					}

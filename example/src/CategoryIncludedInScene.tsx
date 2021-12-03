@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View, StatusBar, StyleSheet, Text, ScrollView} from 'react-native';
-import MapxusSdk, {Category, IndoorSceneChangeObject, POICategorySearchProps} from '@mapxus/react-native-mapxus-sdk';
+import MapxusSdk, {Category, IndoorSceneChangeObject, MapRenderer, POICategorySearchProps} from '@mapxus/react-native-mapxus-sdk';
 import {Button, Provider, Modal, List, ActivityIndicator} from '@ant-design/react-native';
 import ParamsScrollView from './ParamsScrollView';
 import getStatusBarHeight from './utils/getStatusBarHeight';
@@ -47,7 +47,7 @@ export default function CategoryIncludedInScene() {
 						mapOption={{buildingId: 'tsuenwanplaza_hk_369d01'}}
 						onIndoorSceneChange={handleIndoorChange}
 					>
-						<MapxusSdk.MapView style={{flex: 1}}/>
+						<MapRenderer.MapboxGL.MapView style={{flex: 1}}/>
 					</MapxusSdk.MapxusMap>
 				</View>
 				<ParamsScrollView>

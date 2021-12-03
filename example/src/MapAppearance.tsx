@@ -1,6 +1,6 @@
 import React, {useState, useRef, useEffect, Fragment} from 'react';
 import {View, Text, StyleSheet, StatusBar} from 'react-native';
-import MapxusSdk from '@mapxus/react-native-mapxus-sdk';
+import MapxusSdk, { MapRenderer } from '@mapxus/react-native-mapxus-sdk';
 import {Switch, Button, Provider, Modal, List} from '@ant-design/react-native';
 import ParamsScrollView from './ParamsScrollView';
 import getStatusBarHeight from './utils/getStatusBarHeight';
@@ -155,7 +155,7 @@ export default function MapAppearance() {
 						outdoorHidden={outdoorHidden}
 						mapOption={{buildingId: 'tsuenwanplaza_hk_369d01'}}
 					>
-						<MapxusSdk.MapView
+						<MapRenderer.MapboxGL.MapView
 							style={{flex: 1}}
 							onDidFinishLoadingStyle={() => setIsStyleLoaded(true)}
 						/>

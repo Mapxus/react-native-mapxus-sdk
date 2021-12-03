@@ -1,13 +1,13 @@
 import React from 'react';
-import { View, NativeModules, requireNativeComponent } from 'react-native';
+import {View, NativeModules, requireNativeComponent} from 'react-native';
 import PropTypes from 'prop-types';
 
-import { viewPropTypes } from '../utils';
-import { SymbolLayerStyleProp } from '../utils/styleMap';
+import {viewPropTypes} from '../utils';
+import {SymbolLayerStyleProp} from '../utils/styleMap';
 
 import AbstractLayer from './AbstractLayer';
 
-const MapboxGL = NativeModules.MapxusSdk;
+const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLSymbolLayer';
 
@@ -111,7 +111,7 @@ const RCTMGLSymbolLayer = requireNativeComponent(
   NATIVE_MODULE_NAME,
   SymbolLayer,
   {
-    nativeOnly: { reactStyle: true, snapshot: true },
+    nativeOnly: {reactStyle: true, snapshot: true},
   },
 );
 

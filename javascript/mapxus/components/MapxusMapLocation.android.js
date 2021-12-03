@@ -5,7 +5,7 @@ import { viewPropTypes, isFunction } from '../../maprenderer/utils';
 import NativeBridgeComponent from '../../maprenderer/components/NativeBridgeComponent';
 
 export const NATIVE_MODULE_NAME = 'RCTMapxusLocation';
-const RCTMapxusModule = NativeModules.MapxusSdk;
+const MapboxGL = NativeModules.MGLModule;
 
 /**
  * MapxusMapLocation backed by Mapxus Map SDK
@@ -41,7 +41,7 @@ class MapxusMapLocation extends NativeBridgeComponent(React.Component) {
 		/**
 		 * The mode used to track the user location on the map. One of; "None", "Follow", "FollowWithHeading". Or just pass a number , "None" to 0,"Follow" to 1,"FollowWithHeading" to 3
 		 */
-		followUserMode: PropTypes.oneOf([RCTMapxusModule.UserTrackingModes.None,RCTMapxusModule.UserTrackingModes.Follow,RCTMapxusModule.UserTrackingModes.FollowWithHeading,]),
+		followUserMode: PropTypes.oneOf([MapboxGL.UserTrackingModes.None,MapboxGL.UserTrackingModes.Follow,MapboxGL.UserTrackingModes.FollowWithHeading,]),
 	};
 
 	constructor(props) {

@@ -1,4 +1,4 @@
-import { runNativeCommand, isAndroid } from '../utils';
+import {runNativeCommand, isAndroid} from '../utils';
 
 let callbackIncrement = 0;
 
@@ -14,7 +14,7 @@ const NativeBridgeComponent = B =>
     }
 
     _addAddAndroidCallback(id, resolve, reject) {
-      this._callbackMap.set(id, { resolve, reject });
+      this._callbackMap.set(id, {resolve, reject});
     }
 
     _removeAndroidCallback(id) {
@@ -30,7 +30,7 @@ const NativeBridgeComponent = B =>
       }
 
       this._callbackMap.delete(callbackID);
-      let { payload } = e.nativeEvent;
+      let {payload} = e.nativeEvent;
       if (payload.error) {
         callback.reject.call(null, new Error(payload.error));
       } else {
@@ -59,7 +59,7 @@ const NativeBridgeComponent = B =>
       if (!nativeRef) {
         return new Promise(resolve => {
           this._preRefMapMethodQueue.push({
-            method: { name: methodName, args },
+            method: {name: methodName, args},
             resolver: resolve,
           });
         });

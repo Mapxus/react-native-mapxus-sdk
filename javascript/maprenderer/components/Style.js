@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, {useMemo, useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 
 import CircleLayer from './CircleLayer';
@@ -39,7 +39,7 @@ function toCamelCaseKeys(oldObj) {
 }
 
 function getLayerComponentType(layer) {
-  const { type } = layer;
+  const {type} = layer;
 
   switch (type) {
     case 'circle':
@@ -124,12 +124,12 @@ function getTileSourceProps(source) {
 }
 
 function getVectorSource(id, source) {
-  const sourceProps = { ...getTileSourceProps(source) };
+  const sourceProps = {...getTileSourceProps(source)};
   return <VectorSource key={id} id={id} {...sourceProps} />;
 }
 
 function getRasterSource(id, source) {
-  const sourceProps = { ...getTileSourceProps(source) };
+  const sourceProps = {...getTileSourceProps(source)};
   if (source.tileSize) {
     sourceProps.tileSize = source.tileSize;
   }

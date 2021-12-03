@@ -1,6 +1,6 @@
 import React, {useRef, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import MapxusSdk, {Poi, PoiSearchNearbyProps} from '@mapxus/react-native-mapxus-sdk';
+import MapxusSdk, {MapRenderer, Poi, PoiSearchNearbyProps} from '@mapxus/react-native-mapxus-sdk';
 import {ActivityIndicator, Button, InputItem, List} from '@ant-design/react-native';
 import ParamsScrollView from './ParamsScrollView';
 import {map as _map} from 'lodash';
@@ -64,7 +64,7 @@ export default function SearchPOINearby() {
 		<View style={{flex: 1}}>
 			<View style={{flex: 2}}>
 				<MapxusSdk.MapxusMap mapOption={{buildingId: 'tsuenwanplaza_hk_369d01'}}>
-					<MapxusSdk.MapView style={{flex: 1}}/>
+					<MapRenderer.MapboxGL.MapView style={{flex: 1}}/>
 					{
 						markers.length
 							? markers.map((marker, idx) => (
@@ -76,7 +76,7 @@ export default function SearchPOINearby() {
 									floor={marker.floor}
 									title={marker.name}
 								>
-									<MapxusSdk.Callout title={marker.name}/>
+									<MapRenderer.MapboxGL.Callout title={marker.name}/>
 								</MapxusSdk.MapxusPointAnnotationView>
 							)) : null
 					}

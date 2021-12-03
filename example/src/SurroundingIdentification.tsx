@@ -9,7 +9,7 @@ import MapxusSdk, {
 	InputLocation,
 	AndroidSimulateLocation,
 	AndroidInputLocation,
-	mapRender
+	MapRenderer,
 } from '@mapxus/react-native-mapxus-sdk';
 import ParamsScrollView from './ParamsScrollView';
 import {Button, InputItem, List} from '@ant-design/react-native';
@@ -81,7 +81,7 @@ export default function SurroundingIdentification() {
 				floor: location.floor
 			});
 		} else {
-			const location: MapxusSdk.mapRender.Location = feature;
+			const location: MapRenderer.MapboxGL.Location = feature;
 			setLocation({
 				lat: location.coords.latitude,
 				lon: location.coords.longitude,
@@ -173,12 +173,12 @@ export default function SurroundingIdentification() {
 		<View style={{flex: 1}}>
 			<View style={{flex: 2}}>
 				<MapxusSdk.MapxusMap>
-					<MapxusSdk.MapView style={{flex: 1}}>
-						<MapxusSdk.Camera
+					<MapRenderer.MapboxGL.MapView style={{flex: 1}}>
+						<MapRenderer.MapboxGL.Camera
 							centerCoordinate={centerCoordinate}
 							zoomLevel={19}
 						/>
-					</MapxusSdk.MapView>
+					</MapRenderer.MapboxGL.MapView>
 					<MapxusSdk.SimulateLocationManager
 						showsUserHeadingIndicator={true}
 						ref={locationRef}
@@ -195,7 +195,7 @@ export default function SurroundingIdentification() {
 									floor={marker.floor}
 									title={marker.name}
 								>
-									<MapxusSdk.Callout title={marker.name}/>
+									<MapRenderer.MapboxGL.Callout title={marker.name}/>
 								</MapxusSdk.MapxusPointAnnotationView>
 							)) : null
 					}

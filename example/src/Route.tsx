@@ -12,6 +12,7 @@ import MapxusSdk, {
 	AdsorptionLocationObject,
 	AndroidLocation,
 	AdsorptionAndroidLocationObject,
+	MapRenderer,
 } from '@mapxus/react-native-mapxus-sdk';
 import {Switch, SegmentedControl, WhiteSpace, Button} from '@ant-design/react-native';
 import ParamsScrollView from './ParamsScrollView';
@@ -204,7 +205,7 @@ export default function Route() {
 		if (!isNavigation && firstIn) {
 			setFirstIn(false);
 			if ('coords' in feature) {
-				const location: MapxusSdk.Location = feature;
+				const location: MapRenderer.MapboxGL.Location = feature;
 				setCenterCoordinate([location.coords.longitude, location.coords.latitude]);
 			} else {
 				const location: AndroidLocation = feature;
@@ -257,13 +258,13 @@ export default function Route() {
 					onTappedOnPoi={selectPoint}
 					onIndoorSceneChange={handelIndoorSceneChange}
 				>
-					<MapxusSdk.MapView style={{flex: 1}}>
-						<MapxusSdk.Camera
+					<MapRenderer.MapboxGL.MapView style={{flex: 1}}>
+						<MapRenderer.MapboxGL.Camera
 							centerCoordinate={centerCoordinate}
 							zoomLevel={19}
 							heading={heading}
 						/>
-					</MapxusSdk.MapView>
+					</MapRenderer.MapboxGL.MapView>
 					{
 						markers.map((marker: MapxusPointAnnotationViewProps) => (
 							<MapxusSdk.MapxusPointAnnotationView

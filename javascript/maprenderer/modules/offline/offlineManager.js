@@ -1,11 +1,11 @@
-import { NativeModules, NativeEventEmitter } from 'react-native';
+import {NativeModules, NativeEventEmitter} from 'react-native';
 
-import { isUndefined, isFunction, isAndroid } from '../../utils';
+import {isUndefined, isFunction, isAndroid} from '../../utils';
 
 import OfflineCreatePackOptions from './OfflineCreatePackOptions';
 import OfflinePack from './OfflinePack';
 
-const MapboxGL = NativeModules.MapxusSdk;
+const MapboxGL = NativeModules.MGLModule;
 const MapboxGLOfflineManager = NativeModules.MGLOfflineModule;
 export const OfflineModuleEventEmitter = new NativeEventEmitter(
   MapboxGLOfflineManager,
@@ -341,7 +341,7 @@ class OfflineManager {
   }
 
   _onProgress(e) {
-    const { name, state } = e.payload;
+    const {name, state} = e.payload;
 
     if (!this._hasListeners(name, this._progressListeners)) {
       return;
@@ -357,7 +357,7 @@ class OfflineManager {
   }
 
   _onError(e) {
-    const { name } = e.payload;
+    const {name} = e.payload;
 
     if (!this._hasListeners(name, this._errorListeners)) {
       return;

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import {NativeModules, requireNativeComponent} from 'react-native';
 
 import {
   cloneReactChildrenWithProps,
@@ -8,13 +8,13 @@ import {
   isFunction,
   isAndroid,
 } from '../utils';
-import { getFilter } from '../utils/filterUtils';
-import { copyPropertiesAsDeprecated } from '../utils/deprecation';
+import {getFilter} from '../utils/filterUtils';
+import {copyPropertiesAsDeprecated} from '../utils/deprecation';
 
 import AbstractSource from './AbstractSource';
 import NativeBridgeComponent from './NativeBridgeComponent';
 
-const MapboxGL = NativeModules.MapxusSdk;
+const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLVectorSource';
 
@@ -134,7 +134,7 @@ class VectorSource extends NativeBridgeComponent(AbstractSource) {
   onPress(event) {
     const {
       nativeEvent: {
-        payload: { features, coordinates, point },
+        payload: {features, coordinates, point},
       },
     } = event;
     let newEvent = {

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View} from 'react-native';
-import MapxusSdk, {IndoorSceneChangeObject} from '@mapxus/react-native-mapxus-sdk';
+import MapxusSdk, {IndoorSceneChangeObject, MapRenderer} from '@mapxus/react-native-mapxus-sdk';
 import {polygon as turfPolygon} from '@turf/helpers'
 
 const coordinates = [
@@ -39,21 +39,21 @@ export default function IndoorPolygon() {
 				}}
 				onIndoorSceneChange={listenIndoorInfo}
 			>
-				<MapxusSdk.MapView style={{flex: 1}}>
+				<MapRenderer.MapboxGL.MapView style={{flex: 1}}>
 					{
 						data.buildingId === buildingId && data.floor === floor && (
-							<MapxusSdk.ShapeSource
+							<MapRenderer.MapboxGL.ShapeSource
 								id={'customSourceSample'}
 								shape={data.polygon}
 							>
-								<MapxusSdk.FillLayer
+								<MapRenderer.MapboxGL.FillLayer
 									id={'customLayerSample'}
 									style={{fillColor: 'red', fillOpacity: 0.3}}
 								/>
-							</MapxusSdk.ShapeSource>
+							</MapRenderer.MapboxGL.ShapeSource>
 						)
 					}
-				</MapxusSdk.MapView>
+				</MapRenderer.MapboxGL.MapView>
 			</MapxusSdk.MapxusMap>
 		</View>
 	)

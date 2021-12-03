@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import {NativeModules, requireNativeComponent} from 'react-native';
 
-import { cloneReactChildrenWithProps, viewPropTypes } from '../utils';
+import {cloneReactChildrenWithProps, viewPropTypes} from '../utils';
 
 import AbstractSource from './AbstractSource';
 
-const MapboxGL = NativeModules.MapxusSdk;
+const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLRasterSource';
 
@@ -85,8 +85,8 @@ class RasterSource extends AbstractSource {
   }
 
   render() {
-    let { url } = this.props;
-    let { tileUrlTemplates } = this.props;
+    let {url} = this.props;
+    let {tileUrlTemplates} = this.props;
 
     // Swapping url for tileUrlTemplates to provide backward compatiblity
     // when RasterSource supported only tile url as url prop

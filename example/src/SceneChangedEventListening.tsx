@@ -1,6 +1,6 @@
 import React, {useRef, useState} from 'react';
 import {View, Text} from 'react-native';
-import MapxusSdk, {IndoorSceneChangeObject} from '@mapxus/react-native-mapxus-sdk';
+import MapxusSdk, {IndoorSceneChangeObject, MapRenderer} from '@mapxus/react-native-mapxus-sdk';
 
 export default function SceneChangedEventListening() {
 	const [buildingName, setBuildingName] = useState('');
@@ -29,7 +29,7 @@ export default function SceneChangedEventListening() {
 					mapOption={{buildingId: 'tsuenwanplaza_hk_369d01', zoomInsets: {left: -60, right: -60}}}
 					onIndoorSceneChange={handleClick}
 				>
-					<MapxusSdk.MapView style={{flex: 1}}/>
+					<MapRenderer.MapboxGL.MapView style={{flex: 1}}/>
 				</MapxusSdk.MapxusMap>
 			</View>
 		</View>

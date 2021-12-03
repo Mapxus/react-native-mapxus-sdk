@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import MapxusSdk, {Poi, PoiSearchResult} from '@mapxus/react-native-mapxus-sdk';
+import MapxusSdk, {MapRenderer, Poi, PoiSearchResult} from '@mapxus/react-native-mapxus-sdk';
 import {Button, List, InputItem} from '@ant-design/react-native';
 import ParamsScrollView from './ParamsScrollView';
 import language from './utils/language';
@@ -39,7 +39,7 @@ export default function SearchPOIByID() {
 		<View style={{flex: 1}}>
 			<View style={{flex: 4}}>
 				<MapxusSdk.MapxusMap mapOption={{buildingId: 'tsuenwanplaza_hk_369d01'}}>
-					<MapxusSdk.MapView style={{flex: 1}}/>
+					<MapRenderer.MapboxGL.MapView style={{flex: 1}}/>
 					{
 						markers.length
 							? markers.map(marker => (
@@ -51,7 +51,7 @@ export default function SearchPOIByID() {
 									floor={marker.floor}
 									title={marker.name}
 								>
-									<MapxusSdk.Callout title={marker.name}/>
+									<MapRenderer.MapboxGL.Callout title={marker.name}/>
 								</MapxusSdk.MapxusPointAnnotationView>
 							)) : null
 					}
