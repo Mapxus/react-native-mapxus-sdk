@@ -8,6 +8,7 @@
 #import "MXPointAnnotationView.h"
 #import "MXMap.h"
 #import "RCTMGLUtils.h"
+#import "UIView+React.h"
 
 
 @implementation MXPointAnnotationView
@@ -68,16 +69,16 @@
 
 - (void)_addAnnotation
 {
+    if (self.relatedAnnotation && [_mapxusMap.reactMXMAnnotations containsObject:self.relatedAnnotation]) {
+        return;
+    }
+    
     self.relatedAnnotation = [[MXRNPointAnnotation alloc] init];
     self.relatedAnnotation.buildingId = self.reactBuildingId;
     self.relatedAnnotation.floor = self.reactFloor;
     self.relatedAnnotation.annotationView = self;
     self.relatedAnnotation.coordinate = self.coordinate;
     self.relatedAnnotation.title = self.reactTitle;
-    
-    if ([_mapxusMap.reactMXMAnnotations containsObject:self.relatedAnnotation]) {
-        return;
-    }
     
     [_mapxusMap addMXMPointAnnotations:self.relatedAnnotation];
     if (self.reactSelected) {
@@ -88,6 +89,25 @@
 - (BOOL)_isChildrenFrameSet
 {
     return self.frame.size.width > 0 && self.frame.size.height > 0;
+}
+
+- (void)insertReactSubview:(UIView *)subview atIndex:(NSInteger)atIndex
+{
+    if ([subview isKindOfClass:[RCTMGLCallout class]]) {
+        self.calloutView = (RCTMGLCallout *)subview;
+        self.calloutView.representedObject = self.relatedAnnotation;
+    } else {
+        [super insertReactSubview:subview atIndex:0];
+    }
+}
+
+- (void)removeReactSubview:(UIView *)subview
+{
+    if ([subview isKindOfClass:[RCTMGLCallout class]]) {
+        self.calloutView = nil;
+    } else {
+        [super removeReactSubview:subview];
+    }
 }
 
 @end
