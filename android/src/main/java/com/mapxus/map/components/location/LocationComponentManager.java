@@ -2,9 +2,6 @@ package com.mapxus.map.components.location;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.location.Location;
-
-import androidx.annotation.NonNull;
 
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
@@ -17,6 +14,8 @@ import com.mapbox.mapboxsdk.maps.Style;
 import com.mapxus.map.R;
 import com.mapxus.map.components.mapview.RCTMGLMapView;
 import com.mapxus.map.location.LocationManager;
+
+import androidx.annotation.NonNull;
 
 /**
  * The LocationComponent on android implements both location tracking and display of user's current location.
@@ -31,8 +30,6 @@ public class LocationComponentManager {
     private LocationComponent mLocationComponent = null;
     private Context mContext = null;
 
-        // state
-    private @CameraMode.Mode int mCameraMode = CameraMode.NONE;
     private @RenderMode.Mode int mRenderMode = RenderMode.COMPASS;
 
     public LocationComponentManager(RCTMGLMapView rctmglMapView, Context context) {
@@ -98,20 +95,14 @@ public class LocationComponentManager {
         return (mLocationComponent != null);
     }
 
-    public void forceLocationUpdate(Location location) {
-        mLocationComponent.forceLocationUpdate(location);
-    }
-
     public void update(@NonNull Style style) {
-        if (mLocationComponent == null) {
-            update(mShowUserLocation, style);
-        } else {
-            update(mShowUserLocation, style);
-        }
+        update(mShowUserLocation, style);
     }
 
     public void update(boolean displayUserLocation, @NonNull Style style) {
-        if (mLocationComponent == null) {
+        Integer tintColor = mMapView.getTintColor();
+
+        if (mLocationComponent == null || tintColor != null ) {
             mLocationComponent = mMap.getLocationComponent();
 
             LocationComponentActivationOptions locationComponentActivationOptions = LocationComponentActivationOptions
@@ -135,6 +126,7 @@ public class LocationComponentManager {
 
     LocationComponentOptions options(boolean displayUserLocation) {
         LocationComponentOptions.Builder builder = LocationComponentOptions.builder(mContext);
+        Integer tintColor = mMapView.getTintColor();
         if (!displayUserLocation) {
             builder = builder
                     .padding(mMap.getPadding())
@@ -145,6 +137,12 @@ public class LocationComponentManager {
                     .foregroundDrawableStale(R.drawable.empty)
                     .gpsDrawable(R.drawable.empty)
                     .accuracyAlpha(0.0f);
+        } else if (tintColor != null) {
+            builder = builder
+                .enableStaleState(false)
+                .bearingTintColor(tintColor)
+                .foregroundTintColor(tintColor)
+                .accuracyColor(tintColor);
         }
         return builder.build();
     }

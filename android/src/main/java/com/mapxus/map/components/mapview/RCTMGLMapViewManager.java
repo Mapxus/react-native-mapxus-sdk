@@ -1,6 +1,7 @@
 package com.mapxus.map.components.mapview;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -10,16 +11,23 @@ import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.mapbox.mapboxsdk.geometry.LatLngBounds;
+import com.mapbox.mapboxsdk.log.Logger;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapxus.map.components.AbstractEventEmitter;
 import com.mapxus.map.events.constants.EventKeys;
 import com.mapxus.map.utils.ConvertUtils;
 import com.mapxus.map.utils.ExpressionParser;
 import com.mapxus.map.utils.GeoJSONUtils;
+import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.Point;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.RunnableFuture;
 
 import javax.annotation.Nullable;
 
@@ -157,6 +165,11 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
         mapView.setReactLogoEnabled(logoEnabled);
     }
 
+    @ReactProp(name="logoPosition")
+    public void setLogoPosition(RCTMGLMapView mapView, ReadableMap logoPosition) {
+        mapView.setReactLogoPosition(logoPosition);
+    }
+
     @ReactProp(name="compassEnabled")
     public void setCompassEnabled(RCTMGLMapView mapView, boolean compassEnabled) {
         mapView.setReactCompassEnabled(compassEnabled);
@@ -175,6 +188,11 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     @ReactProp(name="contentInset")
     public void setContentInset(RCTMGLMapView mapView, ReadableArray array) {
         mapView.setReactContentInset(array);
+    }
+
+    @ReactProp(name = "tintColor", customType = "Color")
+    public void setTintColor(RCTMGLMapView mapView, @Nullable Integer tintColor) {
+        mapView.setTintColor(tintColor);
     }
 
     //endregion

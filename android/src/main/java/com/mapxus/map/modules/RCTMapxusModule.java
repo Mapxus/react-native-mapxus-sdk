@@ -7,7 +7,6 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.module.annotations.ReactModule;
-import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapxus.map.components.camera.constants.CameraMode;
 import com.mapxus.map.components.styles.RCTMGLStyleValue;
@@ -97,6 +96,7 @@ public class RCTMapxusModule extends ReactContextBaseJavaModule {
         Map<String, Integer> cameraModes = new HashMap<>();
         cameraModes.put("Flight", CameraMode.FLIGHT);
         cameraModes.put("Ease", CameraMode.EASE);
+        cameraModes.put("Linear", CameraMode.LINEAR);
         cameraModes.put("None", CameraMode.NONE);
 
         // style source constants

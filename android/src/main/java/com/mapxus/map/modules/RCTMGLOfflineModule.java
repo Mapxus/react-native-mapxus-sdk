@@ -35,6 +35,7 @@ import com.mapbox.mapboxsdk.maps.Style;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
@@ -68,6 +69,16 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
     @Override
     public String getName () {
         return REACT_CLASS;
+    }
+
+    @ReactMethod
+    public void addListener(String eventName) {
+        // Set up any upstream listeners or background tasks as necessary
+    }
+
+    @ReactMethod
+    public void removeListeners(Integer count) {
+        // Remove upstream listeners, stop unnecessary background tasks
     }
 
     @ReactMethod

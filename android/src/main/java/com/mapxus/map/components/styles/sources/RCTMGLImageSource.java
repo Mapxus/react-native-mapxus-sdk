@@ -3,10 +3,13 @@ package com.mapxus.map.components.styles.sources;
 import android.content.Context;
 import android.util.Log;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.react.views.imagehelper.ResourceDrawableIdHelper;
+import com.mapbox.geojson.Feature;
 import com.mapbox.mapboxsdk.geometry.LatLngQuad;
 import com.mapbox.mapboxsdk.style.sources.ImageSource;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import android.net.Uri;
@@ -67,8 +70,12 @@ public class RCTMGLImageSource extends RCTSource<ImageSource> {
 
     public void setCoordinates(LatLngQuad coordQuad) {
         mCoordQuad = coordQuad;
-        if (mSource != null) {
-            mSource.setCoordinates(this.mCoordQuad);
+        try {
+            if (mSource != null) {
+                mSource.setCoordinates(this.mCoordQuad);
+            }
+        } catch (Exception e) {
+            Log.w(LOG_TAG, e.getLocalizedMessage());
         }
     }
 }

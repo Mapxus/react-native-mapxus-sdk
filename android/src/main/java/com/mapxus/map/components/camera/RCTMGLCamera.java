@@ -11,9 +11,13 @@ import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.geometry.VisibleRegion;
 import com.mapbox.mapboxsdk.location.OnCameraTrackingChangedListener;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
+import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.location.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.location.LocationComponent;
+import com.mapbox.mapboxsdk.location.LocationComponentOptions;
+import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
 // import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapxus.map.components.AbstractMapFeature;
 import com.mapxus.map.components.location.LocationComponentManager;
@@ -27,6 +31,8 @@ import com.mapxus.map.location.UserLocationVerticalAlignment;
 import com.mapxus.map.location.UserTrackingMode;
 import com.mapxus.map.location.UserTrackingState;
 import com.mapxus.map.utils.GeoJSONUtils;
+
+import com.mapxus.map.R;
 
 import com.mapxus.map.events.constants.EventTypes;
 
@@ -44,7 +50,6 @@ public class RCTMGLCamera extends AbstractMapFeature {
     private boolean hasSentFirstRegion = false;
 
     private CameraStop mDefaultStop;
-
     private CameraStop mCameraStop;
     private CameraUpdateQueue mCameraUpdateQueue;
 
@@ -321,7 +326,7 @@ public class RCTMGLCamera extends AbstractMapFeature {
         };
 
         if (isAnimated) {
-            mMapView.easeCamera(cameraUpdate, USER_LOCATION_CAMERA_MOVE_DURATION, callback);
+            mMapView.easeCamera(cameraUpdate, USER_LOCATION_CAMERA_MOVE_DURATION, true, callback);
         } else {
             mMapView.moveCamera(cameraUpdate, callback);
         }

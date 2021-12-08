@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.Size;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
@@ -15,12 +17,17 @@ import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.mapbox.mapboxsdk.utils.BitmapUtils;
+import com.mapxus.map.R;
 import com.mapxus.map.components.mapview.RCTMGLMapView;
 import com.mapxus.map.events.AndroidCallbackEvent;
 import com.mapxus.map.events.FeatureClickEvent;
+import com.mapxus.map.utils.DownloadMapImageTask;
 import com.mapxus.map.utils.ImageEntry;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +48,7 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
     private Integer mMaxZoom;
     private Integer mBuffer;
     private Double mTolerance;
+    private Boolean mLineMetrics;
 
     private static Bitmap mImagePlaceholder;
     private List<Map.Entry<String, ImageEntry>> mImages;
@@ -114,6 +122,10 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
         mTolerance = tolerance;
     }
 
+    public void setLineMetrics(boolean lineMetrics) {
+        mLineMetrics = lineMetrics;
+    }
+
     public void onPress(OnPressEvent event) {
         mManager.handleEvent(FeatureClickEvent.makeShapeSourceEvent(this, event));
     }
@@ -145,6 +157,10 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
             options.withTolerance(mTolerance.floatValue());
         }
 
+        if (mLineMetrics != null) {
+            options.withLineMetrics(mLineMetrics);
+        }
+
         return options;
     }
 
@@ -160,6 +176,125 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
         List<Feature> features = mSource.querySourceFeatures(filter);
         WritableMap payload = new WritableNativeMap();
         payload.putString("data", FeatureCollection.fromFeatures(features).toJson());
+
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
+        mManager.handleEvent(event);
+    }
+
+    public void getClusterExpansionZoom(String callbackID, String featureJSON) {
+        if (mSource == null) {
+            WritableMap payload = new WritableNativeMap();
+            payload.putString("error", "source is not yet loaded");
+            AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
+            mManager.handleEvent(event);
+            return;
+        }
+        Feature feature = Feature.fromJson(featureJSON);
+
+        int zoom = mSource.getClusterExpansionZoom(feature);
+
+        WritableMap payload = new WritableNativeMap();
+        payload.putInt("data", zoom);
+
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
+        mManager.handleEvent(event);
+    }
+
+    public void getClusterLeaves(String callbackID, String featureJSON, int number, int offset) {
+        if (mSource == null) {
+            WritableMap payload = new WritableNativeMap();
+            payload.putString("error", "source is not yet loaded");
+            AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
+            mManager.handleEvent(event);
+            return;
+        }
+        Feature clusterFeature = Feature.fromJson(featureJSON);
+        FeatureCollection leaves = mSource.getClusterLeaves(clusterFeature, number, offset);
+        WritableMap payload = new WritableNativeMap();
+        payload.putString("data", leaves.toJson());
+
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
+        mManager.handleEvent(event);
+    }
+
+    public void getClusterChildren(String callbackID, String featureJSON) {
+        if (mSource == null) {
+            WritableMap payload = new WritableNativeMap();
+            payload.putString("error", "source is not yet loaded");
+            AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
+            mManager.handleEvent(event);
+            return;
+        }
+        Feature clusterFeature = Feature.fromJson(featureJSON);
+        FeatureCollection leaves = mSource.getClusterChildren(clusterFeature);
+        WritableMap payload = new WritableNativeMap();
+        payload.putString("data", leaves.toJson());
+
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
+        mManager.handleEvent(event);
+    }
+
+    // Deprecated. Will be removed in 9+ ver.
+    public void getClusterExpansionZoomById(String callbackID, int clusterId) {
+        if (mSource == null) {
+            WritableMap payload = new WritableNativeMap();
+            payload.putString("error", "source is not yet loaded");
+            AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
+            mManager.handleEvent(event);
+            return;
+        }
+        List<Feature> features = mSource.querySourceFeatures(Expression.eq(Expression.id(), clusterId));
+        int zoom = -1;
+        if (features.size() > 0) {
+            zoom = mSource.getClusterExpansionZoom(features.get(0));
+        }
+
+        if (zoom == -1) {
+            WritableMap payload = new WritableNativeMap();
+            payload.putString("error", "Could not get zoom for cluster id " + clusterId);
+            AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
+            mManager.handleEvent(event);
+            return;
+        }
+
+        WritableMap payload = new WritableNativeMap();
+        payload.putInt("data", zoom);
+
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
+        mManager.handleEvent(event);
+    }
+
+    // Deprecated. Will be removed in 9+ ver.
+    public void getClusterLeavesById(String callbackID, int clusterId, int number, int offset) {
+        if (mSource == null) {
+            WritableMap payload = new WritableNativeMap();
+            payload.putString("error", "source is not yet loaded");
+            AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
+            mManager.handleEvent(event);
+            return;
+        }
+        Feature clusterFeature = mSource.querySourceFeatures(Expression.eq(Expression.get("cluster_id"), clusterId)).get(0);
+        FeatureCollection leaves = mSource.getClusterLeaves(clusterFeature, number, offset);
+        WritableMap payload = new WritableNativeMap();
+        payload.putString("data", leaves.toJson());
+
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
+        mManager.handleEvent(event);
+    }
+
+    // Deprecated. Will be removed in 9+ ver.
+    public void getClusterChildrenById(String callbackID, int clusterId) {
+        if (mSource == null) {
+            WritableMap payload = new WritableNativeMap();
+            payload.putString("error", "source is not yet loaded");
+            AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
+            mManager.handleEvent(event);
+            return;
+        }
+        Feature clusterFeature = mSource.querySourceFeatures(Expression.eq(Expression.get("cluster_id"), clusterId)).get(0);
+        FeatureCollection leaves = mSource.getClusterChildren(clusterFeature);
+        WritableMap payload = new WritableNativeMap();
+        payload.putString("data", leaves.toJson());
 
         AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
         mManager.handleEvent(event);

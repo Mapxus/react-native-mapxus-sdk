@@ -8,7 +8,11 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapxus.map.components.camera.constants.CameraMode;
 
 import java.lang.ref.WeakReference;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -72,8 +76,10 @@ public class CameraUpdateItem implements RunnableFuture<Void> {
 
         if (mCameraMode == CameraMode.FLIGHT) {
             map.animateCamera(mCameraUpdate, duration, callback);
+        } else if (mCameraMode == CameraMode.LINEAR) {
+            map.easeCamera(mCameraUpdate, duration, false, callback);
         } else if (mCameraMode == CameraMode.EASE) {
-            map.easeCamera(mCameraUpdate, duration, callback);
+            map.easeCamera(mCameraUpdate, duration, true, callback);
         }
     }
 
