@@ -18,9 +18,6 @@ import com.mapxus.map.mapxusmap.api.services.model.IndoorLatLng
 import com.mapxus.map.mapxusmap.api.services.model.planning.InstructionDto
 import com.mapxus.map.mapxusmap.api.services.model.planning.LineString
 import com.mapxus.map.mapxusmap.api.services.model.planning.PathDto
-import com.mapxus.map.mapxusmap.positioning.ErrorInfo
-import com.mapxus.map.mapxusmap.positioning.IndoorLocation
-import com.mapxus.map.mapxusmap.positioning.IndoorLocationProviderListener
 
 /**
  * Created by Edison on 2021/5/14.
@@ -55,7 +52,7 @@ class RCTMapxusNavigationView(
         mMapView = null
         mapxusPositioningProvider = null
         mapxusPositioningProvider?.setOnReachListener(null)
-        mapxusPositioningProvider?.navigation?.setOnDriftsNumberExceededListener(null)
+        mapxusPositioningProvider?.routeAdsorber?.setOnDriftsNumberExceededListener(null)
         mapxusPositioningProvider?.routeShortener?.setOnPathChangeListener(null)
     }
 
@@ -68,7 +65,7 @@ class RCTMapxusNavigationView(
                 )
             )
         }
-        mapxusPositioningProvider?.navigation?.setOnDriftsNumberExceededListener {
+        mapxusPositioningProvider?.routeAdsorber?.setOnDriftsNumberExceededListener {
             mManager.handleEvent(
                 MapxusMapCommonEvent(
                     this@RCTMapxusNavigationView,

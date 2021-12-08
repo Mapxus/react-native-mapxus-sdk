@@ -13,8 +13,8 @@ import com.mapxus.map.components.mapview.RCTMapxusMap
 import com.mapxus.map.events.AndroidCallbackEvent
 import com.mapxus.map.mapxusmap.api.services.model.IndoorLatLng
 import com.mapxus.map.mapxusmap.api.services.model.planning.*
-import com.mapxus.map.mapxusmap.overlay.model.WalkRouteResource
-import com.mapxus.map.mapxusmap.overlay.route.WalkRouteOverlay
+import com.mapxus.map.mapxusmap.overlay.model.RoutePainterResource
+import com.mapxus.map.mapxusmap.overlay.route.RoutePainter
 
 /**
  * Created by Edison on 2021/5/14.
@@ -26,9 +26,10 @@ class RCTMapxusRouteView(
     var mContext: ReactContext, private val mManager: RCTMapxusRouteViewManager,
 ) : ReactViewGroup(mContext), MapxusMapFeature {
     private var mMapView: RCTMapxusMap? = null
-    private var walkRouteOverlay: WalkRouteOverlay? = null
+    private var routePainter: RoutePainter? = null
     private var originalRouteData: ReadableMap? = null
     private var routeAppearance: RouteAppearance? = null
+    private var route: RouteResponseDto? = null
 
     override fun addToMap(mapView: RCTMapxusMap?) {
         mMapView = mapView
@@ -45,7 +46,7 @@ class RCTMapxusRouteView(
         val routedata = args?.getMap(1)
         originalRouteData = routedata
 
-        val route = RouteResponseDto().apply {
+        route = RouteResponseDto().apply {
             hints = HintDto()
             info = InfoDto()
             paths = mutableListOf(PathDto().apply {
@@ -140,17 +141,13 @@ class RCTMapxusRouteView(
             lat = args?.getArray(2)?.getMap(1)?.getDouble("latitude")
             lon = args?.getArray(2)?.getMap(1)?.getDouble("longitude")
         }
-        walkRouteOverlay = WalkRouteOverlay(
+        routePainter = RoutePainter(
             mContext,
             mMapView?.mMapview?.mapboxMap,
             mMapView?.mMapxusMap,
-            route,
-            origin,
-            destination,
-            true
         ).apply {
             routeAppearance?.let { routeRes ->
-                changeDefaultLayerRes(WalkRouteResource().apply {
+                setRoutePainterResource(RoutePainterResource().apply {
                     routeRes.isAddEndDash?.let { isAddEndDash = it }
                     routeRes.hiddenTranslucentPaths?.let { hiddenTranslucentPaths = it }
 //                    routeRes.indoorLineColor?.let { indoorLineColor = it as Int }
@@ -172,30 +169,34 @@ class RCTMapxusRouteView(
                 })
             }
 
-            addToMap()
+            paintRouteUsingResult(route)
         }
     }
 
     fun cleanRoute() {
-        walkRouteOverlay?.removeFromMap()
-        walkRouteOverlay = null
+        routePainter?.cleanRoute()
+        routePainter = null
+        route = null
     }
 
     fun changeOn(args: ReadableArray?) {
-        //todo
+//        if (args?.hasKey("isAddStartDash") == true) {
+//            isAddStartDash = args.getBoolean("isAddStartDash")
+//        }
+//        routePainter.changeOnBuilding()
     }
 
     fun focusOn(args: ReadableArray?) {
-        //todo
+//        routePainter.focusOnKeys()
     }
 
     fun setRouteAppearance(args: ReadableMap?) {
         routeAppearance = RouteAppearance().apply {
-            initData(mContext,args)
+            initData(mContext, args)
         }
-        walkRouteOverlay?.removeFromMap()
+        routePainter?.cleanRoute()
         routeAppearance?.let { routeRes ->
-            walkRouteOverlay?.changeDefaultLayerRes(WalkRouteResource().apply {
+            routePainter?.setRoutePainterResource(RoutePainterResource().apply {
                 routeRes.isAddStartDash?.let { isAddStartDash = it }
                 routeRes.isAddEndDash?.let { isAddEndDash = it }
                 routeRes.hiddenTranslucentPaths?.let { hiddenTranslucentPaths = it }
@@ -217,7 +218,7 @@ class RCTMapxusRouteView(
 //                routeRes.buildingGateIcon?.let { buildingGateIcon = it }
             })
         }
-        walkRouteOverlay?.addToMap()
+        routePainter?.paintRouteUsingResult(route)
 
     }
 

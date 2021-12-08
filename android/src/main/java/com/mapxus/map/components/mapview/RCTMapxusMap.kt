@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.core.graphics.Insets
 import com.facebook.react.bridge.LifecycleEventListener
 import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.ReadableArray
@@ -34,6 +35,7 @@ import com.mapxus.map.events.MapxusMapPoiClickEvent
 import com.mapxus.map.events.constants.EventKeys
 import com.mapxus.map.mapxusmap.api.map.MapViewProvider
 import com.mapxus.map.mapxusmap.api.map.MapxusMap
+import com.mapxus.map.mapxusmap.api.map.MapxusMapZoomMode
 import com.mapxus.map.mapxusmap.api.map.interfaces.OnMapxusMapReadyCallback
 import com.mapxus.map.mapxusmap.api.map.model.IndoorBuilding
 import com.mapxus.map.mapxusmap.api.map.model.LatLng
@@ -42,7 +44,6 @@ import com.mapxus.map.mapxusmap.api.map.model.SelectorPosition
 import com.mapxus.map.mapxusmap.api.services.BuildingSearch
 import com.mapxus.map.mapxusmap.api.services.model.DetailSearchOption
 import com.mapxus.map.mapxusmap.api.services.model.building.BuildingDetailResult
-import com.mapxus.map.mapxusmap.api.services.model.building.IndoorBuildingInfo
 import com.mapxus.map.mapxusmap.impl.MapboxMapViewProvider
 import com.mapxus.map.utils.ConvertUtils
 
@@ -86,8 +87,6 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
     private var mSelectorPositionCustom: ReadableMap? = null
     private var mLogoBottomMargin: Int? = null
     private var mOpenStreetSourceBottomMargin: Int? = null
-    private var switchFloorFromSelectIndoorScene: String? = null
-    private var switchBuildingIdSelectIndoorScene: String? = null
 
     /**annotation
      *
@@ -283,11 +282,6 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
 
     override fun onBuildingChange(indoorBuilding: IndoorBuilding?) {
         mManager.handleEvent(MapxusMapBuildingChangeEvent(this, indoorBuilding))
-        if (indoorBuilding != null && switchBuildingIdSelectIndoorScene != null && indoorBuilding.buildingId == switchBuildingIdSelectIndoorScene && switchFloorFromSelectIndoorScene != null) {
-            mMapxusMap?.switchFloor(switchFloorFromSelectIndoorScene)
-            switchBuildingIdSelectIndoorScene = null
-            switchFloorFromSelectIndoorScene = null
-        }
     }
 
     override fun onFloorChange(indoorBuilding: IndoorBuilding, floorName: String) {
@@ -484,85 +478,30 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
     fun selectIndoorScene(args: ReadableArray?) {
         val buildingId = args?.getString(1)
         val floor = args?.getString(2)
-        val mode = args?.getString(3)
-        val insets = args?.getMap(4)
-        switchBuildingIdSelectIndoorScene = buildingId
-        BuildingSearch.newInstance().apply {
-            setBuildingSearchResultListener(object :
-                BuildingSearch.BuildingSearchResultListenerAdapter() {
-                override fun onGetBuildingDetailResult(buildingDetailResult: BuildingDetailResult) {
-                    if (buildingDetailResult.status != 0) {
-                        Toast.makeText(
-                            reactContext,
-                            buildingDetailResult.error.toString(),
-                            Toast.LENGTH_LONG
-                        ).show()
-                        return
-                    }
-                    if (buildingDetailResult.indoorBuildingList.isNullOrEmpty()) {
-                        Toast.makeText(reactContext, "Building not found", Toast.LENGTH_LONG).show()
-                        return
-                    }
-                    if (mode == "ZoomDisable") {
-                        mMapxusMap?.switchBuilding(buildingId)
-                    }
-                    switchingIndoorScenes(
-                        mode ?: "ZoomDisable",
-                        floor ?: buildingDetailResult.indoorBuildingInfo.groundFloor, insets,
-                        buildingDetailResult.indoorBuildingInfo
-                    )
+        val mode = args?.getInt(3)
+        val insets = args?.getMap(4)?.run {
+            Insets.of(
+                getInt("left") ?: 0,
+                getInt("top") ?: 0,
+                getInt("right") ?: 0,
+                getInt("bottom") ?: 0
+            )
+        } ?: Insets.NONE
 
-                }
-            })
-            searchBuildingDetail(DetailSearchOption().ids(mutableListOf(buildingId)))
-        }
-    }
-
-    private fun switchingIndoorScenes(
-        zoomMode: String,
-        floor: String,
-        insets: ReadableMap?,
-        indoorBuildingInfo: IndoorBuildingInfo
-    ) {
-        val top = insets?.getDouble("top") ?: 0.0
-        val left = insets?.getDouble("left") ?: 0.0
-        val bottom = insets?.getDouble("bottom") ?: 0.0
-        val right = insets?.getDouble("right") ?: 0.0
-        when (zoomMode) {
-            "DISABLE" -> {
-                mMapxusMap?.switchBuilding(switchBuildingIdSelectIndoorScene)
-                mMapxusMap?.switchFloor(floor)
-            }
-            "ANIMATED" -> {
-                mMapview?.mapboxMap?.animateCamera(
-                    CameraUpdateFactory.newLatLngBounds(
-                        LatLngBounds.from(
-                            indoorBuildingInfo.bbox.maxLat,
-                            indoorBuildingInfo.bbox.maxLon,
-                            indoorBuildingInfo.bbox.minLat,
-                            indoorBuildingInfo.bbox.minLon
-                        ),
-                        left.toInt(),
-                        top.toInt(),
-                        right.toInt(),
-                        bottom.toInt()
-                    )
-                )
-            }
-            "DIRECT" -> mMapview?.mapboxMap?.moveCamera(
-                CameraUpdateFactory.newLatLngPadding(
-                    com.mapbox.mapboxsdk.geometry.LatLng(
-                        indoorBuildingInfo.labelCenter.lat,
-                        indoorBuildingInfo.labelCenter.lon
-                    ),
-                    left,
-                    top,
-                    right,
-                    bottom
-                )
+        if (buildingId != null) {
+            mMapxusMap?.selectBuilding(
+                buildingId,
+                floor,
+                mode ?: MapxusMapZoomMode.ZoomDirect,
+                insets
+            )
+        } else if (floor != null) {
+            mMapxusMap?.selectFloor(
+                floor,
+                mode ?: MapxusMapZoomMode.ZoomDirect,
+                insets
             )
         }
-        switchFloorFromSelectIndoorScene = floor
     }
 
     /**

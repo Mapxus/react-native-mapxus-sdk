@@ -12,9 +12,8 @@ import com.mapxus.map.components.annotation.RCTMapxusNavigationViewManager
 import com.mapxus.map.events.MapxusMapCommonEvent
 import com.mapxus.map.events.constants.EventKeys
 import com.mapxus.map.mapxusmap.api.services.model.planning.PathDto
-import com.mapxus.map.mapxusmap.overlay.navi.Navigation
-import com.mapxus.map.mapxusmap.overlay.navi.Navigation.OnReachListener
 import com.mapxus.map.mapxusmap.overlay.navi.NavigationPathDto
+import com.mapxus.map.mapxusmap.overlay.navi.RouteAdsorber
 import com.mapxus.map.mapxusmap.overlay.navi.RouteShortener
 import com.mapxus.map.mapxusmap.positioning.ErrorInfo
 import com.mapxus.map.mapxusmap.positioning.IndoorLocation
@@ -41,7 +40,7 @@ class MapxusNavigationPositioningProvider(
     private var started = false
     private var appid = ""
     private var secret = ""
-    var navigation: Navigation? = null
+    var routeAdsorber: RouteAdsorber? = null
     var routeShortener: RouteShortener? = null
     private var mapboxMap: MapboxMap? = null
     var mAdsorbable: Boolean? = null
@@ -140,11 +139,11 @@ class MapxusNavigationPositioningProvider(
                 )
                 val actualLocation = indoorLocation
 
-                if (null != navigation && isNavigation) {
+                if (null != routeAdsorber && isNavigation) {
                     var indoorLatLon = indoorLocation
 
                     mAdsorbable?.let {
-                        indoorLatLon = navigation!!.updateIndoorLatLon(indoorLocation)
+                        indoorLatLon = routeAdsorber!!.calculateTheAdsorptionLocationFromActual(indoorLocation)
                     }
                     mShortenable?.let {
                         routeShortener!!.cutFromTheLocationProjection(
@@ -193,12 +192,12 @@ class MapxusNavigationPositioningProvider(
     fun updatePath(pathDto: PathDto, mapboxMap: MapboxMap?) {
         this.mapboxMap = mapboxMap
         val navigationPathDto = NavigationPathDto(pathDto)
-        navigation = Navigation(navigationPathDto, mMaximumDrift, mNumberOfAllowedDrifts)
+        routeAdsorber = RouteAdsorber(navigationPathDto, mMaximumDrift, mNumberOfAllowedDrifts)
         routeShortener = RouteShortener(navigationPathDto, pathDto, pathDto.indoorPoints)
     }
 
-    fun setOnReachListener(onReachListener: OnReachListener?) {
-        navigation?.setOnReachListener(onReachListener, mDistanceToDestination)
+    fun setOnReachListener(onReachListener: RouteAdsorber.OnReachListener?) {
+        routeAdsorber?.setOnReachListener(onReachListener, mDistanceToDestination)
     }
 
     companion object {

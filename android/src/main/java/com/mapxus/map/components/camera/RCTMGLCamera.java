@@ -11,6 +11,7 @@ import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.geometry.VisibleRegion;
 import com.mapbox.mapboxsdk.location.OnCameraTrackingChangedListener;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
+import com.mapbox.mapboxsdk.location.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
 // import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
@@ -33,8 +34,6 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 
 import com.mapbox.geojson.Point;
-
-import com.mapbox.android.core.permissions.PermissionsManager;
 
 import androidx.annotation.NonNull;
 

@@ -19,6 +19,7 @@ import com.mapxus.map.events.MapxusPointAnnotationClickEvent
 import com.mapxus.map.events.MapxusPointAnnotationDragEvent
 import com.mapxus.map.events.constants.EventTypes
 import com.mapxus.map.mapxusmap.api.map.MapxusMap
+import com.mapxus.map.mapxusmap.api.map.MapxusMapZoomMode
 import com.mapxus.map.mapxusmap.api.map.model.IndoorBuilding
 import com.mapxus.map.utils.BitmapUtils
 import com.mapxus.map.utils.GeoJSONUtils
@@ -148,7 +149,7 @@ class RCTMapxusPointAnnotation(
         floor?.let {
             if (mMapxus != null) {
                 if (mMapxus?.mMapxusMap?.currentFloor != it) {
-                    mMapxus?.mMapxusMap?.switchFloor(it)
+                    mMapxus?.mMapxusMap?.selectFloor(it, MapxusMapZoomMode.ZoomDisable, null)
                 }
                 if (marker != null && !mBuildingId.isNullOrEmpty()) {
 
@@ -344,7 +345,7 @@ class RCTMapxusPointAnnotation(
         }
         mFloor?.let {
             if (mMapxus?.mMapxusMap?.currentFloor != it) {
-                mMapxus?.mMapxusMap?.switchFloor(it)
+                mMapxus?.mMapxusMap?.selectFloor(it, MapxusMapZoomMode.ZoomDisable, null)
             }
         }
     }

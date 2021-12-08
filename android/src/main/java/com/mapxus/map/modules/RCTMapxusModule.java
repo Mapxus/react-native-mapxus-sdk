@@ -16,6 +16,7 @@ import com.mapxus.map.events.constants.EventTypes;
 import com.mapxus.map.location.UserLocationVerticalAlignment;
 import com.mapxus.map.location.UserTrackingMode;
 import com.mapxus.map.mapxusmap.api.map.MapxusMapContext;
+import com.mapxus.map.mapxusmap.api.map.MapxusMapZoomMode;
 import com.mapxus.map.utils.SharedPreferencesUtil;
 
 import java.util.HashMap;
@@ -51,14 +52,14 @@ public class RCTMapxusModule extends ReactContextBaseJavaModule {
     public Map<String, Object> getConstants() {
         // map style urls
         Map<String, String> styleURLS = new HashMap<>();
-        styleURLS.put("Street", Style.MAPBOX_STREETS);
-        styleURLS.put("Dark", Style.DARK);
-        styleURLS.put("Light", Style.LIGHT);
-        styleURLS.put("Outdoors", Style.OUTDOORS);
-        styleURLS.put("Satellite", Style.SATELLITE);
-        styleURLS.put("SatelliteStreet", Style.SATELLITE_STREETS);
-        styleURLS.put("TrafficDay", Style.TRAFFIC_DAY);
-        styleURLS.put("TrafficNight", Style.TRAFFIC_NIGHT);
+        styleURLS.put("Street", "Style.MAPBOX_STREETS");
+        styleURLS.put("Dark", "Style.DARK");
+        styleURLS.put("Light", "Style.LIGHT");
+        styleURLS.put("Outdoors", "Style.OUTDOORS");
+        styleURLS.put("Satellite", "Style.SATELLITE");
+        styleURLS.put("SatelliteStreet", "Style.SATELLITE_STREETS");
+        styleURLS.put("TrafficDay", "Style.TRAFFIC_DAY");
+        styleURLS.put("TrafficNight", "Style.TRAFFIC_NIGHT");
 
         // events
         Map<String, String> eventTypes = new HashMap<>();
@@ -254,13 +255,12 @@ public class RCTMapxusModule extends ReactContextBaseJavaModule {
         selectorPosition.put("TOP_RIGHT", 5);//SelectorPosition.TOP_RIGHT
 
         // location module callback names
-        Map<String, String> mapxusZoomMode = new HashMap<>();
-        mapxusZoomMode.put("DISABLE", "DISABLE");
-        mapxusZoomMode.put("ANIMATED", "ANIMATED");
-        mapxusZoomMode.put("DIRECT", "DIRECT");
+        Map<String, Integer> mapxusZoomMode = new HashMap<>();
+        mapxusZoomMode.put("DISABLE", MapxusMapZoomMode.ZoomDisable);
+        mapxusZoomMode.put("ANIMATED", MapxusMapZoomMode.ZoomAnimated);
+        mapxusZoomMode.put("DIRECT", MapxusMapZoomMode.ZoomDirect);
 
         Map<String, Integer> mapxusStyle = new HashMap<>();
-        mapxusStyle.put("MAPXUS_V3", com.mapxus.map.mapxusmap.api.map.model.Style.MAPXUS_V3);
         mapxusStyle.put("MAPXUS", com.mapxus.map.mapxusmap.api.map.model.Style.MAPXUS);
         mapxusStyle.put("MAPPYBEE", com.mapxus.map.mapxusmap.api.map.model.Style.MAPPYBEE);
         mapxusStyle.put("CHRISTMAS", com.mapxus.map.mapxusmap.api.map.model.Style.CHRISTMAS);

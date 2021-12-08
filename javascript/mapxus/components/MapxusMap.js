@@ -30,8 +30,6 @@ class MapxusMap extends NativeBridgeComponent(React.Component) {
       }),
       poiId: PropTypes.string,
       zoomLevel: PropTypes.number,
-      // 仅Android
-      language: PropTypes.string,
     }),
 
     /**

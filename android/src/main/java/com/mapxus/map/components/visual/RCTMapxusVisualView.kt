@@ -33,12 +33,12 @@ class RCTMapxusVisualView(
                 ))
             }
 
-            override fun loadingChanged() {
+            override fun loadingChanged(p0: Boolean) {
                 mManager.handleEvent(MapxusMapVisualNodeEvent(
                     this@RCTMapxusVisualView,
                     EventKeys.VISUAL_ON_LOADING_CHANGED,
                     WritableNativeMap().apply {
-                        putBoolean("isLoading", false)
+                        putBoolean("isLoading", p0)
                     }
                 ))
             }
@@ -55,6 +55,13 @@ class RCTMapxusVisualView(
                         putDouble("longitude", p0?.lnt ?: 0.0)
                         putDouble("bearing", p0?.ca ?: 0.0)
                     }
+                ))
+            }
+
+            override fun renderComplete() {
+                mManager.handleEvent(MapxusMapVisualNodeEvent(
+                    this@RCTMapxusVisualView,
+                    EventKeys.VISUAL_ON_RENDER_COMPLETE,
                 ))
             }
 

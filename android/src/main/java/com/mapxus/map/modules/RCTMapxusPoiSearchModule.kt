@@ -10,7 +10,6 @@ import com.mapxus.map.mapxusmap.api.services.model.poi.PoiDetailResult
 import com.mapxus.map.mapxusmap.api.services.model.poi.PoiInfo
 import com.mapxus.map.mapxusmap.api.services.model.poi.PoiOrientationResult
 import com.mapxus.map.mapxusmap.api.services.model.poi.PoiResult
-import com.mapxus.map.utils.ConvertUtils
 
 /**
  * Created by Edison on 3/18/21.
@@ -61,7 +60,7 @@ class RCTMapxusPoiSearchModule(var reactContext: ReactApplicationContext?) :
                         putArray("pois", WritableNativeArray().apply {
                             poiOrientationResult.poiOrientationInfos.forEach {
                                 pushMap(WritableNativeMap().apply {
-                                    putString("id", it.id)
+                                    putString("id", it.poiId)
                                     putString("buildingId", it.buildingId)
                                     putString("venueId", it.buildingId)
                                     putString("floor", it.floor)
@@ -77,23 +76,23 @@ class RCTMapxusPoiSearchModule(var reactContext: ReactApplicationContext?) :
                                     })
                                     putString("introduction", it.description)
                                     putString("email", it.email)
-                                    putString("name_default", it.name["default"])
-                                    putString("name_en", it.name["en"])
-                                    putString("name_cn", it.name["cn"])
-                                    putString("name_zh", it.name["zh"])
-                                    putString("name_ja", it.name["ja"])
-                                    putString("name_ko", it.name["ko"])
-                                    putString("accessibilityDetail", it.name["default"])
-                                    putString("accessibilityDetail_en", it.name["en"])
-                                    putString("accessibilityDetail_cn", it.name["zh-Hans"])
-                                    putString("accessibilityDetail_zh", it.name["zh-Hant"])
-                                    putString("accessibilityDetail_ja", it.name["ja"])
-                                    putString("accessibilityDetail_ko", it.name["ko"])
+                                    putString("name_default", it.nameDefault)
+                                    putString("name_en", it.nameEn)
+                                    putString("name_cn", it.nameCn)
+                                    putString("name_zh", it.nameZh)
+                                    putString("name_ja", it.nameJa)
+                                    putString("name_ko", it.nameKo)
+                                    putString("accessibilityDetail", it.accessibilityDetailDefault)
+                                    putString("accessibilityDetail_en", it.accessibilityDetailEn)
+                                    putString("accessibilityDetail_cn", it.accessibilityDetailCn)
+                                    putString("accessibilityDetail_zh", it.accessibilityDetailZh)
+                                    putString("accessibilityDetail_ja", it.accessibilityDetailJa)
+                                    putString("accessibilityDetail_ko", it.accessibilityDetailKo)
                                     putString("openingHours", it.openingHours)
                                     putString("phone", it.phone)
                                     putString("website", it.website)
                                     putDouble("distance", it.distance)
-                                    putInt("angle", it.angle)
+                                    putDouble("angle", it.angle)
                                 })
                             }
                         })
@@ -134,7 +133,7 @@ class RCTMapxusPoiSearchModule(var reactContext: ReactApplicationContext?) :
         putArray("pois", WritableNativeArray().apply {
             poi.forEach {
                 pushMap(WritableNativeMap().apply {
-                    putString("id", it.id)
+                    putString("id", it.poiId)
                     putString("buildingId", it.buildingId)
                     putString("venueId", it.venueId)
                     putString("floor", it.floor)
@@ -151,18 +150,18 @@ class RCTMapxusPoiSearchModule(var reactContext: ReactApplicationContext?) :
                     })
                     putString("introduction", it.description)
                     putString("email", it.email)
-                    putString("name_default", it.name["default"])
-                    putString("name_en", it.name["en"])
-                    putString("name_cn", it.name["cn"])
-                    putString("name_zh", it.name["zh"])
-                    putString("name_ja", it.name["ja"])
-                    putString("name_ko", it.name["ko"])
-                    putString("accessibilityDetail", it.accessibilityDetail["default"])
-                    putString("accessibilityDetail_en", it.accessibilityDetail["en"])
-                    putString("accessibilityDetail_cn", it.accessibilityDetail["zh-Hans"])
-                    putString("accessibilityDetail_zh", it.accessibilityDetail["zh-Hant"])
-                    putString("accessibilityDetail_ja", it.accessibilityDetail["ja"])
-                    putString("accessibilityDetail_ko", it.accessibilityDetail["ko"])
+                    putString("name_default", it.nameDefault)
+                    putString("name_en", it.nameEn)
+                    putString("name_cn", it.nameCn)
+                    putString("name_zh", it.nameZh)
+                    putString("name_ja", it.nameJa)
+                    putString("name_ko", it.nameKo)
+                    putString("accessibilityDetail", it.accessibilityDetailDefault)
+                    putString("accessibilityDetail_en", it.accessibilityDetailEn)
+                    putString("accessibilityDetail_cn", it.accessibilityDetailCn)
+                    putString("accessibilityDetail_zh", it.accessibilityDetailZh)
+                    putString("accessibilityDetail_ja", it.accessibilityDetailJa)
+                    putString("accessibilityDetail_ko", it.accessibilityDetailKo)
                     putString("openingHours", it.openingHours)
                     putString("phone", it.phone)
                     putString("website", it.website)

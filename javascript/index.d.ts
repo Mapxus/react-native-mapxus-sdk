@@ -272,8 +272,6 @@ export interface Configuration {
   zoomInsets?: Insets;
   poiId?: string;
   zoomLevel?: number;
-  // 仅Android
-  language?: string;
 }
 
 export interface AndroidLocationErronInfo {

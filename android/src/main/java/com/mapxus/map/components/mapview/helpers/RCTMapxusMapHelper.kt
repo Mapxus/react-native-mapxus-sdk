@@ -33,10 +33,6 @@ object RCTMapxusMapHelper {
             rctMapxusMapOptions.poiId?.let {
                 poiId = it
             }
-
-            rctMapxusMapOptions.language?.let {
-                language = it
-            }
         }
     }
 }
