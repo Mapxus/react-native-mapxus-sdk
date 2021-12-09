@@ -6,6 +6,7 @@ import NativeBridgeComponent from '../../maprenderer/components/NativeBridgeComp
 
 export const NATIVE_MODULE_NAME = 'RCTMapxusLocation';
 const MapboxGL = NativeModules.MGLModule;
+const RCTMapxusModule = NativeModules.MapxusSdk;
 
 /**
  * MapxusMapLocation backed by Mapxus Map SDK
