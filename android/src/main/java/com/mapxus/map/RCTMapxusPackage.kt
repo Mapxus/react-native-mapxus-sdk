@@ -31,6 +31,7 @@ class RCTMapxusPackage : ReactPackage {
     override fun createNativeModules(reactApplicationContext: ReactApplicationContext): List<NativeModule> {
         return listOf(
             RCTMapxusModule(reactApplicationContext),
+            RCTMGLModule(reactApplicationContext),
             RCTMGLOfflineModule(reactApplicationContext),
             RCTMGLSnapshotModule(reactApplicationContext),
             RCTMGLLocationModule(reactApplicationContext),

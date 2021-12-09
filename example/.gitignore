@@ -62,3 +62,5 @@ Podfile.lock
 
 # config
 env.*.json
+
+yarn.lock
