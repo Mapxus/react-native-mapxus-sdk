@@ -46,10 +46,10 @@ Pod::Spec.new do |s|
   s.source_files = "ios/**/*.{h,c,cc,cpp,m,mm,swift}"
   s.requires_arc = true
 
-  s.dependency 'MapxusBaseSDK'
-  s.dependency 'MapxusMapSDK'
-  s.dependency "MapxusVisualSDK"
-  s.dependency 'MapxusComponentKit'
+  s.dependency 'MapxusBaseSDK', "3.22.1"
+  s.dependency 'MapxusMapSDK', "3.22.1"
+  s.dependency "MapxusVisualSDK", "3.22.1"
+  s.dependency 'MapxusComponentKit', "3.22.1"
   s.dependency "React"
   s.dependency 'React-Core'
 
