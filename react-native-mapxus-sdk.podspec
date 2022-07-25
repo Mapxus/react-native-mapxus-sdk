@@ -40,16 +40,16 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/Mapxus/react-native-mapxus-sdk"
   s.license    = { :type => "MIT", :file => "LICENSE" }
   s.authors      = { "Mapxus" => "developer@maphive.io" }
-  s.platforms    = { :ios => "9.0" }
+  s.platforms    = { :ios => "11.0" }
   s.source       = { :git => "https://github.com/Mapxus/react-native-mapxus-sdk.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,c,cc,cpp,m,mm,swift}"
   s.requires_arc = true
 
-  s.dependency 'MapxusBaseSDK', "3.22.1"
-  s.dependency 'MapxusMapSDK', "3.22.1"
-  s.dependency "MapxusVisualSDK", "3.22.1"
-  s.dependency 'MapxusComponentKit', "3.22.1"
+  s.dependency 'MapxusBaseSDK', "4.1.0"
+  s.dependency 'MapxusMapSDK', "4.1.0"
+  s.dependency "MapxusVisualSDK", "4.1.0"
+  s.dependency 'MapxusComponentKit', "4.1.0"
   s.dependency "React"
   s.dependency 'React-Core'
 
