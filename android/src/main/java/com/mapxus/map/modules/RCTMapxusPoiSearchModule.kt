@@ -55,48 +55,12 @@ class RCTMapxusPoiSearchModule(var reactContext: ReactApplicationContext?) :
                         promise.reject("Poi not found.", "Poi not found.")
                         return
                     }
-                    promise.resolve(WritableNativeMap().apply {
-                        putInt("total", poiOrientationResult.poiOrientationInfos.size)
-                        putArray("pois", WritableNativeArray().apply {
-                            poiOrientationResult.poiOrientationInfos.forEach {
-                                pushMap(WritableNativeMap().apply {
-                                    putString("id", it.poiId)
-                                    putString("buildingId", it.buildingId)
-                                    putString("venueId", it.buildingId)
-                                    putString("floor", it.floor)
-                                    putMap("location", WritableNativeMap().apply {
-                                        putDouble("latitude", it.location.lat)
-                                        putDouble("longitude", it.location.lon)
-                                        putDouble("elevation", 0.0)
-                                    })
-                                    putArray("category", WritableNativeArray().apply {
-                                        it.category.forEach {
-                                            pushString(it)
-                                        }
-                                    })
-                                    putString("introduction", it.description)
-                                    putString("email", it.email)
-                                    putString("name_default", it.nameDefault)
-                                    putString("name_en", it.nameEn)
-                                    putString("name_cn", it.nameCn)
-                                    putString("name_zh", it.nameZh)
-                                    putString("name_ja", it.nameJa)
-                                    putString("name_ko", it.nameKo)
-                                    putString("accessibilityDetail", it.accessibilityDetailDefault)
-                                    putString("accessibilityDetail_en", it.accessibilityDetailEn)
-                                    putString("accessibilityDetail_cn", it.accessibilityDetailCn)
-                                    putString("accessibilityDetail_zh", it.accessibilityDetailZh)
-                                    putString("accessibilityDetail_ja", it.accessibilityDetailJa)
-                                    putString("accessibilityDetail_ko", it.accessibilityDetailKo)
-                                    putString("openingHours", it.openingHours)
-                                    putString("phone", it.phone)
-                                    putString("website", it.website)
-                                    putDouble("distance", it.distance)
-                                    putDouble("angle", it.angle)
-                                })
-                            }
-                        })
-                    })
+                    promise.resolve(
+                        converPoi(
+                            poiOrientationResult.poiOrientationInfos.size,
+                            poiOrientationResult.poiOrientationInfos
+                        )
+                    )
                 } catch (ex: IllegalViewOperationException) {
                     promise.reject("Poi not found.", ex.message)
                 }
@@ -136,8 +100,13 @@ class RCTMapxusPoiSearchModule(var reactContext: ReactApplicationContext?) :
                     putString("id", it.poiId)
                     putString("buildingId", it.buildingId)
                     putString("venueId", it.venueId)
-                    putString("floor", it.floor)
-                    putString("floorId", it.floorId)
+                    putMap("floor", WritableNativeMap().apply {
+                        putString("code", it.floor)
+                        putString("floorId", it.floorId)
+                        putMap("ordinal", WritableNativeMap().apply {
+                            putInt("level", -1)
+                        })
+                    })
                     putMap("location", WritableNativeMap().apply {
                         putDouble("latitude", it.location.lat)
                         putDouble("longitude", it.location.lon)
@@ -166,7 +135,7 @@ class RCTMapxusPoiSearchModule(var reactContext: ReactApplicationContext?) :
                     putString("phone", it.phone)
                     putString("website", it.website)
                     putDouble("distance", it.distance ?: 0.0)
-                    putInt("angle", 0)
+                    putDouble("angle", it.angle)
                 })
             }
         })
