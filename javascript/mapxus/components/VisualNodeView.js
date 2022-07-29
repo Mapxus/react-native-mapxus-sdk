@@ -1,7 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React
+
+from 'react';
+import PropTypes
+
+from 'prop-types';
 import { requireNativeComponent } from 'react-native';
-import NativeBridgeComponent from '../../maprenderer/components/NativeBridgeComponent';
+import NativeBridgeComponent
+
+from '../../maprenderer/components/NativeBridgeComponent';
 import { ViewPropTypes } from '../../maprenderer/utils';
 
 const NATIVE_MODULE_NAME = 'MXVisualNodeView'
@@ -37,29 +43,59 @@ class VisualNodeView extends NativeBridgeComponent(React.Component) {
      * @param {VisualNode[] | VisualNodeGroup[]} nodes The json objects which got from searching interface, for iOS uses VisualNode[] and Android uses VisualNodeGroup[]
      */
     renderFlagUsingNodes(nodes) {
-        this._runNativeCommand('renderFlagUsingNodes', this._nativeRef, [
-            nodes,
-        ]);
+        this._runNativeCommand(
+            'renderFlagUsingNodes', this._nativeRef, [
+                nodes,
+            ]
+        );
     }
 
     /**
      * Clean all flag which rendering on the map.
      */
     cleanLayer() {
-        this._runNativeCommand('cleanLayer', this._nativeRef, [
-        ]);
+        this._runNativeCommand(
+            'cleanLayer', this._nativeRef, [
+            ]
+        );
     }
 
     /**
-     * Toggles the display of the visual annotation points corresponding to the floor of the building. 
+     * Toggles the display of the visual annotation points corresponding to the floor of the building.
      * @param {string} buildingId id of the building to be selected
      * @param {String} floor name of the floor to be selected
      */
     changeOn(buildingId, floor) {
-        this._runNativeCommand('changeOn', this._nativeRef, [
-            buildingId,
-            floor
-        ]);
+        this._runNativeCommand(
+            'changeOn', this._nativeRef, [
+                buildingId,
+                floor
+            ]
+        );
+    }
+
+    /**
+     * Update the Marker Rotate.(Just in Android)
+     * @param {number} angle angle of marker
+     */
+    updateMarkerRotate(angle) {
+        this._runNativeCommand(
+            'updateMarkerRotate', this._nativeRef, [
+                angle
+            ]
+        );
+    }
+
+    /**
+     * Update the Marker Location.(Just in Android)
+     * @param {string} imgKey id of the visual node
+     */
+    setMapMarker(imgKey) {
+        this._runNativeCommand(
+            'setMapMarker', this._nativeRef, [
+                imgKey
+            ]
+        );
     }
 
     _setNativeRef(nativeRef) {

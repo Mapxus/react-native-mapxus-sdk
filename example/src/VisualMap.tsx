@@ -121,11 +121,17 @@ export default function VisualMap() {
 		setLightMarker(
 			_assign({}, lightMarker, {bearing: feature.bearing})
 		);
+		if(Platform.OS == 'android' ){
+			nodeViewRef?.current?.updateMarkerRotate(feature.bearing);
+		}
 	}
 
 	function nodeChanged(feature: NodeChangeObject) {
 		setLightMarker(feature.node);
 		cameraRef.current?.moveTo([feature.node.longitude, feature.node.latitude]);
+		if(Platform.OS == 'android' ){
+			nodeViewRef?.current?.setMapMarker(feature.node.key);
+		}
 	}
 
 	function clickWindow(type: string) {

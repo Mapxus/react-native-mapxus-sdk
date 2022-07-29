@@ -78,6 +78,10 @@ declare namespace MapxusSdk {
     renderFlagUsingNodes(nodes: VisualNode[] | VisualNodeGroup[]): void;
     cleanLayer(): void;
     changeOn(buildingId: string, floor: string): void;
+    /** Just in Android */
+    updateMarkerRotate(angle: number): void;
+    /** Just in Android */
+    setMapMarker(imgKey: string): void;
   }
 
   class VisualView extends Component<VisualViewProps> {

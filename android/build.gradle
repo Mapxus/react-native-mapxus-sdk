@@ -83,7 +83,7 @@ dependencies {
     //mapxus
     implementation("com.mapxus.map:mapxusmap:5.1.0")
     implementation("com.mapxus.positioning:positioning:2.2.0")
-    implementation("com.mapxus.visual:mapxusvisual:0.2.7")
+    implementation("com.mapxus.visual:mapxusvisual:0.2.8")
     //maplibre
     implementation('org.maplibre.gl:android-plugin-localization-v9:1.0.0') {
         exclude group: 'org.maplibre.gl', module: 'android-sdk'

@@ -131,10 +131,10 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     private Boolean mScrollEnabled;
     private Boolean mPitchEnabled;
     private Boolean mRotateEnabled;
-    private Boolean mAttributionEnabled;
+    private Boolean mAttributionEnabled = false;
     private Integer mAttributionGravity;
     private int[] mAttributionMargin;
-    private Boolean mLogoEnabled;
+    private Boolean mLogoEnabled = false;
     private Integer mLogoGravity;
     private int[] mLogoMargins;
     private Boolean mCompassEnabled;
@@ -852,7 +852,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     }
 
     public void setReactLogoEnabled(boolean logoEnabled) {
-        mLogoEnabled = logoEnabled;
+//        mLogoEnabled = logoEnabled;
         updateUISettings();
     }
 
@@ -907,8 +907,8 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     }
 
     public void setReactAttributionEnabled(boolean attributionEnabled) {
-        mAttributionEnabled = attributionEnabled;
-        updateUISettings();
+//        mAttributionEnabled = attributionEnabled;
+//        updateUISettings();
     }
 
     public void setReactAttributionPosition(ReadableMap position) {

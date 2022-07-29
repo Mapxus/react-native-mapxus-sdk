@@ -14,6 +14,8 @@ import com.mapxus.map.events.constants.EventKeys
 private const val METHOD_RENDER_FLAG_USING_NODES = 1
 private const val METHOD_CLEAN_LAYER = 2
 private const val METHOD_CHANGEON = 3
+private const val METHOD_UPDATE_MARKER_ROTATE = 4
+private const val METHOD_SET_MAP_MARKER = 5
 
 class RCTMapxusVisualNodeViewManager(reactApplicationContext: ReactApplicationContext?) :
     AbstractEventEmitter<RCTMapxusVisualNodeView?>(reactApplicationContext) {
@@ -28,6 +30,8 @@ class RCTMapxusVisualNodeViewManager(reactApplicationContext: ReactApplicationCo
             .put("renderFlagUsingNodes", METHOD_RENDER_FLAG_USING_NODES)
             .put("cleanLayer", METHOD_CLEAN_LAYER)
             .put("changeOn", METHOD_CHANGEON)
+            .put("updateMarkerRotate", METHOD_UPDATE_MARKER_ROTATE)
+            .put("setMapMarker", METHOD_SET_MAP_MARKER)
             .build()
     }
 
@@ -48,6 +52,8 @@ class RCTMapxusVisualNodeViewManager(reactApplicationContext: ReactApplicationCo
             METHOD_RENDER_FLAG_USING_NODES -> mapxusVisualNodeView.renderFlagUsingNodes(args)
             METHOD_CLEAN_LAYER -> mapxusVisualNodeView.cleanLayer()
             METHOD_CHANGEON -> mapxusVisualNodeView.changeOn(args)
+            METHOD_UPDATE_MARKER_ROTATE -> mapxusVisualNodeView.updateMarkerRotate(args)
+            METHOD_SET_MAP_MARKER -> mapxusVisualNodeView.setMapMarker(args)
         }
     }
 

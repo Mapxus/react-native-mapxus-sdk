@@ -137,6 +137,18 @@ class RCTMapxusVisualNodeView(
 
     }
 
+    fun updateMarkerRotate(args: ReadableArray?) {
+        args?.getDouble(1)?.let {
+            visualPolylineOverlay?.updateMarkerRotate(it.toFloat())
+        }
+    }
+
+    fun setMapMarker(args: ReadableArray?) {
+        args?.getString(1)?.let {
+            visualPolylineOverlay?.setMapMarker(it)
+        }
+    }
+
     companion object {
     }
 

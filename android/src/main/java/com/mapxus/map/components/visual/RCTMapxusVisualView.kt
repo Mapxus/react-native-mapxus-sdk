@@ -48,21 +48,25 @@ class RCTMapxusVisualView(
                     this@RCTMapxusVisualView,
                     EventKeys.VISUAL_ON_NODE_CHANGED,
                     WritableNativeMap().apply {
-                        putString("key", p0?.key)
-                        putString("buildingId", p0?.buildingId)
-                        putString("floor", p0?.floor)
-                        putDouble("latitude", p0?.lat ?: 0.0)
-                        putDouble("longitude", p0?.lnt ?: 0.0)
-                        putDouble("bearing", p0?.ca ?: 0.0)
+                        putMap("node", WritableNativeMap().apply {
+                            putString("key", p0?.key)
+                            putString("buildingId", p0?.buildingId)
+                            putString("floor", p0?.floor)
+                            putDouble("latitude", p0?.lat ?: 0.0)
+                            putDouble("longitude", p0?.lon ?: 0.0)
+                            putDouble("bearing", p0?.ca ?: 0.0)
+                        })
                     }
                 ))
             }
 
             override fun renderComplete() {
-                mManager.handleEvent(MapxusMapVisualNodeEvent(
-                    this@RCTMapxusVisualView,
-                    EventKeys.VISUAL_ON_RENDER_COMPLETE,
-                ))
+                mManager.handleEvent(
+                    MapxusMapVisualNodeEvent(
+                        this@RCTMapxusVisualView,
+                        EventKeys.VISUAL_ON_RENDER_COMPLETE,
+                    )
+                )
             }
 
         })
