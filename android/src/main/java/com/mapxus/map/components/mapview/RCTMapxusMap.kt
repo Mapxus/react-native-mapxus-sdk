@@ -238,45 +238,6 @@ class RCTMapxusMap(val reactContext: ReactContext?, val mManager: RCTMapxusMapMa
             it.addOnMapLongClickListener(this)
             it.addOnMapClickListener(this)
             it.addOnIndoorPoiClickListener(this)
-            rctMapxusMapOptions?.let { mapOptions ->
-                if (mapxusMap.currentIndoorBuilding == null) {
-                    BuildingSearch.newInstance().apply {
-                        setBuildingSearchResultListener(object :
-                            BuildingSearch.BuildingSearchResultListenerAdapter() {
-                            override fun onGetBuildingDetailResult(buildingDetailResult: BuildingDetailResult) {
-                                if (buildingDetailResult.status != 0) {
-                                    Toast.makeText(
-                                        reactContext,
-                                        buildingDetailResult.error.toString(),
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                    return
-                                }
-                                if (buildingDetailResult.indoorBuildingList.isNullOrEmpty()) {
-                                    Toast.makeText(
-                                        reactContext,
-                                        "Building not found",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                    return
-                                }
-
-                                mMapview?.mapboxMap?.moveCamera(
-                                    CameraUpdateFactory.newLatLngBounds(
-                                        LatLngBounds.from(
-                                            buildingDetailResult.indoorBuildingInfo.bbox.maxLat,
-                                            buildingDetailResult.indoorBuildingInfo.bbox.maxLon,
-                                            buildingDetailResult.indoorBuildingInfo.bbox.minLat,
-                                            buildingDetailResult.indoorBuildingInfo.bbox.minLon
-                                        ), 0
-                                    )
-                                )
-                            }
-                        })
-                        searchBuildingDetail(DetailSearchOption().ids(mutableListOf(mapOptions.buildingId)))
-                    }
-                }
-            }
         }
     }
 
